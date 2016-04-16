@@ -1,5 +1,7 @@
 ﻿using System.IO;
+using Rabbitual.Agents;
 using Rabbitual.Rabbit;
+using Rabbitual.Rabbit.Fake;
 using StructureMap;
 using StructureMap.Graph;
 using Topshelf;
@@ -24,19 +26,19 @@ namespace Rabbitual.Console
 
                 init.For<IPublisher>().Use<RabbitMessagePublisher>();
                 init.For<ISerializer>().Use<JsonSerializer>();
-
-                init.For<IConsumer[]>().Use(x => new IConsumer[]
+                init.For<IMessageConsumer>().Use<TimedFakeMessageConsumer>();
+                init.For<App>().Use(x =>new App(x.GetInstance<IMessageConsumer>(),new IAgent[]
                 {
-                    x.GetInstance<TestConsumer>()
-                });
+                    x.GetInstance<CounterAgent>()
+                }));
             });
 
             //run service using TopShelf
             HostFactory.Run(x =>
             {
-                x.Service<RabbitMessageConsumer>(s =>
+                x.Service<App>(s =>
                 {
-                    s.ConstructUsing(name => c.With<string>(Constants.TaskQueue).GetInstance<RabbitMessageConsumer>());
+                    s.ConstructUsing(name => c.GetInstance<App>());
                     s.WhenStarted(tc => tc.Start());
                     s.WhenStopped(tc => tc.Stop());
                 });
@@ -52,15 +54,12 @@ namespace Rabbitual.Console
                 x.StartAutomatically(); //...when installed
                 x.RunAsLocalSystem();
 
-                x.SetDescription("Processing stuff");
-                x.SetDisplayName("Rabbitual Testing 1,2,3");
-                x.SetServiceName("Rabbitual.Testing.1.2.3");
+                x.SetDescription("Rabbitual Demo");
+                x.SetDisplayName("Rabbitual Demo");
+                x.SetServiceName("Rabbitual.Demo");
             });
 
-            var e = c.GetInstance<IPublisher>();
-            var counter = 0;
 
-            Timer.DoOnTimer(()=>e.PublishEvent(new TestMessage { Message = "Hello World " + (counter++) }));
 
             System.Console.ReadLine();
         }

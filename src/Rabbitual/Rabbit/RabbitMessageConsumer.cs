@@ -6,20 +6,12 @@ using RabbitMQ.Client.Exceptions;
 
 namespace Rabbitual.Rabbit
 {
-    public interface IQueueDeclaration
-    {
-        void DeclareQueue(string queueName, IModel definition);
-    }
-
-
-
     /// <summary>
-    /// Recieve from RabbitMq and delegate work to typed consumers
+    /// Recieve from RabbitMq and delegate work to typed consumersAgent
     /// </summary>
-    public class RabbitMessageConsumer
+    public class RabbitMessageConsumer : IMessageConsumer
     {
         private readonly ILogger _c;
-        private readonly IConsumer[] _consumers;
         private readonly ISerializer _s;
         private readonly IQueueDeclaration _declarations;
         private readonly string _queueName;
@@ -29,24 +21,24 @@ namespace Rabbitual.Rabbit
         private IConnection _connection;
 
         public RabbitMessageConsumer(
-            ILogger c, 
-            IConsumer[] consumers,
+            ILogger c,
             IConfiguration cfg,
             ISerializer s,
             IQueueDeclaration declarations,
             string queueName)
         {
             _c = c;
-            _consumers = consumers;
             _s = s;
             _declarations = declarations;
             _queueName = queueName;
-            _factory = new ConnectionFactory {
-                HostName =cfg.Get("rabbit.hostname")};
+            _factory = new ConnectionFactory
+            {
+                HostName = cfg.Get("rabbit.hostname")
+            };
         }
 
 
-        public void Start()
+        public void Start(IConsumerAgent[] agents)
         {
             try
             {
@@ -54,9 +46,9 @@ namespace Rabbitual.Rabbit
             }
             catch (BrokerUnreachableException ex)
             {
-               _c.Log("Could not connect to Rabbit using HostName=" + _factory.HostName);
-               _c.Log(ex.Message);
-               return;
+                _c.Log("Could not connect to Rabbit using HostName=" + _factory.HostName);
+                _c.Log(ex.Message);
+                return;
             }
             _channel = _connection.CreateModel();
 
@@ -66,7 +58,7 @@ namespace Rabbitual.Rabbit
             //recieve tasks and send to all that can process it
             StartRecieve<Message>(t =>
             {
-                foreach (var taskProcessor in _consumers.Where(x => x.CanConsume(t)))
+                foreach (var taskProcessor in agents.Where(x => x.CanConsume(t)))
                     taskProcessor.Consume(t);
             });
         }

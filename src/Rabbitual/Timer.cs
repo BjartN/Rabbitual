@@ -1,16 +1,13 @@
 using System;
-using System.Timers;
 
-namespace Rabbitual.Console
+namespace Rabbitual
 {
     public class Timer
     {
+        private  System.Timers.Timer _timer;
+        private  int _errCount;
 
-        private static System.Timers.Timer _timer;
-        private static int _errCount = 0;
-        private static int _counter = 0;
-
-        public static void DoOnTimer(Action doIt)
+        public  void DoOnTimer(int intervalMs, Action action)
         {
             Action<string> c = (s) => System.Console.WriteLine(s);
 
@@ -19,11 +16,12 @@ namespace Rabbitual.Console
             {
                 _timer.Stop();
 
-                c("Starting..");
+                if(intervalMs>4000)
+                    c("Scheduled task started");
 
                 try
                 {
-                    doIt();
+                    action();
                 }
                 catch (Exception ex)
                 {
@@ -36,12 +34,14 @@ namespace Rabbitual.Console
                         return;
                     }
                 }
-                c("Done..");
+
+                if (intervalMs > 4000)
+                    c("Scheduled task done");
 
 
                 _timer.Start(); //TODO: Will restart stopped task. Bad for TopShelf
             };
-            _timer.Interval = 5000;
+            _timer.Interval = intervalMs;
             _timer.Enabled = true;
         }
     }

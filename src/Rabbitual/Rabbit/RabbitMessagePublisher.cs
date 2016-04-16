@@ -29,12 +29,12 @@ namespace Rabbitual.Rabbit
         /// rabbitmq-service.bat install 
         /// rabbitmq-service.bat start 
         /// </summary>
-        public void EnqueueTask(Message m)
+        public void SubmitTask(Message m)
         {
-            EnqueueTask(m, Constants.TaskQueue);
+            SubmitTask(m, Constants.TaskQueue);
         }
 
-        public void EnqueueTask(Message m, string queueName)
+        public void SubmitTask(Message m, string queueName)
         {
             var factory = new ConnectionFactory { HostName = _cfg.Get("rabbit.hostname"), UserName= _cfg.Get("rabbit.username"), Password = _cfg.Get("rabbit.password") };
             using (var connection = factory.CreateConnection())
