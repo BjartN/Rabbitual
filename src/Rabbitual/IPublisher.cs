@@ -6,10 +6,7 @@ namespace Rabbitual
     /// </summary>
     public interface IPublisher
     {
-        void SubmitTask(Message m, string queueName);
         void SubmitTask(Message m);
-
-        void PublishEvent(Message m, string exchangeName);
         void PublishEvent(Message m);
     }
 }

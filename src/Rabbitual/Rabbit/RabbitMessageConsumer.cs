@@ -51,7 +51,6 @@ namespace Rabbitual.Rabbit
                 return;
             }
             _channel = _connection.CreateModel();
-
             _declarations.DeclareQueue(_queueName, _channel);
             _channel.BasicQos(prefetchSize: 0, prefetchCount: 1, global: false);
 
@@ -82,14 +81,14 @@ namespace Rabbitual.Rabbit
                 var body = ea.Body;
                 var task = _s.FromBytes<T>(body);
 
-                _c.Log("Task received {0} ", task.GetType());
+                _c.Log("Message received {0} ", task.GetType());
 
                 try
                 {
                     doWork(task);
                     _channel.BasicAck(deliveryTag: ea.DeliveryTag, multiple: false);
 
-                    _c.Log("Task processed at {0}", DateTime.Now);
+                    _c.Log("Message processed at {0}", DateTime.Now);
                 }
                 catch (Exception ex)
                 {

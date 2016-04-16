@@ -3,7 +3,6 @@
     public class Constants
     {
         //queues
-        //queues
         public const string TaskQueue = "task_queue";
 
         //exchanges

@@ -29,7 +29,8 @@ namespace Rabbitual.Console
                 init.For<IMessageConsumer>().Use<TimedFakeMessageConsumer>();
                 init.For<App>().Use(x =>new App(x.GetInstance<IMessageConsumer>(),new IAgent[]
                 {
-                    x.GetInstance<CounterAgent>()
+                    x.GetInstance<CounterAgent>(),
+                    x.GetInstance<TestAgent>()
                 }));
             });
 

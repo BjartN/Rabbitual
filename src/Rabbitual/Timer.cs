@@ -7,7 +7,12 @@ namespace Rabbitual
         private  System.Timers.Timer _timer;
         private  int _errCount;
 
-        public  void DoOnTimer(int intervalMs, Action action)
+        public void Stop()
+        {
+            _timer.Stop();
+        }
+
+        public void Start(int intervalMs, Action action)
         {
             Action<string> c = (s) => System.Console.WriteLine(s);
 

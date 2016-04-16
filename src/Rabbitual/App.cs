@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using Rabbitual.Rabbit;
 
 namespace Rabbitual
@@ -19,11 +20,13 @@ namespace Rabbitual
     {
         private readonly IMessageConsumer _c;
         private readonly IAgent[] _agents;
+        private readonly List<Timer> _timers;
 
         public App(IMessageConsumer c, IAgent[] agents)
         {
             _c = c;
             _agents = agents;
+            _timers = new List<Timer>();
         }
 
         public void Start()
@@ -33,10 +36,9 @@ namespace Rabbitual
             //agents doing work on a timer
             foreach (var a in _agents.OfType<IScheduledAgent>())
             {
-                new Timer().DoOnTimer(5000,() =>
-                {
-                    a.Check();
-                });
+                var timer = new Timer();
+                timer.Start(5000,a.Check);
+                _timers.Add(timer);
             }
 
             //agents waiting for events
@@ -45,7 +47,9 @@ namespace Rabbitual
 
         public void Stop()
         {
-            
+            _c.Stop();
+            foreach(var t in _timers) 
+                t.Stop();
         }
     }
 }

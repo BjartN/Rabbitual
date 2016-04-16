@@ -1,19 +1,17 @@
-﻿using System.Security.Cryptography.X509Certificates;
-
-namespace Rabbitual
+﻿namespace Rabbitual
 {
     /// <summary>
     /// An agent can perform tasks, recieve events or do something on a schedule.
     /// </summary>
     public interface IAgent
     {
-         
+
     }
 
     /// <summary>
-    ///     Do *something* on a schedule
+    ///     Start *something* on a schedule
     /// </summary>
-    public interface IScheduledAgent:IAgent
+    public interface IScheduledAgent : IAgent
     {
         void Check();
     }
@@ -21,7 +19,7 @@ namespace Rabbitual
     /// <summary>
     ///     Execute work 
     /// </summary>
-    public interface IWorker : IAgent
+    public interface ITaskConsumerAgent : IAgent
     {
         bool CanWorkOn(object task);
         void WorkOn(object task);
