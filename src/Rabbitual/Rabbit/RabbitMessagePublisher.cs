@@ -36,7 +36,7 @@ namespace Rabbitual.Rabbit
 
         public void EnqueueTask(Message m, string queueName)
         {
-            var factory = new ConnectionFactory { HostName = _cfg.Get("rabbit.hostname") };
+            var factory = new ConnectionFactory { HostName = _cfg.Get("rabbit.hostname"), UserName= _cfg.Get("rabbit.username"), Password = _cfg.Get("rabbit.password") };
             using (var connection = factory.CreateConnection())
             {
                 using (var channel = connection.CreateModel())

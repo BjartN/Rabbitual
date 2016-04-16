@@ -2,12 +2,12 @@ using System;
 
 namespace Rabbitual
 {
-    public interface ILog
+    public interface ILogger
     {
         void Log(string s, params object[] args);
     }
 
-    public class LogImpl: ILog
+    public class Logger: ILogger
     {
         public void Log(string s, params object[] args)
         {

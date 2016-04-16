@@ -2,6 +2,7 @@ using System;
 using System.Linq;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
+using RabbitMQ.Client.Exceptions;
 
 namespace Rabbitual.Rabbit
 {
@@ -17,7 +18,7 @@ namespace Rabbitual.Rabbit
     /// </summary>
     public class RabbitMessageConsumer
     {
-        private readonly ILog _c;
+        private readonly ILogger _c;
         private readonly IConsumer[] _consumers;
         private readonly ISerializer _s;
         private readonly IQueueDeclaration _declarations;
@@ -28,7 +29,7 @@ namespace Rabbitual.Rabbit
         private IConnection _connection;
 
         public RabbitMessageConsumer(
-            ILog c, 
+            ILogger c, 
             IConsumer[] consumers,
             IConfiguration cfg,
             ISerializer s,
@@ -40,13 +41,23 @@ namespace Rabbitual.Rabbit
             _s = s;
             _declarations = declarations;
             _queueName = queueName;
-            _factory = new ConnectionFactory { HostName =cfg.Get("rabbit.hostname") };
+            _factory = new ConnectionFactory {
+                HostName =cfg.Get("rabbit.hostname")};
         }
 
 
         public void Start()
         {
-            _connection = _factory.CreateConnection();
+            try
+            {
+                _connection = _factory.CreateConnection();
+            }
+            catch (BrokerUnreachableException ex)
+            {
+               _c.Log("Could not connect to Rabbit using HostName=" + _factory.HostName);
+               _c.Log(ex.Message);
+               return;
+            }
             _channel = _connection.CreateModel();
 
             _declarations.DeclareQueue(_queueName, _channel);

@@ -22,6 +22,9 @@ namespace Rabbitual.Console
                     scanner.WithDefaultConventions();
                 });
 
+                init.For<IPublisher>().Use<RabbitMessagePublisher>();
+                init.For<ISerializer>().Use<JsonSerializer>();
+
                 init.For<IConsumer[]>().Use(x => new IConsumer[]
                 {
                     x.GetInstance<TestConsumer>()
@@ -33,7 +36,7 @@ namespace Rabbitual.Console
             {
                 x.Service<RabbitMessageConsumer>(s =>
                 {
-                    s.ConstructUsing(name => c.GetInstance<RabbitMessageConsumer>());
+                    s.ConstructUsing(name => c.With<string>(Constants.TaskQueue).GetInstance<RabbitMessageConsumer>());
                     s.WhenStarted(tc => tc.Start());
                     s.WhenStopped(tc => tc.Stop());
                 });
@@ -51,7 +54,7 @@ namespace Rabbitual.Console
 
                 x.SetDescription("Processing stuff");
                 x.SetDisplayName("Rabbitual Testing 1,2,3");
-                x.SetServiceName("Rabbitual Testing 1,2,3");
+                x.SetServiceName("Rabbitual.Testing.1.2.3");
             });
 
             var e = c.GetInstance<IPublisher>();

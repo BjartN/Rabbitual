@@ -55,7 +55,7 @@
     <Compile Include="IConfiguration.cs" />
     <Compile Include="IConsumer.cs" />
     <Compile Include="IPublisher.cs" />
-    <Compile Include="ILog.cs" />
+    <Compile Include="ILogger.cs" />
     <Compile Include="ISerializer.cs" />
     <Compile Include="JsonSerializer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
