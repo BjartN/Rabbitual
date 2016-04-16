@@ -1,8 +1,9 @@
 ﻿using System;
+using Rabbitual.Infrastructure;
 
 namespace Rabbitual.Agents
 {
-    public class CounterAgent: IScheduledAgent, IConsumerAgent
+    public class CounterAgent: IScheduledAgent, IEventConsumerAgent
     {
         private readonly ILogger _l;
         private int _count;

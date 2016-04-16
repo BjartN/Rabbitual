@@ -1,4 +1,4 @@
-﻿namespace Rabbitual
+﻿namespace Rabbitual.Infrastructure
 {
     public interface ISerializer
     {

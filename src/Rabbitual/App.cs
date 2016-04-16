@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Rabbitual.Infrastructure;
 using Rabbitual.Rabbit;
 
 namespace Rabbitual
@@ -33,23 +34,37 @@ namespace Rabbitual
         {
             //Note that an agent both on timer and waiting for events might get accessed concurrently
 
+            //start all statefull agents
+            foreach (var a in _agents.OfType<IStatefulAgent>())
+            {
+                //TODO: Add agent context
+                a.Start(null);
+            }
+
             //agents doing work on a timer
             foreach (var a in _agents.OfType<IScheduledAgent>())
             {
                 var timer = new Timer();
-                timer.Start(5000,a.Check);
+                timer.Start(5000, a.Check);
                 _timers.Add(timer);
             }
 
             //agents waiting for events
-            _c.Start(_agents.OfType<IConsumerAgent>().ToArray());
+            _c.Start(_agents.OfType<IEventConsumerAgent>().ToArray());
         }
 
         public void Stop()
         {
             _c.Stop();
-            foreach(var t in _timers) 
+            foreach (var t in _timers)
+            {
                 t.Stop();
+            }
+
+            foreach (var a in _agents.OfType<IStatefulAgent>())
+            {
+                a.Stop();
+            }
         }
     }
 }

@@ -2,7 +2,7 @@ namespace Rabbitual.Rabbit
 {
     public interface IMessageConsumer
     {
-        void Start(IConsumerAgent[] agents);
+        void Start(IEventConsumerAgent[] agents);
         void Stop();
     }
 }

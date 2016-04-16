@@ -1,5 +1,6 @@
 ﻿using System.IO;
 using Rabbitual.Agents;
+using Rabbitual.Infrastructure;
 using Rabbitual.Rabbit;
 using Rabbitual.Rabbit.Fake;
 using StructureMap;

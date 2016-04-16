@@ -49,17 +49,19 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AgentState.cs" />
     <Compile Include="Agents\CounterAgent.cs" />
     <Compile Include="IAgent.cs" />
     <Compile Include="App.cs" />
+    <Compile Include="Infrastructure\IObjectDb.cs" />
     <Compile Include="Message.cs" />
     <Compile Include="Constants.cs" />
     <Compile Include="Rabbit\ExchangeDefinitions.cs" />
     <Compile Include="IConfiguration.cs" />
     <Compile Include="IPublisher.cs" />
-    <Compile Include="ILogger.cs" />
-    <Compile Include="ISerializer.cs" />
-    <Compile Include="JsonSerializer.cs" />
+    <Compile Include="Infrastructure\ILogger.cs" />
+    <Compile Include="Infrastructure\ISerializer.cs" />
+    <Compile Include="Infrastructure\JsonSerializer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Rabbit\Fake\TimedFakeMessageConsumer.cs" />
     <Compile Include="Rabbit\IMessageConsumer.cs" />
@@ -67,7 +69,7 @@
     <Compile Include="Rabbit\QueueDeclaration.cs" />
     <Compile Include="Rabbit\RabbitMessageConsumer.cs" />
     <Compile Include="Rabbit\RabbitMessagePublisher.cs" />
-    <Compile Include="Timer.cs" />
+    <Compile Include="Infrastructure\Timer.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

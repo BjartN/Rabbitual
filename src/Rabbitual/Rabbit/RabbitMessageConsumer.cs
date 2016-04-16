@@ -3,6 +3,7 @@ using System.Linq;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
 using RabbitMQ.Client.Exceptions;
+using Rabbitual.Infrastructure;
 
 namespace Rabbitual.Rabbit
 {
@@ -38,7 +39,7 @@ namespace Rabbitual.Rabbit
         }
 
 
-        public void Start(IConsumerAgent[] agents)
+        public void Start(IEventConsumerAgent[] agents)
         {
             try
             {

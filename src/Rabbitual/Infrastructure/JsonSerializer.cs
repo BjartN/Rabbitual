@@ -2,7 +2,7 @@ using System;
 using System.Text;
 using Newtonsoft.Json;
 
-namespace Rabbitual
+namespace Rabbitual.Infrastructure
 {
     public class JsonSerializer : ISerializer
     {

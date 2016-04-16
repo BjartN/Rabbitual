@@ -1,15 +1,17 @@
-﻿namespace Rabbitual.Rabbit.Fake
+﻿using Rabbitual.Infrastructure;
+
+namespace Rabbitual.Rabbit.Fake
 {
     public class TimedFakeMessageConsumer: IMessageConsumer
     {
-        private Timer _timer;
+        private readonly Timer _timer;
 
         public TimedFakeMessageConsumer()
         {
             _timer = new Timer();
         }
 
-        public void Start(IConsumerAgent[] agents)
+        public void Start(IEventConsumerAgent[] agents)
         {
             _timer.Start(100,() =>
             {

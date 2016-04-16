@@ -1,8 +1,9 @@
-﻿using Rabbitual.Rabbit;
+﻿using Rabbitual.Infrastructure;
+using Rabbitual.Rabbit;
 
 namespace Rabbitual.Console
 {
-    public class TestAgent:IConsumerAgent
+    public class TestAgent:IEventConsumerAgent
     {
         private readonly ILogger _log;
 
