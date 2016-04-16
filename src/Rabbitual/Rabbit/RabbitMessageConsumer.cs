@@ -1,0 +1,104 @@
+using System;
+using System.Linq;
+using RabbitMQ.Client;
+using RabbitMQ.Client.Events;
+
+namespace Rabbitual.Rabbit
+{
+    public interface IQueueDeclaration
+    {
+        void DeclareQueue(string queueName, IModel definition);
+    }
+
+
+
+    /// <summary>
+    /// Recieve from RabbitMq and delegate work to typed consumers
+    /// </summary>
+    public class RabbitMessageConsumer
+    {
+        private readonly ILog _c;
+        private readonly IConsumer[] _consumers;
+        private readonly ISerializer _s;
+        private readonly IQueueDeclaration _declarations;
+        private readonly string _queueName;
+
+        private readonly ConnectionFactory _factory;
+        private IModel _channel;
+        private IConnection _connection;
+
+        public RabbitMessageConsumer(
+            ILog c, 
+            IConsumer[] consumers,
+            IConfiguration cfg,
+            ISerializer s,
+            IQueueDeclaration declarations,
+            string queueName)
+        {
+            _c = c;
+            _consumers = consumers;
+            _s = s;
+            _declarations = declarations;
+            _queueName = queueName;
+            _factory = new ConnectionFactory { HostName =cfg.Get("rabbit.hostname") };
+        }
+
+
+        public void Start()
+        {
+            _connection = _factory.CreateConnection();
+            _channel = _connection.CreateModel();
+
+            _declarations.DeclareQueue(_queueName, _channel);
+            _channel.BasicQos(prefetchSize: 0, prefetchCount: 1, global: false);
+
+            //recieve tasks and send to all that can process it
+            StartRecieve<Message>(t =>
+            {
+                foreach (var taskProcessor in _consumers.Where(x => x.CanConsume(t)))
+                    taskProcessor.Consume(t);
+            });
+        }
+
+        public void Stop()
+        {
+            _channel.Close();
+            _channel.Dispose();
+
+            _connection.Close();
+            _connection.Dispose();
+        }
+
+        public void StartRecieve<T>(Action<T> doWork)
+        {
+            var consumer = new EventingBasicConsumer(_channel);
+
+            _c.Log("Waiting for tasks.");
+            consumer.Received += (model, ea) =>
+            {
+                var body = ea.Body;
+                var task = _s.FromBytes<T>(body);
+
+                _c.Log("Task received {0} ", task.GetType());
+
+                try
+                {
+                    doWork(task);
+                    _channel.BasicAck(deliveryTag: ea.DeliveryTag, multiple: false);
+
+                    _c.Log("Task processed at {0}", DateTime.Now);
+                }
+                catch (Exception ex)
+                {
+                    _channel.BasicReject(ea.DeliveryTag, true);
+                    _c.Log("Error");
+                    _c.Log(ex.Message);
+                    _c.Log(ex.StackTrace);
+                }
+            };
+
+            _channel.BasicConsume(queue: Constants.TaskQueue, noAck: false, consumer: consumer);
+        }
+
+    }
+}
