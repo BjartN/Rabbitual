@@ -1,25 +1,24 @@
 ﻿using System.ComponentModel;
 using Rabbitual.Infrastructure;
 
-namespace Rabbitual.Demo.ThirdPartyAgent
+namespace Rabbitual.Agents
 {
     /// <summary>
     /// Publish an event on a schedule
     /// </summary>
     public class ScheduledPublisherAgent :
         IScheduledAgent, 
-        IOptionsAgent<ScheduledPublisherAgentOptions>,
-        IStatefulAgent
+        IHaveOptions<ScheduledPublisherOptions>,
+        IStatefulAgent,
+        IPublishingAgent
     {
         private readonly ILogger _log;
-        private readonly IPublisher _p;
         private SweetState _state;
         private IAgentState _cfx;
 
-        public ScheduledPublisherAgent(ILogger log, IPublisher p)
+        public ScheduledPublisherAgent(ILogger log)
         {
             _log = log;
-            _p = p;
         }
 
         public void Start(IAgentState ctx)
@@ -37,8 +36,10 @@ namespace Rabbitual.Demo.ThirdPartyAgent
         {
             _state.Count++;
             _log.Log("Publishing an event for the {0} time", _state.Count);
-            _p.PublishEvent(new Message());
+            Publisher.PublishEvent(new Message());
         }
+
+        public int DefaultSchedule => 500;
 
 
         public class SweetState
@@ -46,19 +47,13 @@ namespace Rabbitual.Demo.ThirdPartyAgent
             public int Count { get; set; }
         }
 
-        public ScheduledPublisherAgentOptions Options { set; get; }
+        public ScheduledPublisherOptions Options { set; get; }
+        public IPublisher Publisher { get; set; }
+        public string Id { get; set; }
     }
 
-    public class ScheduledPublisherAgentOptions
+    public class ScheduledPublisherOptions
     {
-        public ScheduledPublisherAgentOptions()
-        {
-            Schedule = 100; //default value
-        }
-
-        [Description(@"
-                This exciting agent count all events in 
-                the system and logs the count on a schedule.")]
-        public int Schedule { get; set; }
+       
     }
 }

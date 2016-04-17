@@ -1,7 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using Rabbitual.Configuration;
 using Rabbitual.Infrastructure;
-using Rabbitual.Rabbit;
 
 namespace Rabbitual
 {
@@ -20,58 +21,90 @@ namespace Rabbitual
     public class App
     {
         private readonly IMessageConsumer _c;
-        private readonly IAgent[] _agents;
+        private readonly IAgentFactory _f;
         private readonly IObjectDb _db;
         private readonly ILogger _logger;
         private readonly IOptionsRepository _options;
+        private readonly IPublisher _p;
         private readonly List<Timer> _timers;
-        private int _agentId;
+        private Tuple<IAgent, AgentConfig>[] _agents;
 
-        public App(IMessageConsumer c, IAgent[] agents, IObjectDb db, ILogger logger, IOptionsRepository options)
+        public App(
+            IMessageConsumer c,
+            IAgentFactory f,
+            IObjectDb db,
+            ILogger logger,
+            IOptionsRepository options,
+            IPublisher p)
         {
             _c = c;
-            _agents = agents;
+            _f = f;
             _db = db;
             _logger = logger;
             _options = options;
+            _p = p;
             _timers = new List<Timer>();
         }
 
 
         public void Start()
         {
+            _agents = _f.GetAgents();
+
             //Note that an agent both on timer and waiting for events might get accessed concurrently
-            foreach (var a in _agents)
+            foreach (var tuple in _agents)
             {
-                var oa = a as IOptionsAgent;
-                var sa = a as IStatefulAgent;
-                var sca = a as IScheduledAgent;
+                var agent = tuple.Item1;
+                var config = tuple.Item2;
 
-                if (oa != null)
+                var agentWithOptions = agent as IHaveOptions;
+                var statefulAgent = agent as IStatefulAgent;
+                var scheduledAgent = agent as IScheduledAgent;
+                var publishingAgent = agent as IPublishingAgent;
+
+                //assign id to agent
+                agent.Id = tuple.Item2.Id;
+
+                if (agentWithOptions != null)
                 {
-                    var options = _options.GetOptions(oa.GetType(), "0");
-
-                    //set options using magic
-                    ReflectionHelper.SetOptions(oa, options);
+                    //Set options
+                    var options = _options.GetOptions(agentWithOptions.GetType(), config.Id);
+                    ReflectionHelper.SetOptionsUsingMagic(agentWithOptions, options);
                 }
 
-                if (sa != null)
+                if (publishingAgent != null)
                 {
-                    sa.Start(new AgentState(_agentId.ToString(), _db, _logger));
+                    //Make sure that when things get published the publishing runs through a proxy so that we can enrich the message 
+                    //with the id of the publisher.
+                    publishingAgent.Publisher = new PublisherProxy(_p, publishingAgent.Id);
                 }
 
-                if (sca != null)
-                { 
-                    _timers
-                  .Push(new Timer())
-                  .Start(5000, sca.Check);
+                if (statefulAgent != null)
+                {
+                    //Inject state context
+                    statefulAgent.Start(new AgentState(config.Id, _db, _logger));
                 }
 
-                _agentId++;
+                if (scheduledAgent != null)
+                {
+                    //Set agent on a timer, with some silly-checking.
+                    var schedule = scheduledAgent.DefaultSchedule <= 0 ? 5000 : scheduledAgent.DefaultSchedule;
+                    _timers.Push(new Timer()).Start(schedule, () =>
+                    {
+                        try
+                        {
+                            scheduledAgent.Check();
+                        }
+                        catch
+                        {
+                            _logger.Log("Agent on type {0} failed on Check()", scheduledAgent.GetType().FullName);
+                        }
+                    });
+                }
             }
 
-            //agents waiting for events
-            _c.Start(_agents.OfType<IEventConsumerAgent>().ToArray());
+            //Agents waiting for events
+            _c.Start(_agents.Select(x => x.Item1).OfType<IEventConsumerAgent>().ToArray());
         }
 
         public void Stop()

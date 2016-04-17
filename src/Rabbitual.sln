@@ -7,6 +7,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rabbitual", "Rabbitual\Rabb
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rabbitual.Demo", "Rabbitual.Demo\Rabbitual.Demo.csproj", "{7F9B4FD0-577F-4EE5-98D9-B2AADDE82882}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rabbitual.ConsoleHost", "Rabbitual.ConsoleHost\Rabbitual.ConsoleHost.csproj", "{E7D30BF9-EDDE-46E9-BD14-2D11D3BFA4C6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rabbitual.Agents", "Rabbitual.Agents\Rabbitual.Agents.csproj", "{E4329469-889D-43CE-87DB-0FB058BEC741}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +25,14 @@ Global
 		{7F9B4FD0-577F-4EE5-98D9-B2AADDE82882}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7F9B4FD0-577F-4EE5-98D9-B2AADDE82882}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7F9B4FD0-577F-4EE5-98D9-B2AADDE82882}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E7D30BF9-EDDE-46E9-BD14-2D11D3BFA4C6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E7D30BF9-EDDE-46E9-BD14-2D11D3BFA4C6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E7D30BF9-EDDE-46E9-BD14-2D11D3BFA4C6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E7D30BF9-EDDE-46E9-BD14-2D11D3BFA4C6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E4329469-889D-43CE-87DB-0FB058BEC741}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E4329469-889D-43CE-87DB-0FB058BEC741}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E4329469-889D-43CE-87DB-0FB058BEC741}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E4329469-889D-43CE-87DB-0FB058BEC741}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

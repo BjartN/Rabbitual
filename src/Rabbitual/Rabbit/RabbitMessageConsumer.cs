@@ -23,7 +23,7 @@ namespace Rabbitual.Rabbit
 
         public RabbitMessageConsumer(
             ILogger c,
-            IConfiguration cfg,
+            IAppConfiguration cfg,
             ISerializer s,
             IQueueDeclaration declarations,
             string queueName)
@@ -58,7 +58,7 @@ namespace Rabbitual.Rabbit
             //recieve tasks and send to all that can process it
             StartRecieve<Message>(t =>
             {
-                foreach (var taskProcessor in agents.Where(x => x.CanConsume(t)))
+                foreach (var taskProcessor in agents)
                     taskProcessor.Consume(t);
             });
         }

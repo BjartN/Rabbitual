@@ -8,13 +8,13 @@ namespace Rabbitual
     {
         public static object[] GetDefaultOptions(Assembly[] assemblies)
         {
-            var optionTypes = GetArgumentsOfOpenGenericInterfaceType(typeof(IOptionsAgent<>), assemblies);
+            var optionTypes = GetArgumentsOfOpenGenericInterfaceType(typeof(IHaveOptions<>), assemblies);
             return optionTypes.Select(Activator.CreateInstance).ToArray();
         }
 
         public static Type GetOptionType(Type agentType)
         {
-            return GetGenericArgument(agentType, typeof(IOptionsAgent<>));
+            return GetGenericArgument(agentType, typeof(IHaveOptions<>));
         }
 
         private static Type[] GetArgumentsOfOpenGenericInterfaceType(Type openGenericType, Assembly[] assemblies)
@@ -45,7 +45,7 @@ namespace Rabbitual
             return null;
         }
 
-        public static void SetOptions(IOptionsAgent optionsAgent, object options)
+        public static void SetOptionsUsingMagic(IHaveOptions optionsAgent, object options)
         {
             //TODO: Cheating now, so make more robust
             var pi = optionsAgent.GetType().GetProperties().FirstOrDefault(x => x.Name == "Options");

@@ -4,17 +4,15 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{7F9B4FD0-577F-4EE5-98D9-B2AADDE82882}</ProjectGuid>
-    <OutputType>Exe</OutputType>
+    <ProjectGuid>{E4329469-889D-43CE-87DB-0FB058BEC741}</ProjectGuid>
+    <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Rabbitual.Demo</RootNamespace>
-    <AssemblyName>Rabbitual.Demo</AssemblyName>
+    <RootNamespace>Rabbitual.Agents</RootNamespace>
+    <AssemblyName>Rabbitual.Agents</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -24,7 +22,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
@@ -33,6 +30,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="HtmlAgilityPack, Version=1.4.9.0, Culture=neutral, PublicKeyToken=bd319b19eaf3b43a, processorArchitecture=MSIL">
+      <HintPath>..\packages\HtmlAgilityPack.1.4.9\lib\Net45\HtmlAgilityPack.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -43,25 +44,18 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="StatsAgent.cs" />
+    <Compile Include="WebCheckerAgent.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Rabbitual.Agents\Rabbitual.Agents.csproj">
-      <Project>{e4329469-889d-43ce-87db-0fb058bec741}</Project>
-      <Name>Rabbitual.Agents</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Rabbitual.ConsoleHost\Rabbitual.ConsoleHost.csproj">
-      <Project>{e7d30bf9-edde-46e9-bd14-2d11d3bfa4c6}</Project>
-      <Name>Rabbitual.ConsoleHost</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Rabbitual\Rabbitual.csproj">
       <Project>{993aff94-2199-4009-a2ac-661d9e061933}</Project>
       <Name>Rabbitual</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

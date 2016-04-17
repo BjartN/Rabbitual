@@ -9,14 +9,14 @@ namespace Rabbitual
     /// </summary>
     public interface IAgent
     {
-
+        string Id { get; set; }
     }
 
-    public interface IOptionsAgent:IAgent
+    public interface IHaveOptions:IAgent
     {
     }
 
-    public interface IOptionsAgent<TOption>: IOptionsAgent where TOption:class
+    public interface IHaveOptions<TOption>: IHaveOptions where TOption:class
     {
         TOption Options { set; }
     }
@@ -34,15 +34,24 @@ namespace Rabbitual
         void Stop();
     }
 
-
     /// <summary>
     ///     Start *something* on a schedule
     /// </summary>
     public interface IScheduledAgent : IAgent
     {
+        int DefaultSchedule { get; }
         void Check();
     }
-    
+
+    /// <summary>
+    ///    Publishig agent
+    /// </summary>
+    public interface IPublishingAgent : IAgent
+    {
+        IPublisher Publisher { set; }
+    }
+
+
     /// <summary>
     ///     Execute work 
     /// </summary>
@@ -57,7 +66,6 @@ namespace Rabbitual
     /// </summary>
     public interface IEventConsumerAgent : IAgent
     {
-        bool CanConsume(object evt);
         void Consume(object evt);
     }
 

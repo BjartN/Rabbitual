@@ -9,7 +9,7 @@ namespace Rabbitual
         private readonly ISerializer _s;
         private readonly string _folder;
 
-        public FileObjectDb(ISerializer s, IConfiguration cfg)
+        public FileObjectDb(ISerializer s, IAppConfiguration cfg)
         {
             _s = s;
             _folder = cfg.Get("rabbitual.filedb.folder");

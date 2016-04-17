@@ -11,10 +11,10 @@ namespace Rabbitual.Fox
     /// </summary>
     public class MessageHub
     {
-        private readonly List<Action<object>> _subscribers = new List<Action<object>>();
+        private readonly List<Action<Message>> _subscribers = new List<Action<Message>>();
         readonly object _locker = new object();
 
-        public void Publish(object message)
+        public void Publish(Message message)
         {
             lock (_locker)
             {
@@ -23,7 +23,7 @@ namespace Rabbitual.Fox
             }
         }
 
-        public void Subscribe(Action<object> callback)
+        public void Subscribe(Action<Message> callback)
         {
             lock(_locker)
                 _subscribers.Add(callback);

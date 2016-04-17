@@ -9,10 +9,10 @@ namespace Rabbitual.Rabbit
     public class RabbitMessagePublisher : IPublisher
     {
         private readonly ISerializer _s;
-        private readonly IConfiguration _cfg;
+        private readonly IAppConfiguration _cfg;
         private readonly IQueueDeclaration _declaration;
 
-        public RabbitMessagePublisher(ISerializer s, IConfiguration cfg, IQueueDeclaration declaration)
+        public RabbitMessagePublisher(ISerializer s, IAppConfiguration cfg, IQueueDeclaration declaration)
         {
             _s = s;
             _cfg = cfg;

@@ -49,8 +49,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AgentFactory.cs" />
     <Compile Include="AgentState.cs" />
     <Compile Include="Agents\CounterAgent.cs" />
+    <Compile Include="Agents\ScheduledPublisherAgent.cs" />
+    <Compile Include="Configuration\AgentConfig.cs" />
     <Compile Include="FileObjectDb.cs" />
     <Compile Include="Fox\FoxMessageConsumer.cs" />
     <Compile Include="Fox\FoxMessagePublisher.cs" />
@@ -63,8 +66,9 @@
     <Compile Include="Constants.cs" />
     <Compile Include="Fox\MessageHub.cs" />
     <Compile Include="OptionsRepository.cs" />
+    <Compile Include="PublisherProxy.cs" />
     <Compile Include="Rabbit\ExchangeDefinitions.cs" />
-    <Compile Include="IConfiguration.cs" />
+    <Compile Include="IAppConfiguration.cs" />
     <Compile Include="IPublisher.cs" />
     <Compile Include="Infrastructure\ILogger.cs" />
     <Compile Include="Infrastructure\ISerializer.cs" />
@@ -83,9 +87,7 @@
     <None Include="Fox\README.md" />
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Rabbit\Fake\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

@@ -2,12 +2,12 @@ using System.Configuration;
 
 namespace Rabbitual
 {
-    public interface IConfiguration
+    public interface IAppConfiguration
     {
         string Get(string key);
     }
 
-    public class Configuration: IConfiguration
+    public class AppConfiguration : IAppConfiguration
     {
         public string Get(string key)
         {
