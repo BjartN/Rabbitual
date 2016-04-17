@@ -14,6 +14,8 @@ namespace Rabbitual.Demo
     {
         static void Main(string[] args)
         {
+            var foo = ReflectionHelper.GetDefaultOptions(new[] {typeof(ScheduledPublisherAgent).Assembly});
+
             var animal = args.Length > 0 ? args[0] : "fox";
             var inMemory = animal == "fox";
 
@@ -90,7 +92,8 @@ namespace Rabbitual.Demo
                     ctx.GetInstance<IMessageConsumer>(),
                     ctx.GetInstance<IAgent[]>(),
                     ctx.GetInstance<IObjectDb>(),
-                    ctx.GetInstance<ILogger>())).Singleton();
+                    ctx.GetInstance<ILogger>(),
+                    ctx.GetInstance<IOptionsRepository>())).Singleton();
             });
 
             return c;

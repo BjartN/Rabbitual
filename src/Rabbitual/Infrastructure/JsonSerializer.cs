@@ -17,5 +17,11 @@ namespace Rabbitual.Infrastructure
             var message = Encoding.UTF8.GetString(body);
             return JsonConvert.DeserializeObject<T>(message);
         }
+
+        public object FromBytes(byte[] bytes, Type t)
+        {
+            var message = Encoding.UTF8.GetString(bytes);
+            return JsonConvert.DeserializeObject(message,t);
+        }
     }
 }

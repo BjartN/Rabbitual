@@ -23,15 +23,17 @@ namespace Rabbitual
         private readonly IAgent[] _agents;
         private readonly IObjectDb _db;
         private readonly ILogger _logger;
+        private readonly IOptionsRepository _options;
         private readonly List<Timer> _timers;
-        private int _uniqueId;
+        private int _agentId;
 
-        public App(IMessageConsumer c, IAgent[] agents, IObjectDb db, ILogger logger)
+        public App(IMessageConsumer c, IAgent[] agents, IObjectDb db, ILogger logger, IOptionsRepository options)
         {
             _c = c;
             _agents = agents;
             _db = db;
             _logger = logger;
+            _options = options;
             _timers = new List<Timer>();
         }
 
@@ -39,21 +41,33 @@ namespace Rabbitual
         public void Start()
         {
             //Note that an agent both on timer and waiting for events might get accessed concurrently
-
-            //start all statefull agents
-            foreach (var a in _agents.OfType<IStatefulAgent>())
+            foreach (var a in _agents)
             {
-                a.Start(new AgentState((_uniqueId++).ToString(), _db, _logger));
-            }
+                var oa = a as IOptionsAgent;
+                var sa = a as IStatefulAgent;
+                var sca = a as IScheduledAgent;
 
-            //agents doing work on a timer
-            foreach (var a in _agents.OfType<IScheduledAgent>())
-            {
-                var interval = a.TryGetIntOption("options.schedule") ?? 5000;
+                if (oa != null)
+                {
+                    var options = _options.GetOptions(oa.GetType(), "0");
 
-                var timer = new Timer();
-                timer.Start(interval, a.Check);
-                _timers.Add(timer);
+                    //set options using magic
+                    ReflectionHelper.SetOptions(oa, options);
+                }
+
+                if (sa != null)
+                {
+                    sa.Start(new AgentState(_agentId.ToString(), _db, _logger));
+                }
+
+                if (sca != null)
+                { 
+                    _timers
+                  .Push(new Timer())
+                  .Start(5000, sca.Check);
+                }
+
+                _agentId++;
             }
 
             //agents waiting for events

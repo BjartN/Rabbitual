@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Security.AccessControl;
+using RabbitMQ.Client.Framing.Impl;
 
 namespace Rabbitual
 {
@@ -11,9 +12,13 @@ namespace Rabbitual
 
     }
 
-    public interface IOptionsAgent: IAgent
+    public interface IOptionsAgent:IAgent
     {
-         IDictionary<string,string> Options { get;  }
+    }
+
+    public interface IOptionsAgent<TOption>: IOptionsAgent where TOption:class
+    {
+        TOption Options { set; }
     }
 
     /// <summary>
@@ -37,7 +42,7 @@ namespace Rabbitual
     {
         void Check();
     }
-
+    
     /// <summary>
     ///     Execute work 
     /// </summary>

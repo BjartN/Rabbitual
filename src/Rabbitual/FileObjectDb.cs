@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using Rabbitual.Infrastructure;
 
 namespace Rabbitual
@@ -27,6 +28,16 @@ namespace Rabbitual
         private string getFile(string id)
         {
             return Path.Combine(_folder, id + ".dat");
+        }
+
+        public object Get(Type t, string id)
+        {
+            var file = getFile(id);
+            if (!File.Exists(file))
+                return null;
+
+            var bytes = File.ReadAllBytes(file);
+            return _s.FromBytes(bytes, t);
         }
 
         public T Get<T>(string id)
