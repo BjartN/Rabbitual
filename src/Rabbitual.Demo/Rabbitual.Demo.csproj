@@ -7,8 +7,8 @@
     <ProjectGuid>{7F9B4FD0-577F-4EE5-98D9-B2AADDE82882}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Rabbitual.Console</RootNamespace>
-    <AssemblyName>Rabbitual.Console</AssemblyName>
+    <RootNamespace>Rabbitual.Demo</RootNamespace>
+    <AssemblyName>Rabbitual.Demo</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
@@ -57,7 +57,7 @@
   <ItemGroup>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="TestAgent.cs" />
+    <Compile Include="ThirdPartyAgent\ScheduledPublisherAgent.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

@@ -1,6 +1,6 @@
 ﻿using Rabbitual.Infrastructure;
 
-namespace Rabbitual.Rabbit.Fake
+namespace Rabbitual.Fox
 {
     public class TimedFakeMessageConsumer: IMessageConsumer
     {

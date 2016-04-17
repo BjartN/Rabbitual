@@ -21,14 +21,20 @@ namespace Rabbitual
     {
         private readonly IMessageConsumer _c;
         private readonly IAgent[] _agents;
+        private readonly IObjectDb _db;
+        private readonly ILogger _logger;
         private readonly List<Timer> _timers;
+        private int _uniqueId;
 
-        public App(IMessageConsumer c, IAgent[] agents)
+        public App(IMessageConsumer c, IAgent[] agents, IObjectDb db, ILogger logger)
         {
             _c = c;
             _agents = agents;
+            _db = db;
+            _logger = logger;
             _timers = new List<Timer>();
         }
+
 
         public void Start()
         {
@@ -37,15 +43,16 @@ namespace Rabbitual
             //start all statefull agents
             foreach (var a in _agents.OfType<IStatefulAgent>())
             {
-                //TODO: Add agent context
-                a.Start(null);
+                a.Start(new AgentState((_uniqueId++).ToString(), _db, _logger));
             }
 
             //agents doing work on a timer
             foreach (var a in _agents.OfType<IScheduledAgent>())
             {
+                var interval = a.TryGetIntOption("options.schedule") ?? 5000;
+
                 var timer = new Timer();
-                timer.Start(5000, a.Check);
+                timer.Start(interval, a.Check);
                 _timers.Add(timer);
             }
 

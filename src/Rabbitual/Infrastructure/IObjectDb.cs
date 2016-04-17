@@ -3,6 +3,6 @@
     public interface IObjectDb
     {
         void Save(object o, string id);
-        object Get(string id);
+        T Get<T>(string id);
     }
 }

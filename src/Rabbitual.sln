@@ -5,7 +5,7 @@ VisualStudioVersion = 14.0.25123.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rabbitual", "Rabbitual\Rabbitual.csproj", "{993AFF94-2199-4009-A2AC-661D9E061933}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rabbitual.Console", "Rabbitual.Console\Rabbitual.Console.csproj", "{7F9B4FD0-577F-4EE5-98D9-B2AADDE82882}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rabbitual.Demo", "Rabbitual.Demo\Rabbitual.Demo.csproj", "{7F9B4FD0-577F-4EE5-98D9-B2AADDE82882}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

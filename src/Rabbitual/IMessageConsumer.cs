@@ -1,4 +1,4 @@
-namespace Rabbitual.Rabbit
+namespace Rabbitual
 {
     public interface IMessageConsumer
     {

@@ -8,7 +8,8 @@ namespace Rabbitual.Infrastructure
     {
         public byte[] ToBytes<T>(T o)
         {
-            throw new NotImplementedException();
+            var json = JsonConvert.SerializeObject(o);
+            return Encoding.UTF8.GetBytes(json);
         }
 
         public T FromBytes<T>(byte[] body)

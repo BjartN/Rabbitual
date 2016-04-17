@@ -1,4 +1,5 @@
-﻿using System.Security.AccessControl;
+﻿using System.Collections.Generic;
+using System.Security.AccessControl;
 
 namespace Rabbitual
 {
@@ -8,6 +9,11 @@ namespace Rabbitual
     public interface IAgent
     {
 
+    }
+
+    public interface IOptionsAgent: IAgent
+    {
+         IDictionary<string,string> Options { get;  }
     }
 
     /// <summary>
@@ -56,7 +62,7 @@ namespace Rabbitual
         /// <summary>
         /// As long as the serializers can serialize, you can have state
         /// </summary>
-        object GetState();
+        T GetState<T>();
 
         /// <summary>
         /// Agent is responsible for persisting it's own state when required
