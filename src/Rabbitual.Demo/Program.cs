@@ -1,4 +1,5 @@
 ﻿using Rabbitual.Agents;
+using Rabbitual.Agents.WeatherAgent;
 using Rabbitual.Configuration;
 
 namespace Rabbitual.Demo
@@ -44,7 +45,51 @@ namespace Rabbitual.Demo
                     Sources = new[] { c }
                 };
 
-                return new[] { a, b, c, d };
+                var e = new AgentConfig
+                {
+                    Id = "WeatherAgent 00",
+                    Name = "WeatherAgent 00",
+                    ClrType = typeof(WeatherAgent),
+                    Options = new WeatherOptions
+                    {
+                        RunTime = 0
+                    }
+                };
+
+                var f = new AgentConfig
+                {
+                    Id = "WeatherAgent 06",
+                    Name = "WeatherAgent 06",
+                    ClrType = typeof(WeatherAgent),
+                    Options = new WeatherOptions
+                    {
+                        RunTime = 6
+                    }
+                };
+
+                var g = new AgentConfig
+                {
+                    Id = "WeatherAgent 12",
+                    Name = "WeatherAgent 12",
+                    ClrType = typeof(WeatherAgent),
+                    Options = new WeatherOptions
+                    {
+                        RunTime = 12
+                    }
+                };
+
+                var h = new AgentConfig
+                {
+                    Id = "WeatherAgent 18",
+                    Name = "WeatherAgent 18",
+                    ClrType = typeof(WeatherAgent),
+                    Options = new WeatherOptions
+                    {
+                        RunTime = 18
+                    }
+                };
+
+                return new[] {e,f,g,h };
             }
         }
     }

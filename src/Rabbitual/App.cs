@@ -24,7 +24,6 @@ namespace Rabbitual
         private readonly IAgentFactory _f;
         private readonly IObjectDb _db;
         private readonly ILogger _logger;
-        private readonly IOptionsRepository _options;
         private readonly IPublisher _p;
         private readonly List<Timer> _timers;
         private Tuple<IAgent, AgentConfig>[] _agents;
@@ -34,14 +33,12 @@ namespace Rabbitual
             IAgentFactory f,
             IObjectDb db,
             ILogger logger,
-            IOptionsRepository options,
             IPublisher p)
         {
             _c = c;
             _f = f;
             _db = db;
             _logger = logger;
-            _options = options;
             _p = p;
             _timers = new List<Timer>();
         }
@@ -68,7 +65,7 @@ namespace Rabbitual
                 if (agentWithOptions != null)
                 {
                     //Set options
-                    var options = _options.GetOptions(agentWithOptions.GetType(), config.Id);
+                    var options = config.Options ?? ReflectionHelper.CreateDefaultOptionsUsingMagic(agentWithOptions.GetType());
                     ReflectionHelper.SetOptionsUsingMagic(agentWithOptions, options);
                 }
 
@@ -89,17 +86,7 @@ namespace Rabbitual
                 {
                     //Set agent on a timer, with some silly-checking.
                     var schedule = scheduledAgent.DefaultSchedule <= 0 ? 5000 : scheduledAgent.DefaultSchedule;
-                    _timers.Push(new Timer()).Start(schedule, () =>
-                    {
-                        try
-                        {
-                            scheduledAgent.Check();
-                        }
-                        catch
-                        {
-                            _logger.Log("Agent on type {0} failed on Check()", scheduledAgent.GetType().FullName);
-                        }
-                    });
+                    _timers.Push(new Timer()).Start(schedule, () => scheduledAgent.Check());
                 }
             }
 
@@ -115,7 +102,7 @@ namespace Rabbitual
                 t.Stop();
             }
 
-            foreach (var a in _agents.OfType<IStatefulAgent>())
+            foreach (var a in _agents.Select(x => x.Item1).OfType<IStatefulAgent>())
             {
                 a.Stop();
             }

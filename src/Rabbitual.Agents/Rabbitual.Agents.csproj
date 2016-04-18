@@ -46,6 +46,11 @@
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="StatsAgent.cs" />
+    <Compile Include="WeatherAgent\GribDownloader.cs" />
+    <Compile Include="ScheduledAgent.cs" />
+    <Compile Include="WeatherAgent\WeatherAgent.cs" />
+    <Compile Include="WeatherAgent\WeatherFolder.cs" />
+    <Compile Include="WeatherAgent\WeatherOptions.cs" />
     <Compile Include="WebCheckerAgent.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -35,7 +35,7 @@ namespace Rabbitual.Agents
         public void Check()
         {
             _state.Count++;
-            _log.Log("Publishing an event for the {0} time", _state.Count);
+            //_log.Log("Publishing an event for the {0} time", _state.Count);
             Publisher.PublishEvent(new Message());
         }
 

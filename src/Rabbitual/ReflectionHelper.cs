@@ -12,6 +12,12 @@ namespace Rabbitual
             return optionTypes.Select(Activator.CreateInstance).ToArray();
         }
 
+        public static object CreateDefaultOptionsUsingMagic(Type agentType)
+        {
+            var optionType = GetOptionType(agentType);
+            return Activator.CreateInstance(optionType);
+        }
+
         public static Type GetOptionType(Type agentType)
         {
             return GetGenericArgument(agentType, typeof(IHaveOptions<>));

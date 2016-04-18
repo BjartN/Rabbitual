@@ -9,12 +9,17 @@ namespace Rabbitual
         Tuple<IAgent,AgentConfig>[] GetAgents();
     }
 
+    public interface IFactory
+    {
+        object GetInstance(Type t);
+    }
+
     public class AgentFactory : IAgentFactory
     {
-        private readonly Func<Type, IAgent> _agentFactory;
+        private readonly IFactory _agentFactory;
         private readonly IAgentConfiguration _cfg;
 
-        public AgentFactory(Func<Type,IAgent> agentFactory, IAgentConfiguration cfg)
+        public AgentFactory(IFactory agentFactory, IAgentConfiguration cfg)
         {
             _agentFactory = agentFactory;
             _cfg = cfg;
@@ -23,7 +28,7 @@ namespace Rabbitual
         public Tuple<IAgent,AgentConfig>[] GetAgents()
         {
             return _cfg.GetConfiguration()
-                .Select(x => new Tuple<IAgent, AgentConfig>(_agentFactory(x.ClrType), x))
+                .Select(x => new Tuple<IAgent, AgentConfig>((IAgent)_agentFactory.GetInstance(x.ClrType), x))
                 .ToArray();
         } 
     }

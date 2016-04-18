@@ -19,6 +19,8 @@ namespace Rabbitual.Configuration
         /// If any sources, the agent can only recieve from these sources.
         /// </summary>
         public AgentConfig[] Sources { get; set; }
+
+        public object Options { get; set; }
     }
 
     public interface IAgentConfiguration

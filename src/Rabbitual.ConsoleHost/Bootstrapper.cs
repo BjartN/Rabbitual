@@ -47,15 +47,28 @@ namespace Rabbitual.ConsoleHost
 
                 init.For<IObjectDb>().Use<FileObjectDb>();
                 init.For<ISerializer>().Use<JsonSerializer>();
-
-
                 init.For<IAgentConfiguration>().Use(configuraton);
-                init.For<Func<Type, IAgent>>().Use(ctx => (Func<Type, IAgent>) (t => (IAgent) ctx.GetInstance(t)));
+                init.For<IFactory>().Use<Factory>();
 
                 init.For<App>().Use<App>().Singleton();
             });
 
             return c;
+        }
+
+        public class Factory : IFactory
+        {
+            private readonly IContainer _c;
+
+            public Factory(IContainer c)
+            {
+                _c = c;
+            }
+
+            public object GetInstance(Type t)
+            {
+                return _c.GetInstance(t);
+            }
         }
     }
 }

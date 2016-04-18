@@ -61,11 +61,9 @@
     <Compile Include="App.cs" />
     <Compile Include="Infrastructure\EnumerableExtentions.cs" />
     <Compile Include="Infrastructure\IObjectDb.cs" />
-    <Compile Include="IOptionsRepository.cs" />
     <Compile Include="Message.cs" />
     <Compile Include="Constants.cs" />
     <Compile Include="Fox\MessageHub.cs" />
-    <Compile Include="OptionsRepository.cs" />
     <Compile Include="PublisherProxy.cs" />
     <Compile Include="Rabbit\ExchangeDefinitions.cs" />
     <Compile Include="IAppConfiguration.cs" />
