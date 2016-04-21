@@ -5,28 +5,29 @@ using System.Threading.Tasks;
 namespace Rabbitual.Fox
 {
     /// <summary>
-    /// Simple naive implementation of a in memory message buss
+    /// Simple naive implementation of a in memory task buss
     /// 
     /// Rabbit is the read deal, the Fox just makes life easier when developing.
     /// </summary>
-    public class MessageHub
+    public class EventHub
     {
         private readonly List<Action<Message>> _subscribers = new List<Action<Message>>();
-        readonly object _locker = new object();
+        private readonly object _locker = new object();
 
-        public void Publish(Message message)
+        public void PublishEvent(Message message)
         {
             lock (_locker)
             {
                 foreach (var callback in _subscribers)
-                    Task.Run(()=>callback(message));
+                    Task.Run(() => callback(message));
             }
         }
 
         public void Subscribe(Action<Message> callback)
         {
-            lock(_locker)
+            lock (_locker)
                 _subscribers.Add(callback);
         }
+
     }
 }

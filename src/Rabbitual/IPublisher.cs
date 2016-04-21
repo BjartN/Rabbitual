@@ -8,7 +8,7 @@ namespace Rabbitual
     /// </summary>
     public interface IPublisher
     {
-        void SubmitTask(Message m);
-        void PublishEvent(Message m);
+        void EnqueueTask(Message task);
+        void PublishEvent(Message e);
     }
 }

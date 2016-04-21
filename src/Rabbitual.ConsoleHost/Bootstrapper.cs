@@ -27,13 +27,15 @@ namespace Rabbitual.ConsoleHost
                 if (!inMemory)
                 {
                     init.For<IPublisher>().Use<RabbitMessagePublisher>();
-                    init.For<IMessageConsumer>().Use<RabbitMessageConsumer>();
+                    init.For<IEventConsumer>().Use<RabbitEventConsumer>();
                 }
                 else
                 {
-                    init.For<MessageHub>().Use<MessageHub>().Singleton();
+                    init.For<EventHub>().Use<EventHub>().Singleton();
                     init.For<IPublisher>().Use<FoxMessagePublisher>();
-                    init.For<IMessageConsumer>().Use<FoxMessageConsumer>();
+                    init.For<IEventConsumer>().Use<FoxEventConsumer>();
+                    init.For<ITaskConsumer>().Use<FoxTaskConsumer>();
+
                 }
 
                 init.For<CounterAgent>().Use<CounterAgent>();

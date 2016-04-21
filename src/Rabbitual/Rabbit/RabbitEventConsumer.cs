@@ -10,7 +10,7 @@ namespace Rabbitual.Rabbit
     /// <summary>
     /// Recieve from RabbitMq and delegate work to typed consumersAgent
     /// </summary>
-    public class RabbitMessageConsumer : IMessageConsumer
+    public class RabbitEventConsumer : IEventConsumer
     {
         private readonly ILogger _c;
         private readonly ISerializer _s;
@@ -21,7 +21,7 @@ namespace Rabbitual.Rabbit
         private IModel _channel;
         private IConnection _connection;
 
-        public RabbitMessageConsumer(
+        public RabbitEventConsumer(
             ILogger c,
             IAppConfiguration cfg,
             ISerializer s,
@@ -47,8 +47,8 @@ namespace Rabbitual.Rabbit
             }
             catch (BrokerUnreachableException ex)
             {
-                _c.Log("Could not connect to Rabbit using HostName=" + _factory.HostName);
-                _c.Log(ex.Message);
+                _c.Info("Could not connect to Rabbit using HostName=" + _factory.HostName);
+                _c.Info(ex.Message);
                 return;
             }
             _channel = _connection.CreateModel();
@@ -76,27 +76,27 @@ namespace Rabbitual.Rabbit
         {
             var consumer = new EventingBasicConsumer(_channel);
 
-            _c.Log("Waiting for tasks.");
+            _c.Info("Waiting for tasks.");
             consumer.Received += (model, ea) =>
             {
                 var body = ea.Body;
                 var task = _s.FromBytes<T>(body);
 
-                _c.Log("Message received {0} ", task.GetType());
+                _c.Info("Message received {0} ", task.GetType());
 
                 try
                 {
                     doWork(task);
                     _channel.BasicAck(deliveryTag: ea.DeliveryTag, multiple: false);
 
-                    _c.Log("Message processed at {0}", DateTime.Now);
+                    _c.Info("Message processed at {0}", DateTime.Now);
                 }
                 catch (Exception ex)
                 {
                     _channel.BasicReject(ea.DeliveryTag, true);
-                    _c.Log("Error");
-                    _c.Log(ex.Message);
-                    _c.Log(ex.StackTrace);
+                    _c.Info("Error");
+                    _c.Info(ex.Message);
+                    _c.Info(ex.StackTrace);
                 }
             };
 

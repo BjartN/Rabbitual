@@ -1,16 +1,17 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Rabbitual.Configuration;
 
 namespace Rabbitual.Fox
 {
-    public class FoxMessageConsumer : IMessageConsumer
+    public class FoxEventConsumer : IEventConsumer
     {
-        private readonly MessageHub _m;
+        private readonly EventHub _m;
         private readonly IAgentConfiguration _cfg;
         private Dictionary<string, AgentConfig> _configs;
 
-        public FoxMessageConsumer(MessageHub m, IAgentConfiguration cfg)
+        public FoxEventConsumer(EventHub m, IAgentConfiguration cfg)
         {
             _m = m;
             _cfg = cfg;
@@ -41,5 +42,9 @@ namespace Rabbitual.Fox
         {
 
         }
+    }
+
+    public class Fit : Exception
+    {
     }
 }

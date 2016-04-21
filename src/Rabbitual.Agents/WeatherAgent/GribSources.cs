@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
-using Rabbitual.Infrastructure;
 
 namespace Rabbitual.Agents.WeatherAgent
 {
@@ -17,21 +15,12 @@ namespace Rabbitual.Agents.WeatherAgent
             Url = url;
         }
 
-        public string Folder { get; set; }
         public string File { get; set; }
         public string Url { get; set; }
     }
 
-    public class GribDownloader
+    public class GribSources
     {
-        private readonly ILogger _logger;
-
-        public GribDownloader(ILogger l)
-        {
-            _logger = l;
-        }
-
-
         public DownloadItem[] GetWaveWatch3(DateTime anaTime)
         {
             //Wave watch 3
@@ -83,73 +72,7 @@ namespace Rabbitual.Agents.WeatherAgent
             return l.ToArray();
         }
 
-        private Quarantine _q = new Quarantine();
-        public void Download(string rootFolder, DownloadItem[] files)
-        {
-            foreach (var file in files)
-            {
-                if (!Directory.Exists(rootFolder))
-                    Directory.CreateDirectory(rootFolder);
-
-                var fullFile = Path.Combine(rootFolder, file.File) + ".tmp";
-                var fullFileFinal = Path.Combine(rootFolder, file.File);
-
-                if (File.Exists(fullFileFinal))
-                {
-                    //_logger.Log(string.Format("File exists {0}", fullFileFinal));
-                    continue;
-                }
-
-                if (File.Exists(fullFile))
-                {
-                    try { File.Delete(fullFile); }
-                    catch (Exception ex)
-                    {
-                        _logger.Log("Could not delete .tmp file " + fullFile);
-                        continue;
-                    }
-                }
-
-
-                if (_q.In(file.Url))
-                {
-                    //_logger.Log("Quarantined " + file.Url);
-                    continue;
-                }
-
-                var contentLength = HttpContentExtensions.GetContentLength(file.Url);
-
-                if (!contentLength.HasValue)
-                {
-                    _q.Add(file.Url);
-                    _logger.Log("Not there " + file.Url);
-                    continue;
-                }
-
-                _logger.Log("Downloading \"" + file.Url + "\"...");
-                _logger.Log("\tContent length will be " + contentLength);
-
-                try
-                {
-                    new WebClient().DownloadFile(file.Url, fullFile);
-                }
-                catch(Exception ex)
-                {
-                    _logger.Log("Could not download " + file.Url);
-                }
-
-                try
-                {
-                    File.Move(fullFile, fullFileFinal);
-                }
-                catch 
-                {
-                    _logger.Log("Could not rename to file name " + fullFileFinal);
-                }
-
-                _logger.Log("Done with " + file.Url);
-            }
-        }
+       
     }
 
 

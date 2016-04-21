@@ -20,7 +20,7 @@ namespace Rabbitual.Agents
 
         public void Check()
         {
-            _l.Log("I'm on a schedule. Have processed {0} events so far", _count);
+            _l.Info("I'm on a schedule. Have processed {0} events so far", _count);
         }
 
         public void Consume(object evt)

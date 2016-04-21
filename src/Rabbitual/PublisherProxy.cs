@@ -13,16 +13,16 @@ namespace Rabbitual
             _agentId = agentId;
         }
 
-        public void SubmitTask(Message m)
+        public void EnqueueTask(Message task)
         {
-            m.SourceAgentId = _agentId;
-            _inner.SubmitTask(m);
+            task.SourceAgentId = _agentId;
+            _inner.EnqueueTask(task);
         }
 
-        public void PublishEvent(Message m)
+        public void PublishEvent(Message e)
         {
-            m.SourceAgentId = _agentId;
-            _inner.PublishEvent(m);
+            e.SourceAgentId = _agentId;
+            _inner.PublishEvent(e);
         }
     }
 }

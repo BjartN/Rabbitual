@@ -30,9 +30,9 @@ namespace Rabbitual.Rabbit
         /// rabbitmq-service.bat install 
         /// rabbitmq-service.bat start 
         /// </summary>
-        public void SubmitTask(Message m)
+        public void EnqueueTask(Message task)
         {
-            SubmitTask(m, Constants.TaskQueue);
+            SubmitTask(task, Constants.TaskQueue);
         }
 
         public void SubmitTask(Message m, string queueName)
@@ -58,19 +58,19 @@ namespace Rabbitual.Rabbit
             }
         }
 
-        public void PublishEvent(Message m)
+        public void PublishEvent(Message e)
         {
-            PublishEvent(m,Constants.PubSubExchange);
+            PublishEvent(e,Constants.PubSubExchange);
         }
 
-        public void PublishEvent(Message m,string exchangeName)
+        public void PublishEvent(Message e,string exchangeName)
         {
             var factory = new ConnectionFactory { HostName = _cfg.Get("rabbit.hostname") };
             using (var connection = factory.CreateConnection())
             {
                 using (var channel = connection.CreateModel())
                 {
-                    var body = _s.ToBytes(m);
+                    var body = _s.ToBytes(e);
                     var properties = channel.CreateBasicProperties();
                     properties.Persistent = true;
 

@@ -2,21 +2,23 @@
 {
     public class FoxMessagePublisher: IPublisher
     {
-        private readonly MessageHub _hub;
+        private readonly EventHub _hub;
+        private readonly TaskHub _taskHub;
 
-        public FoxMessagePublisher(MessageHub hub)
+        public FoxMessagePublisher(EventHub hub,TaskHub taskHub)
         {
             _hub = hub;
+            _taskHub = taskHub;
         }
 
-        public void SubmitTask(Message m)
+        public void EnqueueTask(Message task)
         {
-            _hub.Publish(m);
+            _taskHub.EnqueueTask(task);
         }
 
-        public void PublishEvent(Message m)
+        public void PublishEvent(Message e)
         {
-            _hub.Publish(m);
+            _hub.PublishEvent(e);
         }
     }
 }

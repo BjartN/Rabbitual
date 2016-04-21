@@ -1,12 +1,26 @@
 ﻿using System;
 using System.Linq;
+using System.Security.AccessControl;
 using Rabbitual.Configuration;
 
 namespace Rabbitual
 {
+    public class Ac //in lack of a better name
+    {
+        public Ac(IAgent agent, AgentConfig config)
+        {
+            Agent = agent;
+            Config = config;
+        }
+
+        public AgentConfig Config{ get;private set; }
+        public IAgent Agent{ get; private set; }
+
+    }
+
     public interface IAgentFactory
     {
-        Tuple<IAgent,AgentConfig>[] GetAgents();
+        Ac[] GetAgents();
     }
 
     public interface IFactory
@@ -25,10 +39,10 @@ namespace Rabbitual
             _cfg = cfg;
         }
 
-        public Tuple<IAgent,AgentConfig>[] GetAgents()
+        public Ac[] GetAgents()
         {
             return _cfg.GetConfiguration()
-                .Select(x => new Tuple<IAgent, AgentConfig>((IAgent)_agentFactory.GetInstance(x.ClrType), x))
+                .Select(x => new Ac((IAgent)_agentFactory.GetInstance(x.ClrType), x))
                 .ToArray();
         } 
     }

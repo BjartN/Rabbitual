@@ -5,7 +5,6 @@ namespace Rabbitual
 {
     public class Message
     {
-
         public Message()
         {
             Data = new Dictionary<string, string>();
@@ -23,7 +22,5 @@ namespace Rabbitual
             }
             return sb.ToString().TrimEnd('&');
         }
-
     }
-
 }

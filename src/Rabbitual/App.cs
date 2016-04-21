@@ -20,22 +20,25 @@ namespace Rabbitual
     /// </summary>
     public class App
     {
-        private readonly IMessageConsumer _c;
+        private readonly IEventConsumer _eventConsumer;
+        private readonly ITaskConsumer _taskConsumer;
         private readonly IAgentFactory _f;
         private readonly IObjectDb _db;
         private readonly ILogger _logger;
         private readonly IPublisher _p;
         private readonly List<Timer> _timers;
-        private Tuple<IAgent, AgentConfig>[] _agents;
+        private Ac[] _agents;
 
         public App(
-            IMessageConsumer c,
+            IEventConsumer eventConsumer,
+            ITaskConsumer taskConsumer,
             IAgentFactory f,
             IObjectDb db,
             ILogger logger,
             IPublisher p)
         {
-            _c = c;
+            _eventConsumer = eventConsumer;
+            _taskConsumer = taskConsumer;
             _f = f;
             _db = db;
             _logger = logger;
@@ -49,10 +52,10 @@ namespace Rabbitual
             _agents = _f.GetAgents();
 
             //Note that an agent both on timer and waiting for events might get accessed concurrently
-            foreach (var tuple in _agents)
+            foreach (var ac in _agents)
             {
-                var agent = tuple.Item1;
-                var config = tuple.Item2;
+                var agent = ac.Agent;
+                var config = ac.Config;
 
                 var agentWithOptions = agent as IHaveOptions;
                 var statefulAgent = agent as IStatefulAgent;
@@ -60,7 +63,7 @@ namespace Rabbitual
                 var publishingAgent = agent as IPublishingAgent;
 
                 //assign id to agent
-                agent.Id = tuple.Item2.Id;
+                agent.Id = ac.Config.Id;
 
                 if (agentWithOptions != null)
                 {
@@ -86,23 +89,27 @@ namespace Rabbitual
                 {
                     //Set agent on a timer, with some silly-checking.
                     var schedule = scheduledAgent.DefaultSchedule <= 0 ? 5000 : scheduledAgent.DefaultSchedule;
-                    _timers.Push(new Timer()).Start(schedule, () => scheduledAgent.Check());
+                    _timers.Push(new Timer(_logger)).Start(schedule, () => scheduledAgent.Check());
                 }
             }
 
             //Agents waiting for events
-            _c.Start(_agents.Select(x => x.Item1).OfType<IEventConsumerAgent>().ToArray());
+            var eventConsumerAgents = _agents.Select(x => x.Agent).OfType<IEventConsumerAgent>().ToArray();
+            var taskConsumerAgents = _agents.Select(x => x.Agent).OfType<ITaskConsumerAgent>().ToArray();
+
+            _eventConsumer.Start(eventConsumerAgents);
+            _taskConsumer.Start(taskConsumerAgents);
         }
 
         public void Stop()
         {
-            _c.Stop();
+            _eventConsumer.Stop();
             foreach (var t in _timers)
             {
                 t.Stop();
             }
 
-            foreach (var a in _agents.Select(x => x.Item1).OfType<IStatefulAgent>())
+            foreach (var a in _agents.Select(x => x.Agent).OfType<IStatefulAgent>())
             {
                 a.Stop();
             }

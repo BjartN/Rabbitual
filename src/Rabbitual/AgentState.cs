@@ -22,7 +22,7 @@ namespace Rabbitual
 
         public void PersistState(object state)
         {
-            _log.Log("Persisting state for {0}", _log);
+            _log.Info("Persisting state for {0}", _log);
             _db.Save(state,"state." + _agentId);
         }
     }

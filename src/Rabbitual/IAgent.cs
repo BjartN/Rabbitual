@@ -58,7 +58,7 @@ namespace Rabbitual
     public interface ITaskConsumerAgent : IAgent
     {
         bool CanWorkOn(object task);
-        void WorkOn(object task);
+        void DoWork(object task);
     }
 
     /// <summary>
