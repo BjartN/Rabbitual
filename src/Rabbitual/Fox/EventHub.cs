@@ -9,25 +9,25 @@ namespace Rabbitual.Fox
     /// 
     /// Rabbit is the read deal, the Fox just makes life easier when developing.
     /// </summary>
-    public class EventHub
-    {
-        private readonly List<Action<Message>> _subscribers = new List<Action<Message>>();
-        private readonly object _locker = new object();
+    //public class EventHub
+    //{
+    //    private readonly List<Action<Message>> _subscribers = new List<Action<Message>>();
+    //    private readonly object _locker = new object();
 
-        public void PublishEvent(Message message)
-        {
-            lock (_locker)
-            {
-                foreach (var callback in _subscribers)
-                    Task.Run(() => callback(message));
-            }
-        }
+    //    public void PublishEvent(Message message)
+    //    {
+    //        lock (_locker)
+    //        {
+    //            foreach (var callback in _subscribers)
+    //                Task.Run(() => callback(message));
+    //        }
+    //    }
 
-        public void Subscribe(Action<Message> callback)
-        {
-            lock (_locker)
-                _subscribers.Add(callback);
-        }
+    //    public void Subscribe(Action<Message> callback)
+    //    {
+    //        lock (_locker)
+    //            _subscribers.Add(callback);
+    //    }
 
-    }
+    //}
 }

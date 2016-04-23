@@ -31,7 +31,7 @@ namespace Rabbitual.ConsoleHost
                 }
                 else
                 {
-                    init.For<EventHub>().Use<EventHub>().Singleton();
+                    init.For<Hub>().Use<Hub>().Singleton();
                     init.For<IPublisher>().Use<FoxMessagePublisher>();
                     init.For<IEventConsumer>().Use<FoxEventConsumer>();
                     init.For<ITaskConsumer>().Use<FoxTaskConsumer>();

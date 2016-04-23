@@ -6,11 +6,11 @@ namespace Rabbitual.Fox
 {
     public class FoxTaskConsumer : ITaskConsumer
     {
-        private readonly TaskHub _hub;
+        private readonly Hub _hub;
         private readonly IAgentConfiguration _cfg;
         private Dictionary<string, AgentConfig> _configs;
 
-        public FoxTaskConsumer(TaskHub hub, IAgentConfiguration cfg)
+        public FoxTaskConsumer(Hub hub, IAgentConfiguration cfg)
         {
             _hub = hub;
             _cfg = cfg;

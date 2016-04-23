@@ -7,11 +7,11 @@ namespace Rabbitual.Fox
 {
     public class FoxEventConsumer : IEventConsumer
     {
-        private readonly EventHub _m;
+        private readonly Hub _m;
         private readonly IAgentConfiguration _cfg;
         private Dictionary<string, AgentConfig> _configs;
 
-        public FoxEventConsumer(EventHub m, IAgentConfiguration cfg)
+        public FoxEventConsumer(Hub m, IAgentConfiguration cfg)
         {
             _m = m;
             _cfg = cfg;
