@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Security.AccessControl;
 using RabbitMQ.Client.Framing.Impl;
+using Rabbitual.Fox;
 
 namespace Rabbitual
 {
@@ -57,8 +58,8 @@ namespace Rabbitual
     /// </summary>
     public interface ITaskConsumerAgent : IAgent
     {
-        bool CanWorkOn(object task);
-        void DoWork(object task);
+        bool CanDoWork(Message task);
+        void DoWork(Message task);
     }
 
     /// <summary>

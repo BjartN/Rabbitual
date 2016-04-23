@@ -66,7 +66,7 @@ namespace Rabbitual.Agents.DownloaderAgent
             }
             catch (Exception ex)
             {
-                _logger.Info("Could not download " + file.Url);
+                _logger.Debug("\tCould not download");
             }
 
             try

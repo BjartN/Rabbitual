@@ -23,14 +23,7 @@ namespace Rabbitual.Fox
 
             foreach (var w in workers)
             {
-                _hub.AddWorker(message =>
-                {
-                    if (!w.CanWorkOn(message))
-                        //currently only way to signal that work is not suitable
-                        throw new Fit();
-
-                    w.DoWork(message);
-                });
+                _hub.AddWorker(w);
             }
         }
 

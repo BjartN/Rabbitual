@@ -34,7 +34,7 @@ namespace Rabbitual.Agents
 
             _state.Count = _state.Count+1;
 
-            _l.Info($"All good. Count is {_state.Count}");
+            _l.Debug($"All good. Count is {_state.Count}");
 
         }
 

@@ -45,7 +45,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CounterAgent.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ScheduledPublisherAgent.cs" />
     <Compile Include="StatsAgent.cs" />
     <Compile Include="DownloaderAgent\Downloader.cs" />
     <Compile Include="DownloaderAgent\DownloaderOptions.cs" />

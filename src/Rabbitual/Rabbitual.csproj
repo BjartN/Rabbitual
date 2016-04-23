@@ -55,8 +55,6 @@
   <ItemGroup>
     <Compile Include="AgentFactory.cs" />
     <Compile Include="AgentState.cs" />
-    <Compile Include="Agents\CounterAgent.cs" />
-    <Compile Include="Agents\ScheduledPublisherAgent.cs" />
     <Compile Include="Configuration\AgentConfig.cs" />
     <Compile Include="FileObjectDb.cs" />
     <Compile Include="Fox\FoxEventConsumer.cs" />

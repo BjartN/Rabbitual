@@ -2,6 +2,7 @@
 using System.ComponentModel;
 using System.Text.RegularExpressions;
 using HtmlAgilityPack;
+using Rabbitual.Infrastructure;
 
 namespace Rabbitual.Agents
 {
@@ -10,9 +11,11 @@ namespace Rabbitual.Agents
         IPublishingAgent,
         IHaveOptions<WebCheckerOptions>
     {
+        private readonly ILogger _l;
 
-        public WebCheckerAgent()
+        public WebCheckerAgent(ILogger _l)
         {
+            this._l = _l;
         }
 
         public int DefaultSchedule => 10000;
@@ -26,6 +29,7 @@ namespace Rabbitual.Agents
             string contents;
             using (var wc = new System.Net.WebClient())
             {
+                _l.Debug("Checking {0}", Options.Url);
                 contents = wc.DownloadString(Options.Url);
             }
 
@@ -43,12 +47,14 @@ namespace Rabbitual.Agents
                     if (r.IsMatch(n.InnerText))
                     {
                         var data = new Dictionary<string, string> {["text"] = n.InnerText};
+                        _l.Debug("Publishing event");
                         Publisher.PublishEvent(new Message {Data = data});
                     }
                 }
                 else
                 {
                     var data = new Dictionary<string, string> { ["text"] = n.InnerText };
+                    _l.Debug("Publishing event");
                     Publisher.PublishEvent(new Message { Data = data });
                 }
             }
@@ -63,13 +69,13 @@ namespace Rabbitual.Agents
     {
         public WebCheckerOptions()
         {
-            Url = "http://bt.no";
+            Url = "http://ba.no";
             XPath = "//text()[normalize-space(.) != '']";
             Regex = "(?i)oljepris";
         }
 
         [Description("Url to website you want to check")]
-        public string Url { get; }
+        public string Url { get; set; }
 
         [Description("XPath to find a subsection of the site")]
         public string XPath { get; set; }

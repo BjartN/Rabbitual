@@ -6,15 +6,7 @@ using Rabbitual.Infrastructure;
 
 namespace Rabbitual
 {
-    /*
-     *  RabbitMQ terminology:
-     *      A producer is a user application that sends messages.
-     *      A consumer is a user application that receives messages.
-     *  
-     *  Note:
-     *  An agent can be both a consmer and producer at the same time. 
-     */
-
+   
     /// <summary>
     /// Starting point for everything. 
     /// </summary>

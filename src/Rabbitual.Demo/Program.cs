@@ -1,4 +1,7 @@
-﻿using Rabbitual.Agents;
+﻿using System.Collections.Generic;
+using System.Linq;
+using System.Security.Policy;
+using Rabbitual.Agents;
 using Rabbitual.Agents.DownloaderAgent;
 using Rabbitual.Agents.WeatherAgent;
 using Rabbitual.Configuration;
@@ -31,19 +34,33 @@ namespace Rabbitual.Demo
                     ClrType = typeof(ScheduledPublisherAgent),
                 };
 
-                var c = new AgentConfig
+                var urls = new[]
                 {
-                    Id = "WebCheckerAgent",
-                    Name = "WebCheckerAgent",
-                    ClrType = typeof(WebCheckerAgent),
+                    "http://ba.no",
+                    "http://bt.no",
+                    "http://dn.no",
+                    "http://ap.no",
+                    "http://sysla.no",
+                    "http://db.no"
                 };
+
+                var cc = urls.Select(url => new AgentConfig
+                {
+                    Id = "WebCheckerAgent " + url,
+                    Name = "WebCheckerAgent",
+                    ClrType = typeof (WebCheckerAgent),
+                    Options = new WebCheckerOptions
+                    {
+                        Url = url
+                    }
+                }).ToArray();
 
                 var d = new AgentConfig
                 {
                     Id = "StatsAgent",
                     Name = "StatsAgent",
                     ClrType = typeof(StatsAgent),
-                    Sources = new[] { c }
+                    Sources = cc 
                 };
 
                 var e = new AgentConfig
@@ -119,7 +136,10 @@ namespace Rabbitual.Demo
                     Sources = new[] { g }
                 };
 
-                return new[] {e,f,g,h,i,i2,i3 };
+                var l = new List<AgentConfig> {d,e,f,g,h,i,i2,i3 };
+                l.AddRange(cc);
+
+                return l.ToArray();
             }
         }
     }

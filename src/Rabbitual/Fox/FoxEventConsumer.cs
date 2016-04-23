@@ -34,7 +34,7 @@ namespace Rabbitual.Fox
                         return;
 
                     a.Consume(message);
-                });
+                }, a.Id);
             }
         }
 
