@@ -36,8 +36,8 @@ namespace Rabbitual.Demo
 
                 var urls = new[]
                 {
-                    "http://ba.no",
                     "http://bt.no",
+                    "http://ba.no",
                     "http://dn.no",
                     "http://ap.no",
                     "http://sysla.no",
@@ -53,7 +53,7 @@ namespace Rabbitual.Demo
                     {
                         Url = url
                     }
-                }).ToArray();
+                }).Take(1).ToArray();
 
                 var d = new AgentConfig
                 {

@@ -11,6 +11,13 @@ namespace Rabbitual
     public interface IAgent
     {
         string Id { get; set; }
+
+        void Start();
+
+        /// <summary>
+        /// Giving the agent a chance to persist its changes
+        /// </summary>
+        void Stop();
     }
 
     public interface IHaveOptions:IAgent
@@ -22,17 +29,17 @@ namespace Rabbitual
         TOption Options { set; }
     }
 
+    public interface IStatefulAgent 
+    {
+        IAgentState StateService { get; set; }
+    }
+
     /// <summary>
     /// An agent with with state that can seamlessly be fetched and persisted
     /// </summary>
-    public interface IStatefulAgent:IAgent
+    public interface IStatefulAgent<TState>:IStatefulAgent, IAgent where TState : class
     {
-        void Start(IAgentState ctx);
-
-        /// <summary>
-        /// Giving the agent a chance to persist its changes
-        /// </summary>
-        void Stop();
+        TState State { get; set; }
     }
 
     /// <summary>

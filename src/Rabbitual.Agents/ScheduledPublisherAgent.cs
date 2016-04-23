@@ -6,52 +6,40 @@ namespace Rabbitual.Agents
     /// <summary>
     /// Publish an event on a schedule
     /// </summary>
-    public class ScheduledPublisherAgent :
+    public class ScheduledPublisherAgent : Agent<ScheduledPublisherOptions>,
         IScheduledAgent, 
-        IHaveOptions<ScheduledPublisherOptions>,
-        IStatefulAgent,
+        IStatefulAgent<SweetState>,
         IPublishingAgent
     {
         private readonly ILogger _log;
-        private SweetState _state;
-        private IAgentState _cfx;
 
         public ScheduledPublisherAgent(ILogger log)
         {
             _log = log;
         }
 
-        public void Start(IAgentState ctx)
+        public new void Stop()
         {
-            _cfx = ctx;
-            _state = ctx.GetState<SweetState>() ?? new SweetState();
-        }
-
-        public void Stop()
-        {
-            _cfx.PersistState(_state);
+            StateService.PersistState(State);
         }
 
         public void Check()
         {
-            _state.Count++;
-            //_log.Info("Publishing an event for the {0} time", _state.Count);
+            State.Count++;
             Publisher.PublishEvent(new Message());
         }
 
         public int DefaultSchedule => 500;
 
-
-        public class SweetState
-        {
-            public int Count { get; set; }
-        }
-
-        public ScheduledPublisherOptions Options { set; get; }
         public IPublisher Publisher { get; set; }
-        public string Id { get; set; }
+        public SweetState State { get; set; }
+        public IAgentState StateService { get; set; }
     }
 
+    public class SweetState
+    {
+        public int Count { get; set; }
+    }
     public class ScheduledPublisherOptions
     {
        

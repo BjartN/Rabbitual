@@ -6,10 +6,9 @@ using Rabbitual.Infrastructure;
 
 namespace Rabbitual.Agents
 {
-    public class WebCheckerAgent : 
+    public class WebCheckerAgent : Agent<WebCheckerOptions>,
         IScheduledAgent,
-        IPublishingAgent,
-        IHaveOptions<WebCheckerOptions>
+        IPublishingAgent
     {
         private readonly ILogger _l;
 
@@ -18,7 +17,7 @@ namespace Rabbitual.Agents
             this._l = _l;
         }
 
-        public int DefaultSchedule => 10000;
+        public int DefaultSchedule => 4000;
 
         /// <summary>
         /// Use xpath to match node, and check for text in node using RegEx.
@@ -71,7 +70,7 @@ namespace Rabbitual.Agents
         {
             Url = "http://ba.no";
             XPath = "//text()[normalize-space(.) != '']";
-            Regex = "(?i)oljepris";
+            Regex = "(?i)brann";
         }
 
         [Description("Url to website you want to check")]

@@ -73,8 +73,18 @@ namespace Rabbitual
 
                 if (statefulAgent != null)
                 {
-                    //Inject state context
-                    statefulAgent.Start(new AgentState(config.Id, _db, _logger));
+                    //Inject state contex
+                    var service = new AgentState(config.Id, _db, _logger);
+                    statefulAgent.StateService = service;
+
+                    //TODO: Set default state
+                    var arg = ReflectionHelper.GetGenericArgument(statefulAgent.GetType(), typeof (IStatefulAgent<>));
+                    var method = typeof(AgentState).GetMethod("GetState");
+                    var genericMethod = method.MakeGenericMethod(arg);
+                    var result = genericMethod.Invoke(service, null);
+                    var pi = statefulAgent.GetType().GetProperty("State");
+                    pi.SetValue(statefulAgent,result);
+
                 }
 
                 if (scheduledAgent != null)
@@ -83,6 +93,8 @@ namespace Rabbitual
                     var schedule = scheduledAgent.DefaultSchedule <= 0 ? 5000 : scheduledAgent.DefaultSchedule;
                     _timers.Push(new Timer(_logger)).Start(schedule, () => scheduledAgent.Check());
                 }
+
+                agent.Start();
             }
 
             //Agents waiting for events
@@ -96,12 +108,14 @@ namespace Rabbitual
         public void Stop()
         {
             _eventConsumer.Stop();
+            _taskConsumer.Stop();
+
             foreach (var t in _timers)
             {
                 t.Stop();
             }
 
-            foreach (var a in _agents.Select(x => x.Agent).OfType<IStatefulAgent>())
+            foreach (var a in _agents.Select(x => x.Agent))
             {
                 a.Stop();
             }

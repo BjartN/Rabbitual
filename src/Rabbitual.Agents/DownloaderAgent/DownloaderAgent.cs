@@ -40,6 +40,15 @@ namespace Rabbitual.Agents.DownloaderAgent
         }
 
         public string Id { get; set; }
+        public void Start()
+        {
+            
+        }
+
+        public void Stop()
+        {
+        }
+
         public DownloaderOptions Options { get; set; }
     
     }

@@ -30,6 +30,14 @@ namespace Rabbitual.Agents
 
         public CounterOptions Options { get; set; }
         public string Id { get; set; }
+        public void Start()
+        {
+            
+        }
+
+        public void Stop()
+        {
+        }
     }
 
     public class CounterOptions

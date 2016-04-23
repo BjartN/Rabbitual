@@ -37,7 +37,7 @@ namespace Rabbitual
                 .ToArray();
         }
 
-        private static Type GetGenericArgument(Type type, Type interfaceType)
+        public static Type GetGenericArgument(Type type, Type interfaceType)
         {
             if (type.IsInterface || type.IsAbstract)
                 return null;
