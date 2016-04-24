@@ -1,10 +1,13 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using Rabbitual.Configuration;
 using Rabbitual.Fox;
 using Rabbitual.Infrastructure;
 using Rabbitual.Rabbit;
 using StructureMap;
 using StructureMap.Graph;
+using StructureMap.Pipeline;
 
 namespace Rabbitual.ConsoleHost
 {
@@ -58,9 +61,24 @@ namespace Rabbitual.ConsoleHost
                 _c = c;
             }
 
-            public object GetInstance(Type t)
+            public object GetInstance(Type t, IDictionary<Type, object> deps= null)
             {
-                return _c.GetInstance(t);
+                if (deps == null || deps.Count == 0)
+                    return _c.GetInstance(t);
+
+                try
+                {
+                    var args = new ExplicitArguments();
+                    foreach (var a in deps)
+                        args.Set(a.Key,a.Value);
+
+                    return _c.GetInstance(t, args);
+                }
+                catch (Exception ex)
+                {
+                    throw ex;
+                }
+
             }
         }
     }

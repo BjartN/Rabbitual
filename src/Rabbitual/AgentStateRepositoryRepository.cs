@@ -2,13 +2,13 @@ using Rabbitual.Infrastructure;
 
 namespace Rabbitual
 {
-    public class AgentState : IAgentState
+    public class AgentStateRepository : IAgentStateRepository
     {
         private readonly string _agentId;
         private readonly IObjectDb _db;
         private readonly ILogger _log;
 
-        public AgentState(string agentId, IObjectDb db, ILogger log)
+        public AgentStateRepository(string agentId, IObjectDb db, ILogger log)
         {
             _agentId = agentId;
             _db = db;

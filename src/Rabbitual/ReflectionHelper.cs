@@ -4,8 +4,18 @@ using System.Reflection;
 
 namespace Rabbitual
 {
-    public class ReflectionHelper
+    public static class ReflectionHelper
     {
+        public static bool IsOfType(this Type o, Type target)
+        {
+            if (target.IsGenericType && target.IsInterface)
+            {
+                return o.GetInterfaces().Any(x => x.IsGenericType &&   x.GetGenericTypeDefinition() == target);
+            }
+
+            //sick naming
+            return target.IsAssignableFrom(o);
+        }
 
         public static Type[] GetArgumentsOfOpenGenericInterfaceType(Type openGenericType, Assembly[] assemblies)
         {
@@ -39,11 +49,16 @@ namespace Rabbitual
 
     public class StateHelper
     {
-        public static object GetPersistedStateUsingMagic(IAgentState service, Type agent)
+        public static Type GetStateType(Type agent)
         {
-            var arg = ReflectionHelper.GetGenericArgument(agent, typeof(IStatefulAgent<>));
-            var method = typeof(AgentState).GetMethod("GetState");
-            var genericMethod = method.MakeGenericMethod(arg);
+            return ReflectionHelper.GetGenericArgument(agent, typeof(IStatefulAgent<>));
+        }
+
+        public static object GetPersistedStateUsingMagic(IAgentStateRepository service, Type agent)
+        {
+            var stateType = GetStateType(agent);
+            var method = typeof(AgentStateRepository).GetMethod("GetState");
+            var genericMethod = method.MakeGenericMethod(stateType);
             return genericMethod.Invoke(service, null);
         }
 
@@ -54,11 +69,11 @@ namespace Rabbitual
         }
 
 
-        public static void SetState(IStatefulAgent agent, object result)
-        {
-            var pi = agent.GetType().GetProperty("State");
-            pi.SetValue(agent, result);
-        }
+        //public static void SetState(IStaItefulAgent agent, object result)
+        //{
+        //    var pi = agent.GetType().GetProperty("State");
+        //    pi.SetValue(agent, result);
+        //}
 
     }
 
@@ -81,13 +96,13 @@ namespace Rabbitual
         {
             return ReflectionHelper.GetGenericArgument(agentType, typeof(IHaveOptions<>));
         }
-        public static void SetOptionsUsingMagic(IHaveOptions optionsAgent, object options)
-        {
-            //TODO: Cheating now, so make more robust
-            var pi = optionsAgent.GetType().GetProperties().FirstOrDefault(x => x.Name == "Options");
-            if (pi == null)
-                return;
-            pi.SetValue(optionsAgent, options, null);
-        }
+        //public static void SetOptionsUsingMagic(IHaveOptions optionsAgent, object options)
+        //{
+        //    //TODO: Cheating now, so make more robust
+        //    var pi = optionsAgent.GetType().GetProperties().FirstOrDefault(x => x.Name == "Options");
+        //    if (pi == null)
+        //        return;
+        //    pi.SetValue(optionsAgent, options, null);
+        //}
     }
 }

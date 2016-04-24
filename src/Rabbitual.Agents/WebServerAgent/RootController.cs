@@ -11,17 +11,23 @@ namespace Rabbitual.Agents.WebServerAgent
     {
         private readonly IAgentConfiguration _cfg;
         private readonly IAgentRepository _ar;
-        public RootController(IAgentConfiguration cfg, IAgentRepository ar)
+        private readonly IAgentService _s;
+
+        public RootController(
+            IAgentConfiguration cfg, 
+            IAgentRepository ar,
+            IAgentService s)
         {
             _cfg = cfg;
             _ar = ar;
+            _s = s;
         }
 
         [Route("agent/state/{id}")]
         public HttpResponseMessage Get(string id)
         {
             var agent = _ar.GetAgent(id);
-            var state = _ar.GetState(agent.Agent);
+            var state = _s.GetState(agent.Agent);
 
             return this.SweetJson(state);
         }

@@ -11,7 +11,7 @@ namespace Rabbitual.Agents.DownloaderAgent
         private readonly Downloader _d;
         private readonly ILogger _logger;
 
-        public DownloaderAgent(Downloader d, ILogger logger)
+        public DownloaderAgent(Downloader d, ILogger logger,DownloaderOptions options):base(options)
         {
             _d = d;
             _logger = logger;

@@ -54,7 +54,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AgentFactory.cs" />
-    <Compile Include="AgentState.cs" />
+    <Compile Include="AgentService.cs" />
+    <Compile Include="AgentStateRepositoryRepository.cs" />
     <Compile Include="Configuration\AgentConfig.cs" />
     <Compile Include="FileObjectDb.cs" />
     <Compile Include="Fox\FoxEventConsumer.cs" />
@@ -63,6 +64,8 @@
     <Compile Include="Fox\Hub.cs" />
     <Compile Include="IAgent.cs" />
     <Compile Include="App.cs" />
+    <Compile Include="IAgentRepository.cs" />
+    <Compile Include="Infrastructure\DictonaryExtentions.cs" />
     <Compile Include="Infrastructure\EnumerableExtentions.cs" />
     <Compile Include="Infrastructure\IObjectDb.cs" />
     <Compile Include="Infrastructure\ObjectExtentions.cs" />

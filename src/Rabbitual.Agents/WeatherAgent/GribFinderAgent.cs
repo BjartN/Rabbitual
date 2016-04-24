@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Linq;
 using Rabbitual.Infrastructure;
 
 namespace Rabbitual.Agents.WeatherAgent
@@ -9,12 +7,14 @@ namespace Rabbitual.Agents.WeatherAgent
     /// <summary>
     /// Search the W3 for gribs to download
     /// </summary>
-    public class GribFinderAgent : ScheduledStatefulAgent<WeatherOptions, GribFinderState>, IPublishingAgent
+    public class GribFinderAgent :
+        ScheduledStatefulAgent<WeatherOptions, GribFinderState>, 
+        IPublishingAgent
     {
         private readonly GribSources _d;
         private readonly ILogger _logger;
 
-        public GribFinderAgent(GribSources d, ILogger logger)
+        public GribFinderAgent(GribSources d, ILogger logger,WeatherOptions options,IAgentStateRepository stateRepository) : base(options,stateRepository)
         {
             _d = d;
             _logger = logger;

@@ -11,7 +11,7 @@ namespace Rabbitual.Agents.WebCheckerAgent
     {
         private readonly ILogger _l;
 
-        public WebCheckerAgent(ILogger l)
+        public WebCheckerAgent(ILogger l,WebCheckerOptions options) : base(options)
         {
             _l = l;
         }

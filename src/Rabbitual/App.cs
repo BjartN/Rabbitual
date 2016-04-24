@@ -5,32 +5,22 @@ using Rabbitual.Infrastructure;
 
 namespace Rabbitual
 {
-
-    public interface IAgentRepository
-    {
-        Ac GetAgent(string agentId);
-        object GetState(IAgent a);
-
-        object GetPersistedState(IAgent a);
-    }
-
     /// <summary>
     /// Starting point for everything. 
     /// </summary>
-    public class App: IAgentRepository
+    public class App : IAgentRepository
     {
         private readonly IEventConsumer _eventConsumer;
         private readonly ITaskConsumer _taskConsumer;
         private readonly IAgentFactory _f;
-        private readonly IObjectDb _db;
         private readonly ILogger _logger;
-        private readonly IPublisher _p;
         private readonly List<Timer> _timers;
-        private Ac[] _agents= new Ac[0];
+        private Ac[] _agents = new Ac[0];
 
         public App(
             IEventConsumer eventConsumer,
             ITaskConsumer taskConsumer,
+            IAgentService s,
             IAgentFactory f,
             IObjectDb db,
             ILogger logger,
@@ -39,32 +29,13 @@ namespace Rabbitual
             _eventConsumer = eventConsumer;
             _taskConsumer = taskConsumer;
             _f = f;
-            _db = db;
             _logger = logger;
-            _p = p;
             _timers = new List<Timer>();
         }
 
         public Ac GetAgent(string id)
         {
             return _agents.FirstOrDefault(x => x.Agent.Id == id);
-        }
-
-        public object GetPersistedState(IAgent a)
-        {
-            if (a == null || !(a is IStatefulAgent))
-                return null;
-
-            var service = new AgentState(a.Id, _db, _logger);
-            return StateHelper.GetPersistedStateUsingMagic(service, a.GetType());
-        }
-
-        public object GetState(IAgent a)
-        {
-            if (a == null || !(a is IStatefulAgent))
-                return null;
-
-            return StateHelper.GetStateUsingMagic(a);
         }
 
         public void Start()
@@ -90,40 +61,11 @@ namespace Rabbitual
         private IAgent initAgent(Ac ac)
         {
             var agent = ac.Agent;
-            var config = ac.Config;
-
-            var agentWithOptions = agent as IHaveOptions;
-            var statefulAgent = agent as IStatefulAgent;
             var scheduledAgent = agent as IScheduledAgent;
-            var publishingAgent = agent as IPublishingAgent;
 
             //assign id to agent
             agent.Id = ac.Config.Id;
 
-            if (agentWithOptions != null)
-            {
-                //Set options
-                var options = config.Options ?? OptionsHelper.CreateDefaultOptionsUsingMagic(agentWithOptions.GetType());
-                OptionsHelper.SetOptionsUsingMagic(agentWithOptions, options);
-            }
-
-            if (publishingAgent != null)
-            {
-                //Make sure that when things get published the publishing runs through a proxy so that we can enrich the message 
-                //with the id of the publisher.
-                publishingAgent.Publisher = new PublisherProxy(_p, publishingAgent.Id);
-            }
-
-            if (statefulAgent != null)
-            {
-                //Inject state contex
-                var service = new AgentState(config.Id, _db, _logger);
-                statefulAgent.StateService = service;
-
-                //Initialize state object
-                var state = GetPersistedState(statefulAgent);
-                StateHelper.SetState(statefulAgent, state);
-            }
 
             if (scheduledAgent != null)
             {

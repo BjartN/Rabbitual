@@ -8,17 +8,13 @@ namespace Rabbitual.Agents.StatsAgent
     {
         private readonly ILogger _l;
 
-        public StatsAgent( ILogger l)
+        public StatsAgent( ILogger l,StatsOptions options,IAgentStateRepository repository) : base(options,repository)
         {
             _l = l;
         }
 
-        public void Consume(object evt)
+        public void Consume(Message evt)
         {
-            var m = evt as Message;
-            if (m == null)
-                return;
-
             State.Count = State.Count+1;
             _l.Debug($"Stats count is {State.Count}");
 
