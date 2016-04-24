@@ -1,10 +1,4 @@
 using System;
-using System.Net.Http;
-using System.Web.Http;
-using System.Web.Http.Controllers;
-using System.Web.Http.Dispatcher;
-using Rabbitual.Agents;
-using Rabbitual.Agents.WebCheckerAgent;
 using Rabbitual.Configuration;
 using Rabbitual.Fox;
 using Rabbitual.Infrastructure;
@@ -41,7 +35,6 @@ namespace Rabbitual.ConsoleHost
                     init.For<IPublisher>().Use<FoxMessagePublisher>();
                     init.For<IEventConsumer>().Use<FoxEventConsumer>();
                     init.For<ITaskConsumer>().Use<FoxTaskConsumer>();
-
                 }
 
                 init.For<IObjectDb>().Use<FileObjectDb>();
@@ -50,6 +43,7 @@ namespace Rabbitual.ConsoleHost
                 init.For<IFactory>().Use<Factory>();
 
                 init.For<App>().Use<App>().Singleton();
+                init.For<IAgentRepository>().Use(ctx => ctx.GetInstance<App>());
             });
 
             return c;

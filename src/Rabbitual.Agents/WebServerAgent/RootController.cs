@@ -1,11 +1,7 @@
-using System.Collections.Generic;
+using System;
 using System.Linq;
 using System.Net.Http;
-using System.Net.Http.Headers;
-using System.Text;
 using System.Web.Http;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Serialization;
 using Rabbitual.Configuration;
 using Rabbitual.Infrastructure;
 
@@ -14,29 +10,34 @@ namespace Rabbitual.Agents.WebServerAgent
     public class RootController : ApiController
     {
         private readonly IAgentConfiguration _cfg;
-
-        public RootController(IAgentConfiguration cfg)
+        private readonly IAgentRepository _ar;
+        public RootController(IAgentConfiguration cfg, IAgentRepository ar)
         {
             _cfg = cfg;
+            _ar = ar;
         }
 
-        [Route("agent/{id}")]
+        [Route("agent/state/{id}")]
         public HttpResponseMessage Get(string id)
         {
-            var agent = _cfg.GetConfiguration().FirstOrDefault(x => x.Id == id);
+            var agent = _ar.GetAgent(id);
+            var state = _ar.GetState(agent.Agent);
 
-            return this.SweetJson(agent);
+            return this.SweetJson(state);
         }
 
         [Route("config")]
         public HttpResponseMessage Get()
         {
+            var root = Request.RequestUri.GetLeftPart(UriPartial.Authority);
+
             var o = _cfg
                 .GetConfiguration()
                 .GroupBy(x => x.ClrType)
                 .SelectMany(g => g.OrderBy(x => x.Name))
                 .Select(x => new
                 {
+                    Url = $"{root}/agent/state/{x.Id}",
                     x.Id,
                     x.Name,
                     NumSources = x.Sources.Length,

@@ -29,7 +29,7 @@ namespace Rabbitual
         TOption Options { set; }
     }
 
-    public interface IStatefulAgent 
+    public interface IStatefulAgent :IAgent
     {
         IAgentState StateService { get; set; }
     }
