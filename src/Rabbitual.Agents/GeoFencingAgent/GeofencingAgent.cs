@@ -3,14 +3,14 @@ using Rabbitual.Infrastructure;
 
 namespace Rabbitual.Agents.GeoFencingAgent
 {
-    public class GeofencingAgent: StatefulAgent<GeofencingOptions,GeofencingState>
+    public class GeofencingAgent: Agent<GeofencingOptions>
         , IEventConsumerAgent
         , IPublishingAgent
     {
         private readonly IPublisher _p;
 
-        public GeofencingAgent(GeofencingOptions options,  IAgentStateRepository stateRepository, IPublisher p) 
-            : base(options, stateRepository)
+        public GeofencingAgent(GeofencingOptions options,  IPublisher p) 
+            : base(options)
         {
             _p = p;
         }
@@ -35,11 +35,6 @@ namespace Rabbitual.Agents.GeoFencingAgent
             }
         }
 
-    }
-
-    public class GeofencingState
-    {
-        
     }
 
     public class GeofencingOptions

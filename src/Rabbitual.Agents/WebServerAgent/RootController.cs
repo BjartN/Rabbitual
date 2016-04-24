@@ -1,9 +1,10 @@
 using System;
+using System.ComponentModel;
 using System.Linq;
 using System.Net.Http;
+using System.Reflection;
 using System.Web.Http;
 using Rabbitual.Configuration;
-using Rabbitual.Infrastructure;
 
 namespace Rabbitual.Agents.WebServerAgent
 {
@@ -49,6 +50,7 @@ namespace Rabbitual.Agents.WebServerAgent
                     NumSources = x.Sources.Length,
                     Options =x.Options?.GetType().GetProperties().Where(p => p.CanRead).Select(p => new
                     {
+                        Description = getDescription(p),
                         p.Name,
                         Value = p.GetValue(x.Options)
                     })
@@ -57,6 +59,15 @@ namespace Rabbitual.Agents.WebServerAgent
             return this.SweetJson(o);
         }
 
+        private string getDescription(PropertyInfo pi)
+        {
+            var attr = pi.GetCustomAttribute<DescriptionAttribute>();
+            if (attr == null)
+                return null;
+
+            return attr.Description;
+
+        }
     }
 
     
