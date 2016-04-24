@@ -1,5 +1,10 @@
 using System;
+using System.Net.Http;
+using System.Web.Http;
+using System.Web.Http.Controllers;
+using System.Web.Http.Dispatcher;
 using Rabbitual.Agents;
+using Rabbitual.Agents.WebCheckerAgent;
 using Rabbitual.Configuration;
 using Rabbitual.Fox;
 using Rabbitual.Infrastructure;
@@ -9,6 +14,7 @@ using StructureMap.Graph;
 
 namespace Rabbitual.ConsoleHost
 {
+
     public class Bootstrapper
     {
         public static Container Bootstrap(bool inMemory, IAgentConfiguration configuraton)
@@ -37,15 +43,6 @@ namespace Rabbitual.ConsoleHost
                     init.For<ITaskConsumer>().Use<FoxTaskConsumer>();
 
                 }
-
-                init.For<CounterAgent>().Use<CounterAgent>();
-
-                init.For<IAgent[]>().Use(x => new IAgent[]
-                {
-                    x.GetInstance<CounterAgent>(),
-                    x.GetInstance<ScheduledPublisherAgent>(),
-                    x.GetInstance<WebCheckerAgent>(),
-                });
 
                 init.For<IObjectDb>().Use<FileObjectDb>();
                 init.For<ISerializer>().Use<JsonSerializer>();

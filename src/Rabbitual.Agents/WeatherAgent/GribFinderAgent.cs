@@ -9,7 +9,7 @@ namespace Rabbitual.Agents.WeatherAgent
     /// <summary>
     /// Search the W3 for gribs to download
     /// </summary>
-    public class GribFinderAgent : ScheduledAgent<WeatherOptions>, IPublishingAgent, IStatefulAgent<GribFinderState>
+    public class GribFinderAgent : ScheduledStatefulAgent<WeatherOptions, GribFinderState>, IPublishingAgent
     {
         private readonly GribSources _d;
         private readonly ILogger _logger;
@@ -60,18 +60,6 @@ namespace Rabbitual.Agents.WeatherAgent
         }
 
         public IPublisher Publisher { get; set; }
-        public void Start()
-        {
-            State = State ?? new GribFinderState();
-        }
-
-        public GribFinderState State { get; set; }
-        public IAgentState StateService { get; set; }
-
-        public void Stop()
-        {
-            StateService.PersistState(State);
-        }
     }
 
     public class GribFinderState

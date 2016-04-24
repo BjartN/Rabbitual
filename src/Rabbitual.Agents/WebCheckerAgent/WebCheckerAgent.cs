@@ -4,26 +4,25 @@ using System.Text.RegularExpressions;
 using HtmlAgilityPack;
 using Rabbitual.Infrastructure;
 
-namespace Rabbitual.Agents
+namespace Rabbitual.Agents.WebCheckerAgent
 {
-    public class WebCheckerAgent : Agent<WebCheckerOptions>,
-        IScheduledAgent,
+    public class WebCheckerAgent : ScheduledAgent<WebCheckerOptions>,
         IPublishingAgent
     {
         private readonly ILogger _l;
 
-        public WebCheckerAgent(ILogger _l)
+        public WebCheckerAgent(ILogger l)
         {
-            this._l = _l;
+            _l = l;
         }
 
-        public int DefaultSchedule => 4000;
+        public new int DefaultSchedule => 4000;
 
         /// <summary>
         /// Use xpath to match node, and check for text in node using RegEx.
         /// Output the inner text of every matched node as an event.
         /// </summary>
-        public void Check()
+        public override void Check()
         {
             string contents;
             using (var wc = new System.Net.WebClient())
@@ -58,10 +57,7 @@ namespace Rabbitual.Agents
                 }
             }
         }
-
-        public WebCheckerOptions Options { get; set; }
         public IPublisher Publisher { get; set; }
-        public string Id { get; set; }
     }
 
     public class WebCheckerOptions

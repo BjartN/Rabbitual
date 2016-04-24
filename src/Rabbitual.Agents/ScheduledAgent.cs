@@ -43,4 +43,12 @@ namespace Rabbitual.Agents
         public int DefaultSchedule { get; set; }
         public abstract void Check();
     }
+
+    public abstract class ScheduledStatefulAgent<TOptions, TState> :StatefulAgent<TOptions,TState>, IScheduledAgent
+        where TOptions : class
+        where TState : class, new()
+    {
+        public int DefaultSchedule { get; set; }
+        public abstract void Check();
+    }
 }

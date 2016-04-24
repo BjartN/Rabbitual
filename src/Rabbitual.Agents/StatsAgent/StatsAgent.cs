@@ -1,6 +1,6 @@
 ﻿using Rabbitual.Infrastructure;
 
-namespace Rabbitual.Agents
+namespace Rabbitual.Agents.StatsAgent
 {
     public class StatsAgent : StatefulAgent<StatsOptions, StatsState>, 
         IEventConsumerAgent, 

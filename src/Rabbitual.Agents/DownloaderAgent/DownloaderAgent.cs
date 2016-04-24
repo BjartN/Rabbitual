@@ -6,7 +6,7 @@ using Rabbitual.Infrastructure;
 
 namespace Rabbitual.Agents.DownloaderAgent
 {
-    public class DownloaderAgent : ITaskConsumerAgent, IHaveOptions<DownloaderOptions>
+    public class DownloaderAgent : Agent<DownloaderOptions>, ITaskConsumerAgent
     {
         private readonly Downloader _d;
         private readonly ILogger _logger;
@@ -39,17 +39,5 @@ namespace Rabbitual.Agents.DownloaderAgent
             _logger.Info("Done");
         }
 
-        public string Id { get; set; }
-        public void Start()
-        {
-            
-        }
-
-        public void Stop()
-        {
-        }
-
-        public DownloaderOptions Options { get; set; }
-    
     }
 }

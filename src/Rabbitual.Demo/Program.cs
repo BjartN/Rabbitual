@@ -3,7 +3,10 @@ using System.Linq;
 using System.Security.Policy;
 using Rabbitual.Agents;
 using Rabbitual.Agents.DownloaderAgent;
+using Rabbitual.Agents.StatsAgent;
 using Rabbitual.Agents.WeatherAgent;
+using Rabbitual.Agents.WebCheckerAgent;
+using Rabbitual.Agents.WebServerAgent;
 using Rabbitual.Configuration;
 
 namespace Rabbitual.Demo
@@ -20,13 +23,7 @@ namespace Rabbitual.Demo
         {
             public AgentConfig[] GetConfiguration()
             {
-                var a = new AgentConfig
-                {
-                    Id = "CounterAgent",
-                    Name = "CounterAgent",
-                    ClrType = typeof(CounterAgent),
-                };
-
+               
                 var b = new AgentConfig
                 {
                     Id = "ScheduledPublisherAgent",
@@ -44,9 +41,9 @@ namespace Rabbitual.Demo
                     "http://db.no"
                 };
 
-                var cc = urls.Select(url => new AgentConfig
+                var cc = urls.Select((url,idx) => new AgentConfig
                 {
-                    Id = "WebCheckerAgent " + url,
+                    Id = "WebCheckerAgent." + idx,
                     Name = "WebCheckerAgent",
                     ClrType = typeof (WebCheckerAgent),
                     Options = new WebCheckerOptions
@@ -65,7 +62,7 @@ namespace Rabbitual.Demo
 
                 var e = new AgentConfig
                 {
-                    Id = "WeatherAgent 00",
+                    Id = "WeatherAgent.00",
                     Name = "WeatherAgent 00",
                     ClrType = typeof(GribFinderAgent),
                     Options = new WeatherOptions
@@ -76,7 +73,7 @@ namespace Rabbitual.Demo
 
                 var f = new AgentConfig
                 {
-                    Id = "WeatherAgent 06",
+                    Id = "WeatherAgent.06",
                     Name = "WeatherAgent 06",
                     ClrType = typeof(GribFinderAgent),
                     Options = new WeatherOptions
@@ -87,7 +84,7 @@ namespace Rabbitual.Demo
 
                 var g = new AgentConfig
                 {
-                    Id = "WeatherAgent 12",
+                    Id = "WeatherAgent.12",
                     Name = "WeatherAgent 12",
                     ClrType = typeof(GribFinderAgent),
                     Options = new WeatherOptions
@@ -98,7 +95,7 @@ namespace Rabbitual.Demo
 
                 var h = new AgentConfig
                 {
-                    Id = "WeatherAgent 18",
+                    Id = "WeatherAgent.18",
                     Name = "WeatherAgent 18",
                     ClrType = typeof(GribFinderAgent),
                     Options = new WeatherOptions
@@ -109,7 +106,7 @@ namespace Rabbitual.Demo
 
                 var i = new AgentConfig
                 {
-                    Id = "DownloaderAgent 007",
+                    Id = "DownloaderAgent.007",
                     Name = "DownloaderAgent 007",
                     ClrType = typeof(DownloaderAgent),
                     Options = new DownloaderOptions(),
@@ -119,7 +116,7 @@ namespace Rabbitual.Demo
 
                 var i2 = new AgentConfig
                 {
-                    Id = "DownloaderAgent 008",
+                    Id = "DownloaderAgent.008",
                     Name = "DownloaderAgent 008",
                     ClrType = typeof(DownloaderAgent),
                     Options = new DownloaderOptions(),
@@ -129,14 +126,21 @@ namespace Rabbitual.Demo
 
                 var i3 = new AgentConfig
                 {
-                    Id = "DownloaderAgent 009",
+                    Id = "DownloaderAgent.009",
                     Name = "DownloaderAgent 009",
                     ClrType = typeof(DownloaderAgent),
                     Options = new DownloaderOptions(),
                     Sources = new[] { g }
                 };
 
-                var l = new List<AgentConfig> {d,e,f,g,h,i,i2,i3 };
+                var webServer = new AgentConfig
+                {
+                    Id = "WebServer",
+                    Name = "WebServer",
+                    ClrType = typeof(WebServerAgent),
+                };
+
+                var l = new List<AgentConfig> {d,e,f,g,h,i,i2,i3, webServer };
                 l.AddRange(cc);
 
                 return l.ToArray();
