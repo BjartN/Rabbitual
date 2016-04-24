@@ -7,9 +7,12 @@ namespace Rabbitual.Agents.GeoFencingAgent
         , IEventConsumerAgent
         , IPublishingAgent
     {
-        public GeofencingAgent(GeofencingOptions options,  IAgentStateRepository stateRepository) 
+        private readonly IPublisher _p;
+
+        public GeofencingAgent(GeofencingOptions options,  IAgentStateRepository stateRepository, IPublisher p) 
             : base(options, stateRepository)
         {
+            _p = p;
         }
 
         public void Consume(Message evt)
@@ -28,11 +31,9 @@ namespace Rabbitual.Agents.GeoFencingAgent
                     continue;
 
                 //publish fence breached event
-                Publisher.PublishEvent(new Message {Data = {["fence"] = fence.Id}});
+                _p.PublishEvent(new Message {Data = {["fence"] = fence.Id}});
             }
         }
-
-        public IPublisher Publisher { get; set; }
 
     }
 

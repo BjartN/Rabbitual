@@ -10,8 +10,13 @@ namespace Rabbitual.Agents
     {
         private readonly ILogger _log;
 
-        public ScheduledPublisherAgent(ILogger log, ScheduledPublisherOptions options,IAgentStateRepository stateRepository) : base(options,stateRepository)
+        public ScheduledPublisherAgent(
+            ILogger log, 
+            ScheduledPublisherOptions options,
+            IAgentStateRepository stateRepository,
+            IPublisher publisher) : base(options,stateRepository)
         {
+            Publisher = publisher;
             _log = log;
         }
 

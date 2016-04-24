@@ -10,10 +10,12 @@ namespace Rabbitual.Agents.WebCheckerAgent
         IPublishingAgent
     {
         private readonly ILogger _l;
+        private readonly IPublisher _p;
 
-        public WebCheckerAgent(ILogger l,WebCheckerOptions options) : base(options)
+        public WebCheckerAgent(ILogger l,WebCheckerOptions options, IPublisher p) : base(options)
         {
             _l = l;
+            _p = p;
         }
 
         public new int DefaultSchedule => 4000;
@@ -46,18 +48,17 @@ namespace Rabbitual.Agents.WebCheckerAgent
                     {
                         var data = new Dictionary<string, string> {["text"] = n.InnerText};
                         _l.Debug("Publishing event");
-                        Publisher.PublishEvent(new Message {Data = data});
+                        _p.PublishEvent(new Message {Data = data});
                     }
                 }
                 else
                 {
                     var data = new Dictionary<string, string> { ["text"] = n.InnerText };
                     _l.Debug("Publishing event");
-                    Publisher.PublishEvent(new Message { Data = data });
+                    _p.PublishEvent(new Message { Data = data });
                 }
             }
         }
-        public IPublisher Publisher { get; set; }
     }
 
     public class WebCheckerOptions

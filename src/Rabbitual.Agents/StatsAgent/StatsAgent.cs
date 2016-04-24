@@ -20,7 +20,6 @@ namespace Rabbitual.Agents.StatsAgent
 
         }
 
-        public IPublisher Publisher { get; set; }
     }
 
     public class StatsState 

@@ -13,11 +13,18 @@ namespace Rabbitual.Agents.WeatherAgent
     {
         private readonly GribSources _d;
         private readonly ILogger _logger;
+        private readonly IPublisher _p;
 
-        public GribFinderAgent(GribSources d, ILogger logger,WeatherOptions options,IAgentStateRepository stateRepository) : base(options,stateRepository)
+        public GribFinderAgent(
+            GribSources d, 
+            ILogger logger, 
+            WeatherOptions options,
+            IAgentStateRepository stateRepository,
+            IPublisher p) : base(options,stateRepository)
         {
             _d = d;
             _logger = logger;
+            _p = p;
             DefaultSchedule = 3000;
         }
 
@@ -35,7 +42,7 @@ namespace Rabbitual.Agents.WeatherAgent
                 }
                     
                 State.Index[item.Url] = true;
-                Publisher.EnqueueTask(new Message
+                _p.EnqueueTask(new Message
                 {
                     Data = new Dictionary<string, string>
                     {
@@ -58,8 +65,7 @@ namespace Rabbitual.Agents.WeatherAgent
                 : yesterday;
             return anaTime;
         }
-
-        public IPublisher Publisher { get; set; }
+        
     }
 
     public class GribFinderState

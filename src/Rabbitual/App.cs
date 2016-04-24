@@ -20,11 +20,8 @@ namespace Rabbitual
         public App(
             IEventConsumer eventConsumer,
             ITaskConsumer taskConsumer,
-            IAgentService s,
             IAgentFactory f,
-            IObjectDb db,
-            ILogger logger,
-            IPublisher p)
+            ILogger logger)
         {
             _eventConsumer = eventConsumer;
             _taskConsumer = taskConsumer;
