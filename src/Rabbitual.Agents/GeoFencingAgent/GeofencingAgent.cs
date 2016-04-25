@@ -1,16 +1,19 @@
-﻿using System.ComponentModel;
+﻿using System.Collections;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Linq;
 using Rabbitual.Infrastructure;
 
 namespace Rabbitual.Agents.GeoFencingAgent
 {
-    public class GeofencingAgent: Agent<GeofencingOptions>
+    public class GeofencingAgent: StatefulAgent<GeofencingOptions, GeofencingState>
         , IEventConsumerAgent
-        , IPublishingAgent
+        , IEventPublisherAgent
     {
         private readonly IPublisher _p;
 
-        public GeofencingAgent(GeofencingOptions options,  IPublisher p) 
-            : base(options)
+        public GeofencingAgent(GeofencingOptions options,IAgentStateRepository asr, IPublisher p) 
+            : base(options, asr)
         {
             _p = p;
         }
@@ -25,16 +28,30 @@ namespace Rabbitual.Agents.GeoFencingAgent
 
             foreach (var fence in Options.CircleFences)
             {
+                if (State.IssuedFences.Any() && State.IssuedFences.Last() == fence.Id)
+                    continue; //don't issue same fance again
+
                 var rRadius = GeometryFun.RadiusDegrees(fence.RadiusMeters,fence.Lat,fence.Lon);
                 var isMatch = GeometryFun.IsPointInCircle(fence.Lon, fence.Lat, rRadius, lon.Value, lat.Value);
                 if (!isMatch)
                     continue;
 
                 //publish fence breached event
-                _p.PublishEvent(new Message {Data = {["fence"] = fence.Id}});
+                _p.PublishEvent(new Message {Data = {["fence"] = fence.Id,["description"] = fence.Description } });
+                State.IssuedFences.Add(fence.Id);
             }
         }
 
+    }
+
+    public class GeofencingState
+    {
+        public GeofencingState()
+        {
+            IssuedFences= new List<string>();
+        }
+
+        public List<string> IssuedFences { get; set; }
     }
 
     public class GeofencingOptions
@@ -55,6 +72,8 @@ namespace Rabbitual.Agents.GeoFencingAgent
 
         public int RadiusMeters { get; set; }
         public string  Id { get; set; }
+
+        public string Description { get; set; }
 
     }
 }

@@ -67,7 +67,7 @@ namespace Rabbitual
             if (scheduledAgent != null)
             {
                 //Set agent on a timer, with some silly-checking.
-                var schedule = scheduledAgent.DefaultSchedule <= 0 ? 5000 : scheduledAgent.DefaultSchedule;
+                var schedule = scheduledAgent.DefaultScheduleMs <= 0 ? 5000 : scheduledAgent.DefaultScheduleMs;
                 _timers.Push(new Timer(_logger)).Start(schedule, () => scheduledAgent.Check());
             }
             return agent;

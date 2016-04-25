@@ -6,7 +6,7 @@ namespace Rabbitual.Agents
     /// <summary>
     /// Publish an event on a schedule
     /// </summary>
-    public class ScheduledPublisherAgent : ScheduledStatefulAgent<ScheduledPublisherOptions,SweetState>,IPublishingAgent
+    public class ScheduledPublisherAgent : ScheduledStatefulAgent<ScheduledPublisherOptions,SweetState>,IEventPublisherAgent
     {
         private readonly ILogger _log;
 

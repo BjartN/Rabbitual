@@ -11,7 +11,7 @@ namespace Rabbitual.Configuration
 
 
         public string Id { get; set; }
-        public string Name { get; set; }
+        public string Name { get; set; } 
         public int? Schedule { get; set; }
         public Type ClrType { get; set; }
 

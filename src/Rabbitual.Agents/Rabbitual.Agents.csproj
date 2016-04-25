@@ -77,6 +77,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CsvAgent\CsvAgent.cs" />
+    <Compile Include="CsvAgent\CsvOptions.cs" />
+    <Compile Include="CsvAgent\CsvParser.cs" />
+    <Compile Include="EmailAgent\EmailAgent.cs" />
     <Compile Include="GeoFencingAgent\GeometryFun.cs" />
     <Compile Include="GeoFencingAgent\GeofencingAgent.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -84,6 +88,8 @@
     <Compile Include="StatsAgent\StatsAgent.cs" />
     <Compile Include="DownloaderAgent\Downloader.cs" />
     <Compile Include="DownloaderAgent\DownloaderOptions.cs" />
+    <Compile Include="TextAgent\TextAgent.cs" />
+    <Compile Include="UniqueEventAgent\UniqueEventAgent.cs" />
     <Compile Include="WeatherAgent\GribSources.cs" />
     <Compile Include="ScheduledAgent.cs" />
     <Compile Include="WeatherAgent\GribFinderAgent.cs" />

@@ -43,7 +43,10 @@ namespace Rabbitual.Fox
 
         public void Subscribe(Action<Message> callback, string id)
         {
-            var action = new ActionBlock<Message>(callback);
+            var action = new ActionBlock<Message>(m =>
+            {
+                callback(m);
+            });
             var agentBuffer = _agentBuffers.GetOrAdd(id, s => new BufferBlock<Message>());
 
             agentBuffer.LinkTo(action);

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 
 namespace Rabbitual.Infrastructure
 {
@@ -12,7 +13,7 @@ namespace Rabbitual.Infrastructure
                 return null;
 
             double dbl;
-            if (!double.TryParse(v, out dbl))
+            if (!double.TryParse(v, NumberStyles.Any, CultureInfo.InvariantCulture, out dbl))
                 return null;
 
             return dbl;

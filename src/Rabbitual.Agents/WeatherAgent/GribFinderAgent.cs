@@ -9,7 +9,7 @@ namespace Rabbitual.Agents.WeatherAgent
     /// </summary>
     public class GribFinderAgent :
         ScheduledStatefulAgent<WeatherOptions, GribFinderState>, 
-        IPublishingAgent
+        IEventPublisherAgent
     {
         private readonly GribSources _d;
         private readonly ILogger _logger;
@@ -25,7 +25,7 @@ namespace Rabbitual.Agents.WeatherAgent
             _d = d;
             _logger = logger;
             _p = p;
-            DefaultSchedule = 3000;
+            DefaultScheduleMs = 3000;
         }
 
         public override void Check()

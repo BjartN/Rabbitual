@@ -1,13 +1,20 @@
 ﻿using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using System.Security.Policy;
 using Rabbitual.Agents;
+using Rabbitual.Agents.CsvAgent;
 using Rabbitual.Agents.DownloaderAgent;
+using Rabbitual.Agents.EmailAgent;
+using Rabbitual.Agents.GeoFencingAgent;
 using Rabbitual.Agents.StatsAgent;
+using Rabbitual.Agents.TextAgent;
+using Rabbitual.Agents.UniqueEventAgent;
 using Rabbitual.Agents.WeatherAgent;
 using Rabbitual.Agents.WebCheckerAgent;
 using Rabbitual.Agents.WebServerAgent;
 using Rabbitual.Configuration;
+using Rabbitual.Infrastructure;
 
 namespace Rabbitual.Demo
 {
@@ -23,7 +30,96 @@ namespace Rabbitual.Demo
         {
             public AgentConfig[] GetConfiguration()
             {
-               
+                return getGeofenceScenario();
+            }
+
+            private AgentConfig[] getGeofenceScenario()
+            {
+                var a = new AgentConfig
+                {
+                    Id = "CsvAgent",
+                    Name = "CsvAgent",
+                    ClrType = typeof(CsvAgent),
+                    Options = new CsvOptions
+                    {
+                        FieldNamesAtFirstLine = false,
+                        FieldNames = new[] { "lat", "lon", "", "", "", "", "", "time" },
+                        StartAtEnd = true,
+                        RowCount = 10,
+                        Separator = "|",
+                        Url = ConfigurationManager.AppSettings["csv-url"]
+                    }
+                };
+
+                var b = new AgentConfig
+                {
+                    Id = "UniqueEvent",
+                    Name = "UniqueEvent",
+                    ClrType = typeof(UniqueEventAgent),
+                    Options = new UniqueOptions
+                    {
+                        KeepStateMinutes = 60 * 24,
+                        IdField = "time"
+                    },
+                    Sources = new[] { a }
+                };
+
+                var c = new AgentConfig
+                {
+                    Id = "GeoFence",
+                    Name = "GeoFence",
+                    ClrType = typeof(GeofencingAgent),
+                    Options = new GeofencingOptions
+                    {
+                        CircleFences = new[] {
+                            new Fence
+                            {
+                                Id = "Home",
+                                Description = "I'm at home",
+                                Lat =ConfigurationManager.AppSettings["home-lat"].ToDouble(),
+                                Lon =ConfigurationManager.AppSettings["home-lon"].ToDouble(),
+                                RadiusMeters = 1000
+                            }
+                        }
+                    },
+                    Sources = new[] { b }
+
+                };
+
+                var d = new AgentConfig
+                {
+                    Id = "Text",
+                    Name = "Text",
+                    ClrType = typeof(TextAgent),
+                    Options = new TextOptions
+                    {
+                        Template = "Fence {fence} is breached: {description}"
+                    },
+                    Sources = new[] { c },
+                };
+
+                var e = new AgentConfig
+                {
+                    Id = "Email",
+                    Name = "Email",
+                    ClrType = typeof(EmailAgent),
+                    Options = new EmailOptions
+                    {
+                        BodyTemplate = "{text}",
+                        FromEmail = ConfigurationManager.AppSettings["from-email"],
+                        ToEmail = ConfigurationManager.AppSettings["to-email"],
+                        MaxEmailCountPerHour = 10,
+                        SubjectTemplate = "Geofence Event!"
+                    },
+                    Sources = new[] { d }
+                };
+
+                return new List<AgentConfig> { a, b, c, d, e }.ToArray();
+            }
+
+
+            private static AgentConfig[] getRandomScenario()
+            {
                 var b = new AgentConfig
                 {
                     Id = "ScheduledPublisherAgent",
@@ -41,11 +137,11 @@ namespace Rabbitual.Demo
                     "http://db.no"
                 };
 
-                var cc = urls.Select((url,idx) => new AgentConfig
+                var cc = urls.Select((url, idx) => new AgentConfig
                 {
                     Id = "WebCheckerAgent." + idx,
                     Name = "WebCheckerAgent",
-                    ClrType = typeof (WebCheckerAgent),
+                    ClrType = typeof(WebCheckerAgent),
                     Options = new WebCheckerOptions
                     {
                         Url = url
@@ -57,7 +153,7 @@ namespace Rabbitual.Demo
                     Id = "StatsAgent",
                     Name = "StatsAgent",
                     ClrType = typeof(StatsAgent),
-                    Sources = cc 
+                    Sources = cc
                 };
 
                 var e = new AgentConfig
@@ -110,7 +206,7 @@ namespace Rabbitual.Demo
                     Name = "DownloaderAgent 007",
                     ClrType = typeof(DownloaderAgent),
                     Options = new DownloaderOptions(),
-                    Sources = new[] {g}
+                    Sources = new[] { g }
                 };
 
 
@@ -140,11 +236,13 @@ namespace Rabbitual.Demo
                     ClrType = typeof(WebServerAgent),
                 };
 
-                var l = new List<AgentConfig> {d,e,f,g,h,i,i2,i3, webServer };
+                var l = new List<AgentConfig> { d, e, f, g, h, i, i2, i3, webServer };
                 l.AddRange(cc);
 
                 return l.ToArray();
             }
+
         }
+
     }
 }

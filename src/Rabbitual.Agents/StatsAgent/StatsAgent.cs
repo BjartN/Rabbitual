@@ -4,7 +4,7 @@ namespace Rabbitual.Agents.StatsAgent
 {
     public class StatsAgent : StatefulAgent<StatsOptions, StatsState>, 
         IEventConsumerAgent, 
-        IPublishingAgent
+        IEventPublisherAgent
     {
         private readonly ILogger _l;
 

@@ -7,7 +7,7 @@ using Rabbitual.Infrastructure;
 namespace Rabbitual.Agents.WebCheckerAgent
 {
     public class WebCheckerAgent : ScheduledAgent<WebCheckerOptions>,
-        IPublishingAgent
+        IEventPublisherAgent
     {
         private readonly ILogger _l;
         private readonly IPublisher _p;

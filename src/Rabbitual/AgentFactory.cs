@@ -64,11 +64,13 @@ namespace Rabbitual
 
         private object createAgent(AgentConfig config)
         {
+            //TODO: Inject agent specific logger
+
             var agentType = config.ClrType;
 
             var includeOptions = agentType.IsOfType(typeof(IHaveOptions<>));
             var includeState = agentType.IsOfType(typeof(IStatefulAgent<>));
-            var inculdePublisher = agentType.IsOfType(typeof(IPublishingAgent));
+            var inculdePublisher = agentType.IsOfType(typeof(IEventPublisherAgent));
             var deps = new Dictionary<Type,object>();
 
             if (includeOptions)

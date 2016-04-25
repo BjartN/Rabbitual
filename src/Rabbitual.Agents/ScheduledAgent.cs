@@ -10,8 +10,8 @@ namespace Rabbitual.Agents
         }
 
         public string Id { get; set; }
-        public void Start() { }
-        public void Stop() { }
+        public virtual void Start() { }
+        public virtual void Stop() { }
 
         public TOptions Options { get; protected set; }
     }
@@ -54,7 +54,7 @@ namespace Rabbitual.Agents
 
     public abstract class ScheduledAgent<TOptions> : Agent<TOptions>, IScheduledAgent where TOptions : class
     {
-        public int DefaultSchedule { get; set; }
+        public int DefaultScheduleMs { get; set; }
         public abstract void Check();
 
         public ScheduledAgent(TOptions options) : base(options)
@@ -66,7 +66,7 @@ namespace Rabbitual.Agents
         where TOptions : class
         where TState : class, new()
     {
-        public int DefaultSchedule { get; set; }
+        public int DefaultScheduleMs { get; set; }
         public abstract void Check();
 
         public ScheduledStatefulAgent(TOptions options, IAgentStateRepository stateRepository) : base(options, stateRepository)

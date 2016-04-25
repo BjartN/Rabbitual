@@ -27,14 +27,14 @@
     /// </summary>
     public interface IScheduledAgent : IAgent
     {
-        int DefaultSchedule { get; }
+        int DefaultScheduleMs { get; }
         void Check();
     }
 
     /// <summary>
     ///    Publishig agent
     /// </summary>
-    public interface IPublishingAgent : IAgent { }
+    public interface IEventPublisherAgent : IAgent { }
 
 
     /// <summary>
