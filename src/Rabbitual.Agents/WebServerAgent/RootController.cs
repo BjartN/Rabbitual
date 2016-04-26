@@ -13,16 +13,33 @@ namespace Rabbitual.Agents.WebServerAgent
         private readonly IAgentConfiguration _cfg;
         private readonly IAgentRepository _ar;
         private readonly IAgentService _s;
+        private readonly IAgentLogRepository _l;
 
         public RootController(
             IAgentConfiguration cfg, 
             IAgentRepository ar,
-            IAgentService s)
+            IAgentService s,
+            IAgentLogRepository l)
         {
             _cfg = cfg;
             _ar = ar;
             _s = s;
+            _l = l;
         }
+
+        [HttpGet]
+        [Route("agent/message-log/{id}")]
+        public HttpResponseMessage MessageLog(string id)
+        {
+            var al = _l.GetLog(id);
+
+            return this.SweetJson(new
+            {
+                Incoming = al.GetIncoming(),
+                Outgoing = al.GetOutGoing()
+            });
+        }
+
 
         [Route("agent/state/{id}")]
         public HttpResponseMessage Get(string id)
@@ -44,7 +61,8 @@ namespace Rabbitual.Agents.WebServerAgent
                 .SelectMany(g => g.OrderBy(x => x.Name))
                 .Select(x => new
                 {
-                    Url = $"{root}/agent/state/{x.Id}",
+                    MessageLogUrl = $"{root}/agent/message-log/{x.Id}",
+                    StateUrl = $"{root}/agent/state/{x.Id}",
                     x.Id,
                     x.Name,
                     NumSources = x.Sources.Length,

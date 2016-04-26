@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using Rabbitual.Infrastructure;
@@ -20,8 +19,9 @@ namespace Rabbitual.Agents.GeoFencingAgent
 
         public void Consume(Message evt)
         {
-            var lat = evt.Data.AsDouble("lat");
-            var lon = evt.Data.AsDouble("lon");
+            var list = new ListManager<string>(State.IssuedFences, limit:100);
+            var lat = evt.Data.TryGetDouble("lat");
+            var lon = evt.Data.TryGetDouble("lon");
 
             if (lat == null || lon == null)
                 return;
@@ -29,7 +29,7 @@ namespace Rabbitual.Agents.GeoFencingAgent
             foreach (var fence in Options.CircleFences)
             {
                 if (State.IssuedFences.Any() && State.IssuedFences.Last() == fence.Id)
-                    continue; //don't issue same fance again
+                    continue; //don't issue same fence again
 
                 var rRadius = GeometryFun.RadiusDegrees(fence.RadiusMeters,fence.Lat,fence.Lon);
                 var isMatch = GeometryFun.IsPointInCircle(fence.Lon, fence.Lat, rRadius, lon.Value, lat.Value);
@@ -38,7 +38,9 @@ namespace Rabbitual.Agents.GeoFencingAgent
 
                 //publish fence breached event
                 _p.PublishEvent(new Message {Data = {["fence"] = fence.Id,["description"] = fence.Description } });
-                State.IssuedFences.Add(fence.Id);
+
+
+                list.Add(fence.Id);
             }
         }
 

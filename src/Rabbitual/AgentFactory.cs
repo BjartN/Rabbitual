@@ -38,6 +38,7 @@ namespace Rabbitual
         private readonly IAgentConfiguration _cfg;
         private readonly IAgentService _s;
         private readonly IPublisher _p;
+        private readonly IAgentLogRepository _agentLog;
 
         public AgentFactory(
             ILogger logger,
@@ -45,7 +46,7 @@ namespace Rabbitual
             IFactory factory, 
             IAgentConfiguration cfg,
             IAgentService s,
-            IPublisher p)
+            IPublisher p, IAgentLogRepository agentLog)
         {
             _logger = logger;
             _db = db;
@@ -53,6 +54,7 @@ namespace Rabbitual
             _cfg = cfg;
             _s = s;
             _p = p;
+            _agentLog = agentLog;
         }
 
         public Ac[] GetAgents()
@@ -81,7 +83,7 @@ namespace Rabbitual
 
             if (inculdePublisher)
             {
-                deps.Add(typeof(IPublisher),new PublisherProxy(_p, config.Id));
+                deps.Add(typeof(IPublisher),new PublisherProxy(_p, config.Id, _agentLog));
             }
 
             if (includeState)

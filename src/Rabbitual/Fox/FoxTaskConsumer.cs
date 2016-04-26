@@ -16,15 +16,12 @@ namespace Rabbitual.Fox
             _cfg = cfg;
         }
 
-        public void Start(ITaskConsumerAgent[] workers)
+        public void Start(ITaskConsumerAgent w)
         {
             if (_configs == null)
                 _configs = _cfg.GetConfiguration().ToDictionary(x => x.Id, x => x);
 
-            foreach (var w in workers)
-            {
-                _hub.AddWorker(w);
-            }
+            _hub.AddWorker(w);
         }
 
         public void Stop()

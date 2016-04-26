@@ -6,7 +6,7 @@ namespace Rabbitual.Infrastructure
 {
     public static class DictonaryExtentions
     {
-        public static double? AsDouble(this IDictionary<string, string> d, string key)
+        public static double? TryGetDouble(this IDictionary<string, string> d, string key)
         {
             string v;
             if (!d.TryGetValue(key, out v))

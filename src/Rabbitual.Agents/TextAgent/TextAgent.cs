@@ -3,7 +3,9 @@ using Rabbitual.Infrastructure;
 
 namespace Rabbitual.Agents.TextAgent
 {
-    public class TextAgent: Agent<TextOptions>, IEventConsumerAgent, IEventPublisherAgent
+    public class TextAgent: Agent<TextOptions>, 
+        IEventConsumerAgent, 
+        IEventPublisherAgent
     {
         private readonly IPublisher _publisher;
 
@@ -18,7 +20,7 @@ namespace Rabbitual.Agents.TextAgent
            
             _publisher.PublishEvent(new Message
             {
-                Data= new Dictionary<string, string>() { {"text", text} }
+                Data= new Dictionary<string, string> { {"text", text} }
             });
         }
     }

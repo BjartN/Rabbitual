@@ -42,27 +42,18 @@ namespace Rabbitual
             //Note that an agent both on timer and waiting for events might get accessed concurrently
             foreach (var ac in _agents)
             {
-                var agent = initAgent(ac);
-
-                agent.Start();
+                RunAgent(ac);
             }
-
-            //Agents waiting for events
-            var eventConsumerAgents = _agents.Select(x => x.Agent).OfType<IEventConsumerAgent>().ToArray();
-            var taskConsumerAgents = _agents.Select(x => x.Agent).OfType<ITaskConsumerAgent>().ToArray();
-
-            _eventConsumer.Start(eventConsumerAgents);
-            _taskConsumer.Start(taskConsumerAgents);
         }
 
-        private IAgent initAgent(Ac ac)
+        public void RunAgent(Ac ac)
         {
             var agent = ac.Agent;
             var scheduledAgent = agent as IScheduledAgent;
+            var eventConsumerAgent = agent as IEventConsumerAgent;
+            var taskConsumerAgent = agent as ITaskConsumerAgent;
 
-            //assign id to agent
             agent.Id = ac.Config.Id;
-
 
             if (scheduledAgent != null)
             {
@@ -70,13 +61,21 @@ namespace Rabbitual
                 var schedule = scheduledAgent.DefaultScheduleMs <= 0 ? 5000 : scheduledAgent.DefaultScheduleMs;
                 _timers.Push(new Timer(_logger)).Start(schedule, () => scheduledAgent.Check());
             }
-            return agent;
+            if (eventConsumerAgent != null)
+            {
+                _eventConsumer.Start(eventConsumerAgent);
+            }
+            if (taskConsumerAgent != null)
+            {
+                _taskConsumer.Start(taskConsumerAgent);
+            }
+
+            agent.Start();
         }
 
         public void Stop()
         {
-            _eventConsumer.Stop();
-            _taskConsumer.Stop();
+            //TODO: Should shut down message flow through hub
 
             foreach (var t in _timers)
             {

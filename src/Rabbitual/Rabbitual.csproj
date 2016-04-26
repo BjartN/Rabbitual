@@ -65,8 +65,10 @@
     <Compile Include="IAgent.cs" />
     <Compile Include="App.cs" />
     <Compile Include="IAgentRepository.cs" />
+    <Compile Include="IMessageLog.cs" />
     <Compile Include="Infrastructure\DictonaryExtentions.cs" />
     <Compile Include="Infrastructure\EnumerableExtentions.cs" />
+    <Compile Include="Infrastructure\ListManager.cs" />
     <Compile Include="Infrastructure\IObjectDb.cs" />
     <Compile Include="Infrastructure\ObjectExtentions.cs" />
     <Compile Include="Infrastructure\StringExtentions.cs" />

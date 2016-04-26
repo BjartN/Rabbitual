@@ -39,8 +39,12 @@ namespace Rabbitual.Rabbit
         }
 
 
-        public void Start(IEventConsumerAgent[] agents)
+        public void Start(IEventConsumerAgent agent)
         {
+            throw new NotImplementedException("TODO: Implement for one agent at the time");
+
+            var agents = new [] {agent};
+
             try
             {
                 _connection = _factory.CreateConnection();

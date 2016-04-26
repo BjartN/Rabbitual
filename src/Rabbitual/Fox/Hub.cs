@@ -10,7 +10,8 @@ namespace Rabbitual.Fox
     public class Hub
     {
         private readonly ILogger _log;
-        
+        private readonly IAgentLogRepository _agentLog;
+
         //producer consumer
         private readonly BufferBlock<Message> _workBlock;
         private int _workCount;
@@ -22,9 +23,10 @@ namespace Rabbitual.Fox
         private readonly ConcurrentDictionary<string,BufferBlock<Message>> _agentBuffers = new ConcurrentDictionary<string, BufferBlock<Message>>(); 
 
 
-        public Hub(ILogger log)
+        public Hub(ILogger log, IAgentLogRepository agentLog)
         {
             _log = log;
+            _agentLog = agentLog;
 
             _broadcastBlock = new BroadcastBlock<Message>(clone);
             _workBlock = new BufferBlock<Message>();
@@ -55,9 +57,15 @@ namespace Rabbitual.Fox
 
         public void AddWorker(ITaskConsumerAgent worker)
         {
+            var log = _agentLog.GetLog(worker.Id);
+
             var work = new ActionBlock<Message>(m =>
             {
-                Task.Run(() => worker.DoWork(m));
+                Task.Run(() =>
+                {
+                    log.LogIncoming(m);
+                    worker.DoWork(m);
+                });
             });
             var agentBuffer = _agentBuffers.GetOrAdd(worker.Id, s => new BufferBlock<Message>());
 

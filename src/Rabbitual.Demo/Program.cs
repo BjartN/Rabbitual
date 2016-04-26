@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
-using System.Security.Policy;
 using Rabbitual.Agents;
 using Rabbitual.Agents.CsvAgent;
 using Rabbitual.Agents.DownloaderAgent;
@@ -114,7 +113,15 @@ namespace Rabbitual.Demo
                     Sources = new[] { d }
                 };
 
-                return new List<AgentConfig> { a, b, c, d, e }.ToArray();
+
+                var webServer = new AgentConfig
+                {
+                    Id = "WebServer",
+                    Name = "WebServer",
+                    ClrType = typeof(WebServerAgent),
+                };
+
+                return new List<AgentConfig> { a, b, c, d, e, webServer }.ToArray();
             }
 
 
