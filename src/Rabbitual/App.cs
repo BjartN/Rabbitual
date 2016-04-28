@@ -49,25 +49,22 @@ namespace Rabbitual
         public void RunAgent(Ac ac)
         {
             var agent = ac.Agent;
-            var scheduledAgent = agent as IScheduledAgent;
-            var eventConsumerAgent = agent as IEventConsumerAgent;
-            var taskConsumerAgent = agent as ITaskConsumerAgent;
 
             agent.Id = ac.Config.Id;
 
-            if (scheduledAgent != null)
+            if (agent.IsScheduled())
             {
-                //Set agent on a timer, with some silly-checking.
-                var schedule = scheduledAgent.DefaultScheduleMs <= 0 ? 5000 : scheduledAgent.DefaultScheduleMs;
-                _timers.Push(new Timer(_logger)).Start(schedule, () => scheduledAgent.Check());
+                var schedule = agent.GetSchedule();
+                schedule = schedule <= 0 ? 5000 : schedule;
+                _timers.Push(new Timer(_logger)).Start(schedule, () => agent.Check());
             }
-            if (eventConsumerAgent != null)
+            if (agent.IsConsumer())
             {
-                _eventConsumer.Start(eventConsumerAgent);
+                _eventConsumer.Start(agent);
             }
-            if (taskConsumerAgent != null)
+            if (agent.IsWorker())
             {
-                _taskConsumer.Start(taskConsumerAgent);
+                _taskConsumer.Start(agent);
             }
 
             agent.Start();

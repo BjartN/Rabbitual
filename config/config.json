@@ -1,0 +1,97 @@
+[
+  {
+    "id": "CsvAgent",
+    "name": "CsvAgent",
+    "schedule": null,
+    "type": "CsvAgent",
+    "sourceIds": [],
+    "options": {
+      "fieldNamesAtFirstLine": false,
+      "fieldNames": [
+        "lat",
+        "lon",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "time"
+      ],
+      "rowCount": 10,
+      "startAtEnd": true,
+      "separator": "|",
+      "url": null
+    }
+  },
+  {
+    "id": "UniqueEvent",
+    "name": "UniqueEvent",
+    "schedule": null,
+    "type": "UniqueEventAgent",
+    "sourceIds": [
+      "CsvAgent"
+    ],
+    "options": {
+      "idField": "time",
+      "keepStateMinutes": 1440
+    }
+  },
+  {
+    "id": "GeoFence",
+    "name": "GeoFence",
+    "schedule": null,
+    "type": "GeofencingAgent",
+    "sourceIds": [
+      "UniqueEvent"
+    ],
+    "options": {
+      "arrivingGrazeTime": "00:01:00",
+      "leavingGrazeTime": "00:01:00",
+      "circleFences": [
+        {
+          "lat": 0.0,
+          "lon": 0.0,
+          "radiusMeters": 1000,
+          "id": "Home",
+          "description": "I'm at home"
+        }
+      ]
+    }
+  },
+  {
+    "id": "Text",
+    "name": "Text",
+    "schedule": null,
+    "type": "TextAgent",
+    "sourceIds": [
+      "GeoFence"
+    ],
+    "options": {
+      "template": "Fence {fence} is breached: {description}"
+    }
+  },
+  {
+    "id": "Email",
+    "name": "Email",
+    "schedule": null,
+    "type": "EmailAgent",
+    "sourceIds": [
+      "Text"
+    ],
+    "options": {
+      "maxEmailCountPerHour": 10,
+      "subjectTemplate": "Geofence Event!",
+      "toEmail": "example@domain.com",
+      "fromEmail": "example@domain.com",
+      "bodyTemplate": "{text}"
+    }
+  },
+  {
+    "id": "WebServer",
+    "name": "WebServer",
+    "schedule": null,
+    "type": "WebServerAgent",
+    "sourceIds": [],
+    "options": null
+  }
+]

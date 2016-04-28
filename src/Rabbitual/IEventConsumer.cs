@@ -2,12 +2,12 @@ namespace Rabbitual
 {
     public interface IEventConsumer
     {
-        void Start(IEventConsumerAgent agent);
+        void Start(IAgentWrapper agent);
     }
 
     public interface ITaskConsumer
     {
-        void Start(ITaskConsumerAgent worker);
+        void Start(IAgentWrapper worker);
     }
 
 }

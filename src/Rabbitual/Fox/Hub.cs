@@ -45,17 +45,14 @@ namespace Rabbitual.Fox
 
         public void Subscribe(Action<Message> callback, string id)
         {
-            var action = new ActionBlock<Message>(m =>
-            {
-                callback(m);
-            });
+            var action = new ActionBlock<Message>(callback);
             var agentBuffer = _agentBuffers.GetOrAdd(id, s => new BufferBlock<Message>());
 
             agentBuffer.LinkTo(action);
             _broadcastBlock.LinkTo(agentBuffer);
         }
 
-        public void AddWorker(ITaskConsumerAgent worker)
+        public void AddWorker(IAgentWrapper worker)
         {
             var log = _agentLog.GetLog(worker.Id);
 

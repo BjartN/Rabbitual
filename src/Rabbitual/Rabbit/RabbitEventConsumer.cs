@@ -39,7 +39,7 @@ namespace Rabbitual.Rabbit
         }
 
 
-        public void Start(IEventConsumerAgent agent)
+        public void Start(IAgentWrapper agent)
         {
             throw new NotImplementedException("TODO: Implement for one agent at the time");
 

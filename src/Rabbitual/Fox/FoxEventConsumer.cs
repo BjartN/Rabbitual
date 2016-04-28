@@ -19,7 +19,7 @@ namespace Rabbitual.Fox
             _log = log;
         }
 
-        public void Start(IEventConsumerAgent a)
+        public void Start(IAgentWrapper a)
         {
             if (_configs == null)
                 _configs = _cfg.GetConfiguration().ToDictionary(x => x.Id, x => x);

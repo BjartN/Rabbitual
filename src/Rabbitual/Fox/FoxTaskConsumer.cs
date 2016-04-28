@@ -16,7 +16,7 @@ namespace Rabbitual.Fox
             _cfg = cfg;
         }
 
-        public void Start(ITaskConsumerAgent w)
+        public void Start(IAgentWrapper w)
         {
             if (_configs == null)
                 _configs = _cfg.GetConfiguration().ToDictionary(x => x.Id, x => x);

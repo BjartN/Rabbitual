@@ -9,14 +9,14 @@ namespace Rabbitual
 {
     public class Ac //in lack of a better name
     {
-        public Ac(IAgent agent, AgentConfig config)
+        public Ac(IAgentWrapper agent, AgentConfig config)
         {
             Agent = agent;
             Config = config;
         }
 
         public AgentConfig Config{ get;private set; }
-        public IAgent Agent{ get; private set; }
+        public IAgentWrapper Agent { get; private set; }
 
     }
 
@@ -59,12 +59,13 @@ namespace Rabbitual
 
         public Ac[] GetAgents()
         {
-            return _cfg.GetConfiguration()
-                .Select(x => new Ac((IAgent)createAgent(x), x))
+            var cfg =_cfg.GetConfiguration();
+
+            return cfg.Select(x => new Ac(createAgent(x), x))
                 .ToArray();
         }
 
-        private object createAgent(AgentConfig config)
+        private IAgentWrapper createAgent(AgentConfig config)
         {
             //TODO: Inject agent specific logger
 
@@ -92,7 +93,115 @@ namespace Rabbitual
                 deps.Add(typeof(IAgentStateRepository),agentState);
             }
 
-            return _factory.GetInstance(agentType,deps);
+            var agent = _factory.GetInstance(agentType,deps);
+
+            return new AgentWrapper((IAgent)agent);
+        }
+    }
+
+    public interface IAgentWrapper
+    {
+        string Id { get; set; }
+        
+        //Statefullness
+        bool HasState();
+        object GetState();
+
+        void Start();
+        void Stop();
+        void Check();
+
+        //Scheduling
+        bool IsScheduled();
+        int GetSchedule();
+
+        //Pub Sub
+        bool IsPublisher();
+        bool IsConsumer();
+        void Consume(Message message);
+
+
+        //Producer consumer
+        bool IsWorker();
+        bool CanDoWork(Message message);
+        void DoWork(Message message);
+    }
+
+    public class AgentWrapper : IAgentWrapper
+    {
+        private readonly IAgent _agent;
+
+        public AgentWrapper(IAgent agent)
+        {
+            _agent = agent;
+            Id = _agent.Id;
+        }
+
+        public string Id { get; set; }
+
+        public bool IsWorker()
+        {
+            return _agent is ITaskConsumerAgent;
+        }
+
+        public bool CanDoWork(Message message)
+        {
+            return ((ITaskConsumerAgent)_agent).CanDoWork(message);
+        }
+
+        public void DoWork(Message message)
+        {
+            ((ITaskConsumerAgent)_agent).DoWork(message);
+        }
+
+        public void Consume(Message message)
+        {
+            ((IEventConsumerAgent)_agent).Consume(message);
+        }
+
+        public bool IsScheduled()
+        {
+            return _agent is IScheduledAgent;
+        }
+
+        public int GetSchedule()
+        {
+           return ((IScheduledAgent) _agent).DefaultScheduleMs;
+        }
+
+        public bool IsPublisher()
+        {
+            return _agent is IEventPublisherAgent;
+        }
+
+        public object GetState()
+        {
+            return StateHelper.GetStateUsingMagic(_agent);
+        }
+
+        public void Start()
+        {
+            _agent.Start();
+        }
+
+        public void Stop()
+        {
+            _agent.Stop();
+        }
+
+        public void Check()
+        {
+           ((IScheduledAgent)_agent).Check();
+        }
+
+        public bool IsConsumer()
+        {
+            return _agent is IEventConsumerAgent;
+        }
+
+        public bool HasState()
+        {
+            return _agent.GetType().IsOfType(typeof(IStatefulAgent<>));
         }
     }
 }

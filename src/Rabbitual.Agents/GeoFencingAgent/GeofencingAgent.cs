@@ -1,10 +1,56 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using Rabbitual.Infrastructure;
 
 namespace Rabbitual.Agents.GeoFencingAgent
 {
+
+    public enum FenceState
+    {
+        Leaving, Arriving, In, Out
+    }
+
+    public class GeoFencingService
+    {
+        private readonly GeofencingOptions _o;
+        private readonly GeofencingState _s;
+
+        public GeoFencingService(GeofencingOptions o, GeofencingState s)
+        {
+            _o = o;
+            _s = s;
+        }
+
+        public void EvaluateEvent(double lat, double lon, DateTime occurred)
+        {
+            foreach (var fence in _o.CircleFences)
+            {
+                if (_s.IssuedFences.Any() && _s.IssuedFences.Last() == fence.Id)
+                    continue; //don't issue same fence again
+
+                var rRadius = GeometryFun.RadiusDegrees(fence.RadiusMeters, fence.Lat, fence.Lon);
+                var isMatch = GeometryFun.IsPointInCircle(fence.Lon, fence.Lat, rRadius, lon, lat);
+         
+
+            }
+
+        }
+    }
+
+
+
+    [Description(@"
+        Possible states, decided by setting
+            leaving-graze-time
+            arriving-graze-time
+
+        in -> leaving -> out
+        in -> leaving -> in
+        out -> arriving -> in
+        out -> arriving -> out
+    ")]
     public class GeofencingAgent: StatefulAgent<GeofencingOptions, GeofencingState>
         , IEventConsumerAgent
         , IEventPublisherAgent
@@ -51,7 +97,10 @@ namespace Rabbitual.Agents.GeoFencingAgent
         public GeofencingState()
         {
             IssuedFences= new List<string>();
+            State= new Dictionary<string, Tuple<FenceState, DateTime>>();
         }
+
+        public IDictionary<string,Tuple<FenceState, DateTime>> State { get; set; }
 
         public List<string> IssuedFences { get; set; }
     }
@@ -61,7 +110,13 @@ namespace Rabbitual.Agents.GeoFencingAgent
         public GeofencingOptions()
         {
             CircleFences = new Fence[0];
+            LeavingGrazeTime = TimeSpan.FromMinutes(1);
+            ArrivingGrazeTime = TimeSpan.FromMinutes(1);
         }
+
+        public TimeSpan ArrivingGrazeTime { get; set; }
+
+        public TimeSpan LeavingGrazeTime { get; set; }
 
         [Description("List of lists of [lat,lon,radiusMeter] to describe the circular fence")]
         public Fence[] CircleFences { get; set; }

@@ -5,7 +5,7 @@ namespace Rabbitual
 {
     public interface IAgentService
     {
-        object GetState(IAgent a);
+        object GetState(IAgentWrapper a);
         object GetPersistedState(Type agent, string id);
     }
 
@@ -32,12 +32,12 @@ namespace Rabbitual
             return StateHelper.GetPersistedStateUsingMagic(service, agent);
         }
 
-        public object GetState(IAgent a)
+        public object GetState(IAgentWrapper a)
         {
-            if (a == null || !(a.GetType().IsOfType(typeof(IStatefulAgent<>))))
+            if (a == null || !a.HasState())
                 return null;
 
-            return StateHelper.GetStateUsingMagic(a);
+            return a.GetState();
         }
     }
 }
