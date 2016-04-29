@@ -1,4 +1,5 @@
 using System.Threading.Tasks.Dataflow;
+using Rabbitual.Infrastructure;
 
 namespace Rabbitual
 {
@@ -6,13 +7,15 @@ namespace Rabbitual
     public class AgentWrapper : IAgentWrapper
     {
         private readonly IAgent _agent;
-        private readonly IAgentLog _al;
+        private readonly IAgentMessageLog _al;
+        private readonly ILogger _logger;
         private readonly BufferBlock<Message> _buffer;
 
-        public AgentWrapper(IAgent agent, IAgentLog al)
+        public AgentWrapper(IAgent agent, IAgentMessageLog al, ILogger logger)
         {
             _agent = agent;
             _al = al;
+            _logger = logger;
             Id = _agent.Id;
 
             _buffer = setUpBuffer(_agent);
@@ -33,7 +36,10 @@ namespace Rabbitual
             {
                 var doWork = new ActionBlock<Message>(message =>
                 {
+                    _logger.Info("{0}: Work start",Id);
                     taskAgent.DoWork(message);
+                    _logger.Info("{0}: Work end", Id);
+
                 });
                 b.LinkTo(doWork, m => m.MessageType == MessageType.Task);
 
@@ -43,7 +49,10 @@ namespace Rabbitual
             {
                 var consume = new ActionBlock<Message>(message =>
                 {
+                    _logger.Info("{0}: Consume start", Id);
                     eventAgent.Consume(message);
+                    _logger.Info("{0}: Consume end", Id);
+
                 });
                 b.LinkTo(consume, m => m.MessageType == MessageType.Event);
 
@@ -53,7 +62,10 @@ namespace Rabbitual
             {
                 var check = new ActionBlock<Message>(message =>
                 {
+                    _logger.Info("{0}: Schedule start", Id);
                     scheduledAgent.Check();
+                    _logger.Info("{0}: Schedule end", Id);
+
                 });
                 b.LinkTo(check, m => m.MessageType == MessageType.Check);
             }

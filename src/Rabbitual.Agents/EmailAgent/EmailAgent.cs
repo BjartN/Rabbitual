@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Net;
 using System.Net.Mail;
 using Rabbitual.Infrastructure;
 
@@ -33,7 +34,14 @@ namespace Rabbitual.Agents.EmailAgent
 
             try
             {
-                var client = new SmtpClient();
+                var client = new SmtpClient
+                {
+                    Host = Options.Host,
+                    Port = Options.Port,
+                    EnableSsl = Options.EnableSsl,
+                    Credentials = new NetworkCredential(Options.UserName,Options.Password)
+                };
+
                 client.Send(message);
                 State.EmailCount[now] = State.EmailCount[now] + 1;
             }
@@ -68,5 +76,10 @@ namespace Rabbitual.Agents.EmailAgent
         public string ToEmail { get; set; }
         public string FromEmail { get; set; }
         public string BodyTemplate { get; set; }
+        public string Host { get; set; }
+        public bool EnableSsl { get; set; }
+        public int Port { get; set; }
+        public string Password { get; set; }
+        public string UserName { get; set; }
     }
 }

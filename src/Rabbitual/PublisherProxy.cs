@@ -5,18 +5,18 @@ namespace Rabbitual
     {
         private readonly IPublisher _inner;
         private readonly string _agentId;
-        private readonly IAgentLog _log;
+        private readonly IAgentMessageLog _messageLog;
 
         public PublisherProxy(IPublisher inner, string agentId, IAgentLogRepository log)
         {
             _inner = inner;
             _agentId = agentId;
-            _log = log.GetLog(agentId);
+            _messageLog = log.GetLog(agentId);
         }
 
         public void EnqueueTask(Message task)
         {
-            _log.LogOutgoing(task);
+            _messageLog.LogOutgoing(task);
 
             task.SourceAgentId = _agentId;
             _inner.EnqueueTask(task);
@@ -24,7 +24,7 @@ namespace Rabbitual
 
         public void PublishEvent(Message e)
         {
-            _log.LogOutgoing(e);
+            _messageLog.LogOutgoing(e);
 
             e.SourceAgentId = _agentId;
             _inner.PublishEvent(e);

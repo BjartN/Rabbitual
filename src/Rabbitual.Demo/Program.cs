@@ -1,4 +1,5 @@
-﻿using Rabbitual.Configuration;
+﻿using System.Configuration;
+using Rabbitual.Configuration;
 
 namespace Rabbitual.Demo
 {
@@ -15,7 +16,7 @@ namespace Rabbitual.Demo
             public AgentConfig[] GetConfiguration()
             {
                 var config= new ConfigSerialization();
-                return config.Get(@"c:\dev\rabbitual\config\config.json");
+                return config.Get(ConfigurationManager.AppSettings["config-file"]);
             }
         }
     }

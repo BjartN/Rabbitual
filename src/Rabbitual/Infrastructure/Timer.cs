@@ -25,9 +25,6 @@ namespace Rabbitual.Infrastructure
             {
                 _timer.Stop();
 
-                if(intervalMs>4000)
-                    _log.Info("Scheduled task started");
-
                 try
                 {
                     action();
@@ -43,10 +40,6 @@ namespace Rabbitual.Infrastructure
                         return;
                     }
                 }
-
-                if (intervalMs > 4000)
-                    _log.Info("Scheduled task done");
-
 
                 _timer.Start(); //TODO: Will restart stopped task. Bad for TopShelf
             };

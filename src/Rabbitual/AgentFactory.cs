@@ -36,7 +36,6 @@ namespace Rabbitual
         private readonly IObjectDb _db;
         private readonly IFactory _factory;
         private readonly IAgentConfiguration _cfg;
-        private readonly IAgentService _s;
         private readonly IPublisher _p;
         private readonly IAgentLogRepository _agentLog;
 
@@ -45,14 +44,13 @@ namespace Rabbitual
             IObjectDb db,
             IFactory factory,
             IAgentConfiguration cfg,
-            IAgentService s,
-            IPublisher p, IAgentLogRepository agentLog)
+            IPublisher p,
+            IAgentLogRepository agentLog)
         {
             _logger = logger;
             _db = db;
             _factory = factory;
             _cfg = cfg;
-            _s = s;
             _p = p;
             _agentLog = agentLog;
         }
@@ -95,9 +93,10 @@ namespace Rabbitual
 
             var al = _agentLog.GetLog(config.Id);
 
-            var agent = _factory.GetInstance(agentType, deps);
+            var agent = (IAgent)_factory.GetInstance(agentType, deps);
+            agent.Id = config.Id;
 
-            return new AgentWrapper((IAgent)agent,al);
+            return new AgentWrapper(agent,al,_logger);
         }
     }
 }

@@ -5,22 +5,21 @@ using Rabbitual.Infrastructure;
 
 namespace Rabbitual
 {
-    public interface IAgentLog
+    public interface IAgentMessageLog
     {
         void LogIncoming( Message m);
         void LogOutgoing( Message m);
 
         Message[] GetIncoming();
-
         Message[] GetOutGoing();
     }
 
     public interface IAgentLogRepository
     {
-        IAgentLog GetLog(string agentId);
+        IAgentMessageLog GetLog(string agentId);
     }
 
-    public class AgentLog: IAgentLog
+    public class AgentMessageLog: IAgentMessageLog
     {
         readonly List<Message> _outgoing = new List<Message>();
         readonly List<Message> _incoming = new List<Message>();
@@ -28,7 +27,7 @@ namespace Rabbitual
         private readonly ListManager<Message> _i;
 
 
-        public AgentLog()
+        public AgentMessageLog()
         {
             _o = new ListManager<Message>(_outgoing,100);
             _i = new ListManager<Message>(_incoming, 100);
@@ -58,12 +57,12 @@ namespace Rabbitual
 
     public class AgentLogRepository: IAgentLogRepository
     {
-        readonly IDictionary<string,AgentLog> _logs = new ConcurrentDictionary<string, AgentLog>();
+        readonly IDictionary<string,AgentMessageLog> _logs = new ConcurrentDictionary<string, AgentMessageLog>();
 
-        public IAgentLog GetLog(string agentId)
+        public IAgentMessageLog GetLog(string agentId)
         {
             if(!_logs.ContainsKey(agentId))
-                _logs[agentId]= new AgentLog();
+                _logs[agentId]= new AgentMessageLog();
 
             return _logs[agentId];
         }
