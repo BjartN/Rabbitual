@@ -5,10 +5,9 @@ namespace Rabbitual.ConsoleHost
 {
     public static class Host
     {
-        public static void Run(bool inMemory, IAgentConfiguration configuraton)
+        public static void Run(bool inMemory)
         {
-            //setup ioc container
-            var c = Bootstrapper.Bootstrap(true, configuraton);
+            var c = Bootstrapper.Bootstrap(true);
 
             //run service using TopShelf
             HostFactory.Run(x =>

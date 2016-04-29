@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
+using System.Configuration;
 using Rabbitual.Configuration;
 using Rabbitual.Fox;
 using Rabbitual.Infrastructure;
@@ -14,7 +14,7 @@ namespace Rabbitual.ConsoleHost
 
     public class Bootstrapper
     {
-        public static Container Bootstrap(bool inMemory, IAgentConfiguration configuraton)
+        public static Container Bootstrap(bool inMemory)
         {
             var c = new Container(init =>
             {
@@ -42,7 +42,7 @@ namespace Rabbitual.ConsoleHost
 
                 init.For<IObjectDb>().Use<FileObjectDb>();
                 init.For<ISerializer>().Use<JsonSerializer>();
-                init.For<IAgentConfiguration>().Use(configuraton);
+                init.For<IAgentConfiguration>().Use(  new AgentConfiguration(ConfigurationManager.AppSettings["config-file"]));
                 init.For<IAgentLogRepository>().Use<AgentLogRepository>().Singleton();
                 init.For<IFactory>().Use<Factory>();
                 init.For<App>().Use<App>().Singleton();

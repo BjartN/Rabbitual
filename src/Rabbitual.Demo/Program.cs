@@ -1,5 +1,4 @@
 ﻿using System.Configuration;
-using Rabbitual.Configuration;
 
 namespace Rabbitual.Demo
 {
@@ -7,17 +6,8 @@ namespace Rabbitual.Demo
     {
         static void Main(string[] args)
         {
-            ConsoleHost.Host.Run(true, new AgentConfiguration());
+            ConsoleHost.Host.Run(true);
         }
 
-        //TODO: This whole config object should obviously be read as json or similar from some persisted medium and then created like this.
-        public class AgentConfiguration : IAgentConfiguration
-        {
-            public AgentConfig[] GetConfiguration()
-            {
-                var config= new ConfigSerialization();
-                return config.Get(ConfigurationManager.AppSettings["config-file"]);
-            }
-        }
     }
 }
