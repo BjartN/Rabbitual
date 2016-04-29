@@ -12,15 +12,11 @@ namespace Rabbitual
 
         public IDictionary<string, string> Data { get; set; }
         public string SourceAgentId { get; set; }
+        public MessageType MessageType { get; set; }
+    }
 
-        public override string ToString()
-        {
-            var sb = new StringBuilder();
-            foreach (var kvp in Data)
-            {
-                sb.Append(kvp.Key + "=" + kvp.Value + "&");
-            }
-            return sb.ToString().TrimEnd('&');
-        }
+    public enum MessageType
+    {
+        Task, Event,Check
     }
 }

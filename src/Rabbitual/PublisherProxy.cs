@@ -1,4 +1,3 @@
-using Rabbitual.Configuration;
 
 namespace Rabbitual
 {
@@ -6,7 +5,7 @@ namespace Rabbitual
     {
         private readonly IPublisher _inner;
         private readonly string _agentId;
-        private IAgentLog _log;
+        private readonly IAgentLog _log;
 
         public PublisherProxy(IPublisher inner, string agentId, IAgentLogRepository log)
         {

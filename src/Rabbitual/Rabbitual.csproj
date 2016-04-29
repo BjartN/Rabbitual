@@ -56,6 +56,7 @@
     <Compile Include="AgentFactory.cs" />
     <Compile Include="AgentService.cs" />
     <Compile Include="AgentStateRepositoryRepository.cs" />
+    <Compile Include="AgentWrapper.cs" />
     <Compile Include="Configuration\AgentConfig.cs" />
     <Compile Include="Configuration\AgentConfigDto.cs" />
     <Compile Include="Configuration\ConfigSerialization.cs" />
@@ -69,6 +70,7 @@
     <Compile Include="IAgent.cs" />
     <Compile Include="App.cs" />
     <Compile Include="IAgentRepository.cs" />
+    <Compile Include="IAgentWrapper.cs" />
     <Compile Include="IMessageLog.cs" />
     <Compile Include="Infrastructure\DictonaryExtentions.cs" />
     <Compile Include="Infrastructure\EnumerableExtentions.cs" />

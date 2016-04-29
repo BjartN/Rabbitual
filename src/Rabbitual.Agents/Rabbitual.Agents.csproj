@@ -81,6 +81,11 @@
     <Compile Include="CsvAgent\CsvOptions.cs" />
     <Compile Include="CsvAgent\CsvParser.cs" />
     <Compile Include="EmailAgent\EmailAgent.cs" />
+    <Compile Include="GeoFencingAgent\Fence.cs" />
+    <Compile Include="GeoFencingAgent\FenceState.cs" />
+    <Compile Include="GeoFencingAgent\GeofencingOptions.cs" />
+    <Compile Include="GeoFencingAgent\GeoFencingService.cs" />
+    <Compile Include="GeoFencingAgent\GeofencingState.cs" />
     <Compile Include="GeoFencingAgent\GeometryFun.cs" />
     <Compile Include="GeoFencingAgent\GeofencingAgent.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

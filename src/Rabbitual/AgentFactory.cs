@@ -15,7 +15,7 @@ namespace Rabbitual
             Config = config;
         }
 
-        public AgentConfig Config{ get;private set; }
+        public AgentConfig Config { get; private set; }
         public IAgentWrapper Agent { get; private set; }
 
     }
@@ -43,7 +43,7 @@ namespace Rabbitual
         public AgentFactory(
             ILogger logger,
             IObjectDb db,
-            IFactory factory, 
+            IFactory factory,
             IAgentConfiguration cfg,
             IAgentService s,
             IPublisher p, IAgentLogRepository agentLog)
@@ -59,7 +59,7 @@ namespace Rabbitual
 
         public Ac[] GetAgents()
         {
-            var cfg =_cfg.GetConfiguration();
+            var cfg = _cfg.GetConfiguration();
 
             return cfg.Select(x => new Ac(createAgent(x), x))
                 .ToArray();
@@ -74,134 +74,30 @@ namespace Rabbitual
             var includeOptions = agentType.IsOfType(typeof(IHaveOptions<>));
             var includeState = agentType.IsOfType(typeof(IStatefulAgent<>));
             var inculdePublisher = agentType.IsOfType(typeof(IEventPublisherAgent));
-            var deps = new Dictionary<Type,object>();
+            var deps = new Dictionary<Type, object>();
 
             if (includeOptions)
             {
                 var optionType = OptionsHelper.GetOptionType(agentType);
-                deps.Add(optionType,config.Options ?? Activator.CreateInstance(optionType));
+                deps.Add(optionType, config.Options ?? Activator.CreateInstance(optionType));
             }
 
             if (inculdePublisher)
             {
-                deps.Add(typeof(IPublisher),new PublisherProxy(_p, config.Id, _agentLog));
+                deps.Add(typeof(IPublisher), new PublisherProxy(_p, config.Id, _agentLog));
             }
 
             if (includeState)
             {
                 var agentState = new AgentStateRepository(config.Id, _db, _logger);
-                deps.Add(typeof(IAgentStateRepository),agentState);
+                deps.Add(typeof(IAgentStateRepository), agentState);
             }
 
-            var agent = _factory.GetInstance(agentType,deps);
+            var al = _agentLog.GetLog(config.Id);
 
-            return new AgentWrapper((IAgent)agent);
-        }
-    }
+            var agent = _factory.GetInstance(agentType, deps);
 
-    public interface IAgentWrapper
-    {
-        string Id { get; set; }
-        
-        //Statefullness
-        bool HasState();
-        object GetState();
-
-        void Start();
-        void Stop();
-        void Check();
-
-        //Scheduling
-        bool IsScheduled();
-        int GetSchedule();
-
-        //Pub Sub
-        bool IsPublisher();
-        bool IsConsumer();
-        void Consume(Message message);
-
-
-        //Producer consumer
-        bool IsWorker();
-        bool CanDoWork(Message message);
-        void DoWork(Message message);
-    }
-
-    public class AgentWrapper : IAgentWrapper
-    {
-        private readonly IAgent _agent;
-
-        public AgentWrapper(IAgent agent)
-        {
-            _agent = agent;
-            Id = _agent.Id;
-        }
-
-        public string Id { get; set; }
-
-        public bool IsWorker()
-        {
-            return _agent is ITaskConsumerAgent;
-        }
-
-        public bool CanDoWork(Message message)
-        {
-            return ((ITaskConsumerAgent)_agent).CanDoWork(message);
-        }
-
-        public void DoWork(Message message)
-        {
-            ((ITaskConsumerAgent)_agent).DoWork(message);
-        }
-
-        public void Consume(Message message)
-        {
-            ((IEventConsumerAgent)_agent).Consume(message);
-        }
-
-        public bool IsScheduled()
-        {
-            return _agent is IScheduledAgent;
-        }
-
-        public int GetSchedule()
-        {
-           return ((IScheduledAgent) _agent).DefaultScheduleMs;
-        }
-
-        public bool IsPublisher()
-        {
-            return _agent is IEventPublisherAgent;
-        }
-
-        public object GetState()
-        {
-            return StateHelper.GetStateUsingMagic(_agent);
-        }
-
-        public void Start()
-        {
-            _agent.Start();
-        }
-
-        public void Stop()
-        {
-            _agent.Stop();
-        }
-
-        public void Check()
-        {
-           ((IScheduledAgent)_agent).Check();
-        }
-
-        public bool IsConsumer()
-        {
-            return _agent is IEventConsumerAgent;
-        }
-
-        public bool HasState()
-        {
-            return _agent.GetType().IsOfType(typeof(IStatefulAgent<>));
+            return new AgentWrapper((IAgent)agent,al);
         }
     }
 }
