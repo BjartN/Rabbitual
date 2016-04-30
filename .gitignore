@@ -4,6 +4,7 @@
 #Various
 src/ProducerConsumer
 src/Rabbitual.Demo/App.config
+src/Rabbitual.Web/typings
 
 # User-specific files
 *.suo

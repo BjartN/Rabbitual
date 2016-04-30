@@ -11,6 +11,8 @@ namespace Rabbitual.Agents.WebServerAgent
         public void Configuration(IAppBuilder appBuilder)
         {
             var config = new HttpConfiguration();
+
+            config.MessageHandlers.Add(new CustomHeaderHandler());
             config.MapHttpAttributeRoutes();
             config.Services.Replace(typeof(IHttpControllerActivator), new ServiceActivator(config, Factory));
             appBuilder.UseWebApi(config);

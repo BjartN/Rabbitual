@@ -1,0 +1,77 @@
+	<!DOCTYPE html>
+	<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<title>Rabbitual</title>
+
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.1.8/semantic.min.css" />
+
+		<style type="text/css">
+			td {
+				text-transform: capitalize;
+			}
+		</style>
+	</head>
+	<body>
+	<div class="ui container">
+		<div class="ui pointing menu">
+		  <a class="active item">
+		    Agents
+		  </a>
+		  <a class="item">
+		    Flow
+		  </a>
+		  <div class="right menu">
+		    <div class="item">
+		    	Rabbitual
+		    </div>
+		  </div>
+		</div>
+
+		<div id="app" class="ui segment">
+
+		</div>
+</div>
+		<script id="table-template" type="text/x-handlebars-template">
+			<table class="ui very compact table">
+				<thead>
+					<tr>
+						<th class="one wide">Name</th>
+						<th class="two wide">Last Check</th>
+						<th class="two wide">Last Event Out</th>
+						<th class="two wide">Last Event In</th>
+						<th class="two wide">Last Task Out</th>
+						<th class="two wide">Last Task In</th>
+						<th class="one wide">Messages</th>
+						<th class="one wide">Schedule</th>
+						<th class="two wide">Sources</th>
+						<th class="one wide"></th>
+					</tr>
+				</thead>
+				<tbody>
+					{{#each this}}
+					<tr>
+						<td>{{name}}</td>
+						<td>{{lastCheck}}</td>
+						<td>{{lastEventOut}}</td>
+						<td>{{lastEventIn}}</td>
+						<td>{{lastTaskOut}}</td>
+						<td>{{lastTaskIn}}</td>
+						<td>In:{{outgoingCount}} / Out:{{incomingCount}}</td>
+						<td>{{schedule}}</td>
+						<td>{{sources}}</td>
+						<td></td>
+					</tr>
+					{{/each}}
+				</tbody>
+			</table>
+		</script>
+
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.0.0-beta1/jquery.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.1.8/semantic.min.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.0.5/handlebars.min.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.13.0/moment.min.js"></script>
+		<script src="bundle/bundle.js"></script>
+	</body>
+	</html>

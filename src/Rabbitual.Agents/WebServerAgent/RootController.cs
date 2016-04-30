@@ -59,19 +59,31 @@ namespace Rabbitual.Agents.WebServerAgent
                 .GetConfiguration()
                 .GroupBy(x => x.ClrType)
                 .SelectMany(g => g.OrderBy(x => x.Name))
-                .Select(x => new
+                .Select(x =>
                 {
-                    MessageLogUrl = $"{root}/agent/message-log/{x.Id}",
-                    StateUrl = $"{root}/agent/state/{x.Id}",
-                    x.Id,
-                    x.Name,
-                    NumSources = x.Sources.Length,
-                    Options =x.Options?.GetType().GetProperties().Where(p => p.CanRead).Select(p => new
+                    var al = _l.GetLog(x.Id).GetSummary();
+
+                    return new
                     {
-                        Description = getDescription(p),
-                        p.Name,
-                        Value = p.GetValue(x.Options)
-                    })
+                        OutgoingCount = al.OutgoingCount,
+                        IncomingCount = al.IncomingCount,
+                        LastCheck = al.LastCheck == null ? null : new DateTime?(al.LastCheck.Occured),
+                        LastEventIn = al.LastEventIn == null ? null : new DateTime?(al.LastEventIn.Occured),
+                        LastEventOut = al.LastEventOut == null ? null : new DateTime?(al.LastEventOut.Occured),
+                        LastTaskIn = al.LastTaskIn == null ? null : new DateTime?(al.LastTaskIn.Occured),
+                        LastTaskOut = al.LastTaskOut == null ? null : new DateTime?(al.LastTaskOut.Occured),
+                        MessageLogUrl = $"{root}/agent/message-log/{x.Id}",
+                        StateUrl = $"{root}/agent/state/{x.Id}",
+                        x.Id,
+                        x.Name,
+                        Sources = x.Sources.Select(s => s.Id),
+                        Options = x.Options?.GetType().GetProperties().Where(p => p.CanRead).Select(p => new
+                        {
+                            Description = getDescription(p),
+                            p.Name,
+                            Value = p.GetValue(x.Options)
+                        })
+                    };
                 });
 
             return this.SweetJson(o);
@@ -88,5 +100,5 @@ namespace Rabbitual.Agents.WebServerAgent
         }
     }
 
-    
+
 }

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Text;
 
 namespace Rabbitual
@@ -7,12 +8,14 @@ namespace Rabbitual
     {
         public Message()
         {
+            Occured=DateTime.UtcNow;
             Data = new Dictionary<string, string>();
         }
 
         public IDictionary<string, string> Data { get; set; }
         public string SourceAgentId { get; set; }
         public MessageType MessageType { get; set; }
+        public DateTime Occured { get; set; }
     }
 
     public enum MessageType
