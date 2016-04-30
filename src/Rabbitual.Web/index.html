@@ -28,7 +28,7 @@
 		  </div>
 		</div>
 
-		<div id="app" class="ui segment">
+		<div id="app">
 
 		</div>
 </div>
@@ -43,15 +43,14 @@
 						<th class="two wide">Last Task Out</th>
 						<th class="two wide">Last Task In</th>
 						<th class="one wide">Messages</th>
-						<th class="one wide">Schedule</th>
+						<th class="two wide">Schedule</th>
 						<th class="two wide">Sources</th>
-						<th class="one wide"></th>
 					</tr>
 				</thead>
 				<tbody>
 					{{#each this}}
 					<tr>
-						<td>{{name}}</td>
+						<td><a href="edit.html?id={{id}}">{{name}}</a></td>
 						<td>{{lastCheck}}</td>
 						<td>{{lastEventOut}}</td>
 						<td>{{lastEventIn}}</td>
@@ -60,7 +59,6 @@
 						<td>In:{{outgoingCount}} / Out:{{incomingCount}}</td>
 						<td>{{schedule}}</td>
 						<td>{{sources}}</td>
-						<td></td>
 					</tr>
 					{{/each}}
 				</tbody>
@@ -72,6 +70,8 @@
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.1.8/semantic.min.js"></script>
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.0.5/handlebars.min.js"></script>
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.13.0/moment.min.js"></script>
-		<script src="bundle/bundle.js"></script>
+		<script src="bundle/data.js"></script>
+		<script src="bundle/app.js"></script>
+
 	</body>
 	</html>

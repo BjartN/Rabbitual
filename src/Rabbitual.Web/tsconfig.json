@@ -1,8 +1,9 @@
 {
   "compilerOptions": {
-    "outFile" : "bundle/bundle.js"
+    "outDir" : "bundle"
   },
   "files": [
+  	"edit.ts",
     "app.ts",
     "typings/tsd.d.ts"
   ]

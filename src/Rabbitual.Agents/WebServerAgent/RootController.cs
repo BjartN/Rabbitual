@@ -27,6 +27,12 @@ namespace Rabbitual.Agents.WebServerAgent
             _l = l;
         }
 
+        [Route("agent/update")]
+        public bool Update()
+        {
+            return true;
+        }
+
         [HttpGet]
         [Route("agent/message-log/{id}")]
         public HttpResponseMessage MessageLog(string id)

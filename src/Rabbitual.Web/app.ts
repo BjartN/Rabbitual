@@ -1,11 +1,15 @@
 /// <reference path="typings/handlebars/handlebars.d.ts"/>
+/// <reference path="./data.ts"/>
+
 
 class App {
 	e: any;
 	tableTemplate: any;
+	data: Data;
 
 	constructor(e){
 		this.e = e;
+		this.data = new Data('http://localhost:9000/config')
 	}
 
 	run() {
@@ -13,26 +17,11 @@ class App {
 		let source = document.getElementById('table-template');
 		this.tableTemplate = Handlebars.compile(source.innerHTML);
 
-		fetch('http://localhost:9000/config').then(r=>{
-			r.json().then(that.display.bind(that));
-		});
+		this.data.get(data=>{
+			var html = this.tableTemplate(data);
+			document.getElementById('app').innerHTML = html;
+		})
 	}
-
-	display(data){
-		let props = ['lastCheck', 'lastEventOut', 'lastEventIn', 'lastTaskIn', 'lastTaskOut'];
-
-		_.each(data,x=>{
-			_.each(props,p=>{
-				if(x[p]){
-					x[p] = moment.utc(x[p]).fromNow();
-				}
-			});
-		});
-
-		var html = this.tableTemplate(data);
-		document.getElementById('app').innerHTML = html;
-	}
-
 }
 
 var app  = new App(document.getElementById('app'));

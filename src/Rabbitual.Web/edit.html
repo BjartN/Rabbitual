@@ -1,0 +1,52 @@
+	<!DOCTYPE html>
+	<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<title>Edit</title>
+
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.1.8/semantic.min.css" />
+
+	</head>
+	<body>
+		<div class="ui container">
+			<div class="ui pointing menu">
+				<a class="active item">
+					Agents
+				</a>
+				<a class="item">
+					Flow
+				</a>
+				<div class="right menu">
+					<div class="item">
+						Rabbitual
+					</div>
+				</div>
+			</div>
+
+			<div id="app">
+
+			</div>
+		</div>
+		<script id="form-template" type="text/x-handlebars-template">
+			<form class="ui form">
+				{{#each this}}
+				
+				<div class="field">
+					<label>{{name}}</label>
+					<input type="text" name="{{name}}" value="{{value}}">
+				</div>
+				
+				{{/each}}
+			</form>
+		</script>
+
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.0.0-beta1/jquery.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.1.8/semantic.min.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.0.5/handlebars.min.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.13.0/moment.min.js"></script>
+		
+		<script src="bundle/data.js"></script>
+		<script src="bundle/edit.js"></script>
+	</body>
+	</html>
