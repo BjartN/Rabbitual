@@ -1,6 +1,4 @@
-/// <reference path="../typings/handlebars/handlebars.d.ts"/>
-/// <reference path="../typings/jquery/jquery.d.ts"/>
-/// <reference path="./data.ts"/>
+/// <reference path="../typings/tsd.d.ts"/>
 
 class App {
 	tableTemplate: any;

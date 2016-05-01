@@ -1,6 +1,4 @@
-/// <reference path="../typings/jquery/jquery.d.ts"/>
-/// <reference path="../typings/whatwg-fetch/whatwg-fetch.d.ts"/>
-/// <reference path="../typings/underscore/underscore.d.ts"/>
+/// <reference path="../typings/tsd.d.ts"/>
 var DataService = (function () {
     function DataService() {
         this.root = 'http://localhost:9000';

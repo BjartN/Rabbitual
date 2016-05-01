@@ -1,4 +1,4 @@
-/// <reference path="data.ts"/>
+/// <reference path="../typings/tsd.d.ts"/>
 var Editor = (function () {
     function Editor(e) {
         this.e = e;

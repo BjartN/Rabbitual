@@ -1,4 +1,4 @@
-/// <reference path="data.ts"/>
+/// <reference path="../typings/tsd.d.ts"/>
 
 class Editor {
 	data: DataService;
