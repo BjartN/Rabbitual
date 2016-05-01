@@ -1,18 +1,38 @@
-﻿namespace Rabbitual.Configuration
+using System.IO;
+using System.Linq;
+using Rabbitual.Infrastructure;
+
+namespace Rabbitual.Configuration
 {
     public class AgentConfiguration : IAgentConfiguration
     {
-        private readonly string _file;
+        private readonly ConfigSerialization _configSerialization;
+        private readonly IObjectDb _db;
+        private readonly ILogger _log;
+        private readonly string _folder;
 
-        public AgentConfiguration(string file)
+        public AgentConfiguration(IAppConfiguration cfg, ConfigSerialization configSerialization,IObjectDb db, ILogger log)
         {
-            _file = file;
+            _configSerialization = configSerialization;
+            _db = db;
+            _log = log;
+            _folder = cfg.Get("rabbitual.filedb.folder");
         }
 
         public AgentConfig[] GetConfiguration()
         {
-            var config = new ConfigSerialization();
-            return config.Get(_file);
+            var result = Directory
+                .GetFiles(_folder, "*.json")
+                .Where(x => new FileInfo(x).Name.StartsWith("agent."))
+                .ToArray();
+
+            return _configSerialization.Get(result);
+        }
+
+        public void PersistConfig(AgentConfigDto c)
+        {
+            _log.Info($"Persisting agent {c.Id}");
+            _db.Save(c, "agent." + c.Id);
         }
     }
 }

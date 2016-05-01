@@ -6,10 +6,10 @@ namespace Rabbitual
 {
     public class FileObjectDb : IObjectDb
     {
-        private readonly ISerializer _s;
+        private readonly IJsonSerializer _s;
         private readonly string _folder;
 
-        public FileObjectDb(ISerializer s, IAppConfiguration cfg)
+        public FileObjectDb(IJsonSerializer s, IAppConfiguration cfg)
         {
             _s = s;
             _folder = cfg.Get("rabbitual.filedb.folder");
@@ -21,13 +21,13 @@ namespace Rabbitual
                 return;
 
             var file = getFile(id);
-            var bytes = _s.ToBytes(o);
-            File.WriteAllBytes(file, bytes);
+            var json = _s.Serialize(o);
+            File.WriteAllText(file, json);
         }
 
         private string getFile(string id)
         {
-            return Path.Combine(_folder, id + ".dat");
+            return Path.Combine(_folder, id + ".json");
         }
 
         public object Get(Type t, string id)
@@ -36,8 +36,8 @@ namespace Rabbitual
             if (!File.Exists(file))
                 return null;
 
-            var bytes = File.ReadAllBytes(file);
-            return _s.FromBytes(bytes, t);
+            var bytes = File.ReadAllText(file);
+            return _s.Deserialize(bytes, t);
         }
 
         public T Get<T>(string id)
@@ -46,8 +46,8 @@ namespace Rabbitual
             if (!File.Exists(file))
                 return default(T);
 
-            var bytes = File.ReadAllBytes(file);
-            return _s.FromBytes<T>(bytes);
+            var json = File.ReadAllText(file);
+            return _s.Deserialize<T>(json);
         }
     }
 }

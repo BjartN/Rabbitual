@@ -36,12 +36,16 @@
 	}
 
 	postOptions(agentId,value,callback){
-		fetch("http://localhost:9000/agent/update/" +agentId,
-			{
-				method: "POST",
-				body: value
-			})
-			.then(function(res) { return res.json(); })
-			.then(function(data) { callback(data) })
+
+		var bodz = JSON.stringify(value);
+
+		$.ajax({
+			type: 'POST',
+			url: 'http://localhost:9000/agent/options/update/' + agentId,
+			data: bodz,
+			success: callback
+		});
+
+		
 	}
 }

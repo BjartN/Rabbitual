@@ -6,6 +6,7 @@ using System.Text;
 using System.Web.Http;
 using NJsonSchema;
 using Rabbitual.Configuration;
+using Rabbitual.Infrastructure;
 
 namespace Rabbitual.Agents.WebServerAgent
 {
@@ -15,17 +16,23 @@ namespace Rabbitual.Agents.WebServerAgent
         private readonly IAgentRepository _ar;
         private readonly IAgentService _s;
         private readonly IAgentLogRepository _l;
+        private readonly IAgentConfiguration _configRepository;
+        private readonly IJsonSerializer _serializer;
 
         public RootController(
             IAgentConfiguration cfg,
             IAgentRepository ar,
             IAgentService s,
-            IAgentLogRepository l)
+            IAgentLogRepository l,
+            IAgentConfiguration configRepository,
+            IJsonSerializer serializer)
         {
             _cfg = cfg;
             _ar = ar;
             _s = s;
             _l = l;
+            _configRepository = configRepository;
+            _serializer = serializer;
         }
 
         [HttpGet]
@@ -40,18 +47,33 @@ namespace Rabbitual.Agents.WebServerAgent
             return response;
         }
 
+
+        [Route("agent/options/update/{id}")]
+        public IHttpActionResult Update(string id)
+        {
+            var json = Request.Content.ReadAsStringAsync().Result;
+            var agent = _ar.GetAgent(id);
+            if (agent == null)
+                return NotFound();
+
+            var newOptions = _serializer.Deserialize(json, agent.Config.Options.GetType());
+            //Note: This will replace the options object, so the agent(s) will still keep a refrence to the old one.
+            //Could be solved my replacing just copying the properties one by one.
+            agent.Config.Options = newOptions;
+
+            _configRepository.PersistConfig(agent.Config.ToDto());
+
+
+            return Ok();
+        }
+
+
         [HttpGet]
         [Route("agent/options/{id}")]
         public HttpResponseMessage Options(string id)
         {
             var agent = _ar.GetAgent(id);
-            return this.SweetJson(agent.Config.Options,bigAssPropertyNames:true);
-        }
-
-        [Route("agent/update/{id}")]
-        public bool Update()
-        {
-            return true;
+            return this.SweetJson(agent.Config.Options, bigAssPropertyNames: true);
         }
 
         [HttpGet]

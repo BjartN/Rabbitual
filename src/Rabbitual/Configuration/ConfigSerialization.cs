@@ -2,13 +2,20 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using Rabbitual.Infrastructure;
 
 namespace Rabbitual.Configuration
 {
     public class ConfigSerialization
     {
+        private readonly IJsonSerializer _s;
+
+        public ConfigSerialization(IJsonSerializer s)
+        {
+            _s = s;
+        }
+
         public IDictionary<string, Type> GetTypeMap()
         {
             var type = typeof(IAgent);
@@ -21,10 +28,17 @@ namespace Rabbitual.Configuration
 
         public AgentConfig[] Get(string source)
         {
-            var s = JsonConvert.DeserializeObject<AgentConfigDto[]>(File.ReadAllText(source));
-
+            var s = _s.Deserialize<AgentConfigDto[]>(File.ReadAllText(source));
 
             return ToConfig(s);
+        }
+
+
+        public AgentConfig[] Get(string[] source)
+        {
+            var all =source.Select(s => _s.Deserialize<AgentConfigDto>(File.ReadAllText(s))).ToArray();
+
+            return ToConfig(all);
         }
 
         public AgentConfig[] ToConfig(AgentConfigDto[] dtos)
@@ -57,7 +71,8 @@ namespace Rabbitual.Configuration
 
                 if (c.Options != null)
                 {
-                    var o = JsonConvert.DeserializeObject(((JObject)c.Options).ToString(), t);
+                    //TODO: Making some internals assumptions here.
+                    var o = _s.Deserialize(((JObject)c.Options).ToString(), t);
                     config.Options = o;
                 }
 

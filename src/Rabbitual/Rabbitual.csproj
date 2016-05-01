@@ -55,13 +55,13 @@
   <ItemGroup>
     <Compile Include="AgentFactory.cs" />
     <Compile Include="AgentService.cs" />
-    <Compile Include="AgentStateRepositoryRepository.cs" />
+    <Compile Include="AgentStateRepository.cs" />
     <Compile Include="AgentWrapper.cs" />
     <Compile Include="Configuration\AgentConfig.cs" />
     <Compile Include="Configuration\AgentConfigDto.cs" />
-    <Compile Include="Configuration\AgentConfiguration.cs" />
     <Compile Include="Configuration\ConfigSerialization.cs" />
     <Compile Include="Configuration\IAgentConfiguration.cs" />
+    <Compile Include="Configuration\AgentConfiguration.cs" />
     <Compile Include="Configuration\Scenario.cs" />
     <Compile Include="FileObjectDb.cs" />
     <Compile Include="Fox\FoxEventConsumer.cs" />
@@ -75,6 +75,8 @@
     <Compile Include="IMessageLog.cs" />
     <Compile Include="Infrastructure\DictonaryExtentions.cs" />
     <Compile Include="Infrastructure\EnumerableExtentions.cs" />
+    <Compile Include="Infrastructure\IJsonSerializer.cs" />
+    <Compile Include="Infrastructure\JsonSerializer.cs" />
     <Compile Include="Infrastructure\ListManager.cs" />
     <Compile Include="Infrastructure\IObjectDb.cs" />
     <Compile Include="Infrastructure\ObjectExtentions.cs" />
@@ -87,8 +89,8 @@
     <Compile Include="IAppConfiguration.cs" />
     <Compile Include="IPublisher.cs" />
     <Compile Include="Infrastructure\ILogger.cs" />
-    <Compile Include="Infrastructure\ISerializer.cs" />
-    <Compile Include="Infrastructure\JsonSerializer.cs" />
+    <Compile Include="Infrastructure\IBinarySerializer.cs" />
+    <Compile Include="Infrastructure\JsonBinarySerializer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="IEventConsumer.cs" />
     <Compile Include="Rabbit\IQueueDeclaration.cs" />

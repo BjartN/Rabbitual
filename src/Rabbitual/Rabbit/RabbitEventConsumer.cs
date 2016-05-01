@@ -13,7 +13,7 @@ namespace Rabbitual.Rabbit
     public class RabbitEventConsumer : IEventConsumer
     {
         private readonly ILogger _c;
-        private readonly ISerializer _s;
+        private readonly IBinarySerializer _s;
         private readonly IQueueDeclaration _declarations;
         private readonly string _queueName;
 
@@ -24,7 +24,7 @@ namespace Rabbitual.Rabbit
         public RabbitEventConsumer(
             ILogger c,
             IAppConfiguration cfg,
-            ISerializer s,
+            IBinarySerializer s,
             IQueueDeclaration declarations,
             string queueName)
         {

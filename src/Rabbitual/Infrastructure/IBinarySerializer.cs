@@ -2,7 +2,7 @@
 
 namespace Rabbitual.Infrastructure
 {
-    public interface ISerializer
+    public interface IBinarySerializer
     {
         byte[] ToBytes<T>(T o);
         T FromBytes<T>(byte[] o);

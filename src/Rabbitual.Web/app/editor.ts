@@ -28,9 +28,7 @@ class Editor {
 		editor.on('ready', function() {
 			editor.validate();
 			document.getElementById('submit').addEventListener('click', function() {
-				that.data.postOptions(that.agentId, editor.getValue(),function(){
-					editor.getValue()					
-				})
+				that.data.postOptions(that.agentId, editor.getValue(),function(){})
 				console.log(editor.getValue());
 			});	
 		});

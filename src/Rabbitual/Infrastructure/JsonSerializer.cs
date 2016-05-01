@@ -1,27 +1,23 @@
 using System;
-using System.Text;
 using Newtonsoft.Json;
 
 namespace Rabbitual.Infrastructure
 {
-    public class JsonSerializer : ISerializer
+    public class JsonSerializer : IJsonSerializer
     {
-        public byte[] ToBytes<T>(T o)
+        public string Serialize<T>(T o)
         {
-            var json = JsonConvert.SerializeObject(o);
-            return Encoding.UTF8.GetBytes(json);
+            return o.ToJson();
         }
 
-        public T FromBytes<T>(byte[] body)
+        public T Deserialize<T>(string json)
         {
-            var message = Encoding.UTF8.GetString(body);
-            return JsonConvert.DeserializeObject<T>(message);
+            return  JsonConvert.DeserializeObject<T>(json);
         }
 
-        public object FromBytes(byte[] bytes, Type t)
+        public object Deserialize(string json, Type t)
         {
-            var message = Encoding.UTF8.GetString(bytes);
-            return JsonConvert.DeserializeObject(message,t);
+            return JsonConvert.DeserializeObject(json,t);
         }
     }
 }
