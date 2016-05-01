@@ -1,4 +1,5 @@
-/// <reference path="typings/handlebars/handlebars.d.ts"/>
+/// <reference path="../typings/handlebars/handlebars.d.ts"/>
+/// <reference path="../typings/jquery/jquery.d.ts"/>
 /// <reference path="./data.ts"/>
 
 class App {

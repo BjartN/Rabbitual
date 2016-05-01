@@ -13,6 +13,15 @@
     },
     "moment/moment-node.d.ts": {
       "commit": "08ed4e9f1869e37e29514d862e0158b40e550232"
+    },
+    "jquery/jquery.d.ts": {
+      "commit": "e05e1f6f83c6ac84e9d7ff8284e8089d53a788a6"
+    },
+    "whatwg-fetch/whatwg-fetch.d.ts": {
+      "commit": "e05e1f6f83c6ac84e9d7ff8284e8089d53a788a6"
+    },
+    "underscore/underscore.d.ts": {
+      "commit": "e05e1f6f83c6ac84e9d7ff8284e8089d53a788a6"
     }
   }
 }

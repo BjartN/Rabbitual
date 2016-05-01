@@ -1,3 +1,6 @@
+/// <reference path="../typings/jquery/jquery.d.ts"/>
+/// <reference path="../typings/whatwg-fetch/whatwg-fetch.d.ts"/>
+/// <reference path="../typings/underscore/underscore.d.ts"/>
 
  class DataService {
 	 root: string
