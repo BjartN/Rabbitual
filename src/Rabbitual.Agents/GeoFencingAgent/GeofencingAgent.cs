@@ -43,13 +43,13 @@ namespace Rabbitual.Agents.GeoFencingAgent
             if (lat == null || lon == null)
                 return;
 
-            var service = new GeoFencingService(Options, State, DateTime.UtcNow);
+            var service = new GeoFencingService(Options, State,()=> DateTime.UtcNow);
             service.MoveTo(lat.Value, lon.Value);
         }
 
         public void Check()
         {
-            var service = new GeoFencingService(Options, State, DateTime.UtcNow);
+            var service = new GeoFencingService(Options, State, () => DateTime.UtcNow);
             var events = service.TransitionBasedOnTime();
             var list = new ListManager<string>(State.IssuedFences, limit: 100);
 
