@@ -37,28 +37,34 @@
 				<thead>
 					<tr>
 						<th class="one wide">Name</th>
-						<th class="two wide">Last Check</th>
-						<th class="two wide">Last Event Out</th>
 						<th class="two wide">Last Event In</th>
+						<th class="two wide">Last Event Out</th>
 						<th class="two wide">Last Task Out</th>
 						<th class="two wide">Last Task In</th>
+						<th class="two wide">Last Check</th>
 						<th class="one wide">Messages</th>
-						<th class="two wide">Schedule</th>
-						<th class="two wide">Sources</th>
+						<th class="one wide">Schedule</th>
+						<th class="one wide">Sources</th>
+						<th class="two wide"></th>
 					</tr>
 				</thead>
 				<tbody>
 					{{#each this}}
 					<tr>
-						<td><a href="edit.html?id={{id}}">{{name}}</a></td>
-						<td>{{lastCheck}}</td>
-						<td>{{lastEventOut}}</td>
+						<td>{{name}}</td>
 						<td>{{lastEventIn}}</td>
+						<td>{{lastEventOut}}</td>
 						<td>{{lastTaskOut}}</td>
 						<td>{{lastTaskIn}}</td>
-						<td>In:{{outgoingCount}} / Out:{{incomingCount}}</td>
+						<td>{{lastCheck}}</td>
+						<td>Out:{{outgoingCount}} / In:{{incomingCount}}</td>
 						<td>{{schedule}}</td>
 						<td>{{sources}}</td>
+						<td>
+							[<a href="editor.html?id={{id}}">Edit</a>]
+							[<a href="{{stateUrl}}">State</a>]
+							[<a href="{{messageLogUrl}}">Msg</a>]
+						</td>
 					</tr>
 					{{/each}}
 				</tbody>

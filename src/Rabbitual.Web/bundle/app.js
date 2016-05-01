@@ -3,7 +3,7 @@
 var App = (function () {
     function App(e) {
         this.e = e;
-        this.data = new Data('http://localhost:9000/config');
+        this.data = new DataService();
     }
     App.prototype.run = function () {
         var _this = this;

@@ -1,18 +1,9 @@
 /// <reference path="typings/handlebars/handlebars.d.ts"/>
 /// <reference path="./data.ts"/>
-$.urlParam = function (name) {
-    var results = new RegExp('[\?&]' + name + '=([^&#]*)').exec(window.location.href);
-    if (results == null) {
-        return null;
-    }
-    else {
-        return results[1] || 0;
-    }
-};
 var Edit = (function () {
     function Edit(e) {
         this.e = e;
-        this.data = new Data('http://localhost:9000/config');
+        this.data = new DataService();
         this.updateUrl = 'http://localhost:9000/agent/update';
         this.agentId = $.urlParam('id');
     }

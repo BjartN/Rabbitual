@@ -16,17 +16,19 @@ namespace Rabbitual
 
         public void EnqueueTask(Message task)
         {
+            task.SourceAgentId = _agentId;
+            task.MessageType = MessageType.Task;
             _messageLog.LogOutgoing(task);
 
-            task.SourceAgentId = _agentId;
             _inner.EnqueueTask(task);
         }
 
         public void PublishEvent(Message e)
         {
+            e.SourceAgentId = _agentId;
+            e.MessageType = MessageType.Event;
             _messageLog.LogOutgoing(e);
 
-            e.SourceAgentId = _agentId;
             _inner.PublishEvent(e);
         }
     }

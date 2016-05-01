@@ -5,11 +5,11 @@
 class App {
 	e: any;
 	tableTemplate: any;
-	data: Data;
+	data: DataService;
 
 	constructor(e){
 		this.e = e;
-		this.data = new Data('http://localhost:9000/config')
+		this.data = new DataService()
 	}
 
 	run() {

@@ -80,7 +80,9 @@ namespace Rabbitual
             }
 
             _i.Add(m);
-            _summary.IncomingCount++;
+
+            if(m.MessageType!=MessageType.Check)
+                _summary.IncomingCount++;
         }
 
         public void LogOutgoing(Message m)
@@ -96,7 +98,9 @@ namespace Rabbitual
             }
 
             _o.Add(m);
-            _summary.OutgoingCount++;
+
+            if (m.MessageType != MessageType.Check)
+                _summary.OutgoingCount++;
         }
     }
 

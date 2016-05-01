@@ -1,9 +1,10 @@
 using System;
-using System.ComponentModel;
 using System.Linq;
+using System.Net;
 using System.Net.Http;
-using System.Reflection;
+using System.Text;
 using System.Web.Http;
+using NJsonSchema;
 using Rabbitual.Configuration;
 
 namespace Rabbitual.Agents.WebServerAgent
@@ -16,7 +17,7 @@ namespace Rabbitual.Agents.WebServerAgent
         private readonly IAgentLogRepository _l;
 
         public RootController(
-            IAgentConfiguration cfg, 
+            IAgentConfiguration cfg,
             IAgentRepository ar,
             IAgentService s,
             IAgentLogRepository l)
@@ -27,7 +28,27 @@ namespace Rabbitual.Agents.WebServerAgent
             _l = l;
         }
 
-        [Route("agent/update")]
+        [HttpGet]
+        [Route("agent/options/schema/{id}")]
+        public HttpResponseMessage Schema(string id)
+        {
+            var agent = _ar.GetAgent(id);
+            var schema = JsonSchema4.FromType(agent.Config.Options.GetType());
+
+            var response = Request.CreateResponse(HttpStatusCode.OK);
+            response.Content = new StringContent(schema.ToJson(), Encoding.UTF8, "application/schema+json");
+            return response;
+        }
+
+        [HttpGet]
+        [Route("agent/options/{id}")]
+        public HttpResponseMessage Options(string id)
+        {
+            var agent = _ar.GetAgent(id);
+            return this.SweetJson(agent.Config.Options,bigAssPropertyNames:true);
+        }
+
+        [Route("agent/update/{id}")]
         public bool Update()
         {
             return true;
@@ -80,31 +101,17 @@ namespace Rabbitual.Agents.WebServerAgent
                         LastTaskOut = al.LastTaskOut == null ? null : new DateTime?(al.LastTaskOut.Occured),
                         MessageLogUrl = $"{root}/agent/message-log/{x.Id}",
                         StateUrl = $"{root}/agent/state/{x.Id}",
+                        OptionsSchemaUrl = $"{root}/agent/options/schema?id={x.Id}",
                         x.Id,
                         x.Name,
                         Sources = x.Sources.Select(s => s.Id),
-                        Options = x.Options?.GetType().GetProperties().Where(p => p.CanRead).Select(p => new
-                        {
-                            Description = getDescription(p),
-                            p.Name,
-                            Value = p.GetValue(x.Options)
-                        })
+                        Options = x.Options
                     };
                 });
 
             return this.SweetJson(o);
         }
 
-        private string getDescription(PropertyInfo pi)
-        {
-            var attr = pi.GetCustomAttribute<DescriptionAttribute>();
-            if (attr == null)
-                return null;
-
-            return attr.Description;
-
-        }
     }
-
 
 }
