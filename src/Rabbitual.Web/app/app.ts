@@ -1,28 +1,44 @@
 /// <reference path="typings/handlebars/handlebars.d.ts"/>
 /// <reference path="./data.ts"/>
 
-
 class App {
-	e: any;
 	tableTemplate: any;
+	createTemplate: any;
 	data: DataService;
 
-	constructor(e){
-		this.e = e;
+
+	constructor(){
 		this.data = new DataService()
 	}
 
 	run() {
 		let that = this;
+
+		let createSource = document.getElementById('create-template');
+		this.createTemplate = Handlebars.compile(createSource.innerHTML);
+
 		let source = document.getElementById('table-template');
 		this.tableTemplate = Handlebars.compile(source.innerHTML);
 
 		this.data.get(data=>{
-			var html = this.tableTemplate(data);
+			var html = that.tableTemplate(data);
 			document.getElementById('app').innerHTML = html;
 		})
+
+		this.data.getAgentTypes(data=>{
+			var html = that.createTemplate(data);
+			document.getElementById('create-form').innerHTML = html;
+
+			$('#create-agent').on('click', () => {
+				that.data.postAgent($('#agent-name').val(), $('#agent-type').val(), () => {
+					window.location.href = 'index.html'
+				});
+			});
+		});
+
+		
 	}
 }
 
-var app  = new App(document.getElementById('app'));
+var app  = new App();
 app.run();

@@ -7,24 +7,24 @@ using Rabbitual.Infrastructure;
 
 namespace Rabbitual.Configuration
 {
-    public class ConfigSerialization
+    public interface IConfigSerialization
+    {
+        AgentConfig[] Get(string source);
+        AgentConfig[] Get(string[] source);
+        AgentConfig[] ToConfig(AgentConfigDto[] dtos);
+    }
+
+    public class ConfigSerialization : IConfigSerialization
     {
         private readonly IJsonSerializer _s;
+        private readonly IConfigReflection _reflection;
 
-        public ConfigSerialization(IJsonSerializer s)
+        public ConfigSerialization(IJsonSerializer s, IConfigReflection reflection)
         {
             _s = s;
+            _reflection = reflection;
         }
 
-        public IDictionary<string, Type> GetTypeMap()
-        {
-            var type = typeof(IAgent);
-            return AppDomain.CurrentDomain
-                .GetAssemblies()
-                .SelectMany(s => s.GetTypes())
-                .Where(p => type.IsAssignableFrom(p))
-                .ToDictionary(x => x.Name, x => x);
-        }
 
         public AgentConfig[] Get(string source)
         {
@@ -43,7 +43,7 @@ namespace Rabbitual.Configuration
 
         public AgentConfig[] ToConfig(AgentConfigDto[] dtos)
         {
-            var map = GetTypeMap();
+            var map = _reflection.GetTypeMap();
             var d = new Dictionary<string, AgentConfig>();
 
             foreach (var c in dtos)

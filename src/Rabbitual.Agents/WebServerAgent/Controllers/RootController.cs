@@ -8,7 +8,7 @@ using NJsonSchema;
 using Rabbitual.Configuration;
 using Rabbitual.Infrastructure;
 
-namespace Rabbitual.Agents.WebServerAgent
+namespace Rabbitual.Agents.WebServerAgent.Controllers
 {
     public class RootController : ApiController
     {
@@ -88,7 +88,6 @@ namespace Rabbitual.Agents.WebServerAgent
                 Outgoing = al.GetOutGoing()
             });
         }
-
 
         [Route("agent/state/{id}")]
         public HttpResponseMessage Get(string id)

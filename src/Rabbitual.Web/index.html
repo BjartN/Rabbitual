@@ -13,71 +13,98 @@
 		</style>
 	</head>
 	<body>
-	<div class="ui container">
-		<div class="ui pointing menu">
-		  <a class="active item">
-		    Agents
-		  </a>
-		  <a class="item">
-		    Flow
-		  </a>
-		  <div class="right menu">
-		    <div class="item">
-		    	Rabbitual
-		    </div>
-		  </div>
-		</div>
+		<div class="ui container">
+			<div class="ui pointing menu">
+				<a class="active item">
+					Agents
+				</a>
+				<a class="item">
+					Flow
+				</a>
+				<div class="right menu">
+					<div class="item">
+						Rabbitual
+					</div>
+				</div>
+			</div>
 
-		<div id="app">
+			<div id="app">
 
-		</div>
-</div>
-		<script id="table-template" type="text/x-handlebars-template">
-			<table class="ui very compact table">
-				<thead>
-					<tr>
-						<th class="one wide">Name</th>
-						<th class="two wide">Last Event In</th>
-						<th class="two wide">Last Event Out</th>
-						<th class="two wide">Last Task Out</th>
-						<th class="two wide">Last Task In</th>
-						<th class="two wide">Last Check</th>
-						<th class="one wide">Messages</th>
-						<th class="one wide">Schedule</th>
-						<th class="one wide">Sources</th>
-						<th class="two wide"></th>
-					</tr>
-				</thead>
-				<tbody>
-					{{#each this}}
-					<tr>
-						<td>{{name}}</td>
-						<td>{{lastEventIn}}</td>
-						<td>{{lastEventOut}}</td>
-						<td>{{lastTaskOut}}</td>
-						<td>{{lastTaskIn}}</td>
-						<td>{{lastCheck}}</td>
-						<td>Out:{{outgoingCount}} / In:{{incomingCount}}</td>
-						<td>{{schedule}}</td>
-						<td>{{sources}}</td>
-						<td>
-							[<a href="editor.html?id={{id}}">Edit</a>]
-							[<a href="{{stateUrl}}">State</a>]
-							[<a href="{{messageLogUrl}}">Msg</a>]
-						</td>
-					</tr>
-					{{/each}}
-				</tbody>
-			</table>
-		</script>
+			</div>
 
-		<script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js"></script>
-		<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.0.0-beta1/jquery.js"></script>
-		<script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.1.8/semantic.min.js"></script>
-		<script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.0.5/handlebars.min.js"></script>
-		<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.13.0/moment.min.js"></script>
-		<script src="bundle/data.js"></script>
-		<script src="bundle/app.js"></script>
+			<div id="create-form" class="ui segment">
+				
+			</div>
 
-	</body>
-	</html>
+			<script id="table-template" type="text/x-handlebars-template">
+				<table class="ui very compact table">
+					<thead>
+						<tr>
+							<th class="one wide">Name</th>
+							<th class="two wide">Last Event In</th>
+							<th class="two wide">Last Event Out</th>
+							<th class="two wide">Last Task Out</th>
+							<th class="two wide">Last Task In</th>
+							<th class="two wide">Last Check</th>
+							<th class="one wide">Messages</th>
+							<th class="one wide">Schedule</th>
+							<th class="one wide">Sources</th>
+							<th class="two wide"></th>
+						</tr>
+					</thead>
+					<tbody>
+						{{#each this}}
+						<tr>
+							<td>{{name}}</td>
+							<td>{{lastEventIn}}</td>
+							<td>{{lastEventOut}}</td>
+							<td>{{lastTaskOut}}</td>
+							<td>{{lastTaskIn}}</td>
+							<td>{{lastCheck}}</td>
+							<td>Out:{{outgoingCount}} / In:{{incomingCount}}</td>
+							<td>{{schedule}}</td>
+							<td>{{sources}}</td>
+							<td>
+								[<a href="editor.html?id={{id}}">Edit</a>]
+								[<a href="{{stateUrl}}">State</a>]
+								[<a href="{{messageLogUrl}}">Msg</a>]
+							</td>
+						</tr>
+						{{/each}}
+					</tbody>
+				</table>
+			</script>
+
+
+			<script id="create-template" type="text/x-handlebars-template">
+				<div class="ui form">
+					<div class="inline fields">
+						<div class="three wide field">
+							<select id="agent-type">
+								<option>Select Agent Type</option>
+								{{#each this}}
+									<option value="{{this}}">{{this}}</option>
+								{{/each}}
+							</select>
+						</div>
+						<div class="three wide field">
+    						<input type="text" name="agent-name" id="agent-name" placeholder="Agent Name">
+						</div>
+						<div class="one wide field">
+							<button class="ui button" type="submit" id="create-agent" name="create-agent">Create</button>
+						</div>
+					</div>
+				</div>
+			</script>
+
+
+			<script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js"></script>
+			<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.0.0-beta1/jquery.js"></script>
+			<script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.1.8/semantic.min.js"></script>
+			<script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.0.5/handlebars.min.js"></script>
+			<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.13.0/moment.min.js"></script>
+			<script src="bundle/data.js"></script>
+			<script src="bundle/app.js"></script>
+
+		</body>
+		</html>

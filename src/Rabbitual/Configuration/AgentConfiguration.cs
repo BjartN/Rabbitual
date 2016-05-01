@@ -6,12 +6,15 @@ namespace Rabbitual.Configuration
 {
     public class AgentConfiguration : IAgentConfiguration
     {
-        private readonly ConfigSerialization _configSerialization;
+        private readonly IConfigSerialization _configSerialization;
         private readonly IObjectDb _db;
         private readonly ILogger _log;
         private readonly string _folder;
 
-        public AgentConfiguration(IAppConfiguration cfg, ConfigSerialization configSerialization,IObjectDb db, ILogger log)
+        public AgentConfiguration(
+            IAppConfiguration cfg, 
+            IConfigSerialization configSerialization,
+            IObjectDb db, ILogger log)
         {
             _configSerialization = configSerialization;
             _db = db;

@@ -3,7 +3,6 @@
     "outDir" : "bundle"
   },
   "files": [
-  	"app/edit.ts",
   	"app/editor.ts",
     "app/app.ts",
     "typings/tsd.d.ts"

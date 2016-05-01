@@ -1,9 +1,14 @@
 
  class DataService {
-	
+	 root: string
+
+ 	constructor(){
+		  this.root = 'http://localhost:9000'
+ 	}
+
 	get(callback) {
 		let that = this;
-		fetch('http://localhost:9000/config').then(r => {
+		fetch(`${this.root}/config`).then(r => {
 			r.json().then(data=>{
 				let props = ['lastCheck', 'lastEventOut', 'lastEventIn', 'lastTaskIn', 'lastTaskOut'];
 				_.each(data, x => {
@@ -20,7 +25,7 @@
 	}
 
 	getSchema(agentId,callback) {
-		fetch('http://localhost:9000/agent/options/schema/' + agentId).then(r => {
+		fetch(`${this.root}/agent/options/schema/` + agentId).then(r => {
 			r.json().then(data => {
 				callback(data);
 			});
@@ -28,11 +33,31 @@
 	}
 
 	getOptions(agentId, callback) {
-		fetch('http://localhost:9000/agent/options/' + agentId).then(r => {
+		fetch(`${this.root}/agent/options/` + agentId).then(r => {
 			r.json().then(data => {
 				callback(data);
 			});
 		});
+	}
+
+	postAgent(name, type, callback) {
+
+		$.ajax({
+			type: 'POST',
+			data: {name:name,type:type},
+			url: `${this.root}/agent-create`,
+			success: callback
+		});
+	}
+
+	getAgentTypes(callback) {
+
+		$.ajax({
+			type: 'GET',
+			url: `${this.root}/agent/types`,
+			success: callback
+		});
+
 	}
 
 	postOptions(agentId,value,callback){
@@ -41,11 +66,9 @@
 
 		$.ajax({
 			type: 'POST',
-			url: 'http://localhost:9000/agent/options/update/' + agentId,
+			url: `${this.root}/agent/options/update/` + agentId,
 			data: bodz,
 			success: callback
 		});
-
-		
 	}
 }
