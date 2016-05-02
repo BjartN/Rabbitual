@@ -1,25 +1,35 @@
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 using System.Threading.Tasks.Dataflow;
+using Rabbitual.Configuration;
 using Rabbitual.Infrastructure;
 
 namespace Rabbitual
 {
 
+    /// <summary>
+    /// Wrap all access to agents to make sure only one thread is accessing it at the time.
+    /// </summary>
     public class AgentWrapper : IAgentWrapper
     {
         private readonly IAgent _agent;
         private readonly IAgentMessageLog _al;
         private readonly ILogger _logger;
-        private readonly BufferBlock<Message> _buffer;
+        private readonly Dictionary<string, bool> _sourceIdx;
 
-        public AgentWrapper(IAgent agent, IAgentMessageLog al, ILogger logger)
+        public AgentWrapper(IAgent agent, AgentConfig config, IAgentMessageLog al, ILogger logger)
         {
             _agent = agent;
+            _sourceIdx = config.Sources.ToDictionary(x => x.Id, x => true);
             _al = al;
             _logger = logger;
             Id = _agent.Id;
 
-            _buffer = setUpBuffer(_agent);
+            Buffer = setUpBuffer(_agent);
         }
+
+        public BufferBlock<Message> Buffer { get; }
 
         /// <summary>
         /// Ensure that only one thread is accessing the agent at a time
@@ -36,10 +46,12 @@ namespace Rabbitual
             {
                 var doWork = new ActionBlock<Message>(message =>
                 {
-                    _logger.Info("{0}: Work start",Id);
-                    taskAgent.DoWork(message);
-                    _logger.Info("{0}: Work end", Id);
-
+                    Task.Run(() =>
+                    {
+                        _logger.Info("{0}: Work start", Id);
+                        taskAgent.DoWork(message);
+                        _logger.Info("{0}: Work end", Id);
+                    });
                 });
                 b.LinkTo(doWork, m => m.MessageType == MessageType.Task);
 
@@ -49,9 +61,12 @@ namespace Rabbitual
             {
                 var consume = new ActionBlock<Message>(message =>
                 {
-                    _logger.Info("{0}: Consume start", Id);
-                    eventAgent.Consume(message);
-                    _logger.Info("{0}: Consume end", Id);
+                    Task.Run(() =>
+                    {
+                        _logger.Info("{0}: Consume start", Id);
+                        eventAgent.Consume(message);
+                        _logger.Info("{0}: Consume end", Id);
+                    });
 
                 });
                 b.LinkTo(consume, m => m.MessageType == MessageType.Event);
@@ -65,7 +80,6 @@ namespace Rabbitual
                     _logger.Info("{0}: Schedule start", Id);
                     scheduledAgent.Check();
                     _logger.Info("{0}: Schedule end", Id);
-
                 });
                 b.LinkTo(check, m => m.MessageType == MessageType.Check);
             }
@@ -74,6 +88,11 @@ namespace Rabbitual
         }
 
         public string Id { get; set; }
+
+        public bool CanConsume(string fromAgentId)
+        {
+            return _sourceIdx.Count == 0 || _sourceIdx.ContainsKey(fromAgentId);
+        }
 
         public bool IsWorker()
         {
@@ -89,14 +108,14 @@ namespace Rabbitual
         {
             message.MessageType = MessageType.Task;
             _al.LogIncoming(message);
-            _buffer.Post(message);
+            Buffer.Post(message);
         }
 
         public void Consume(Message message)
         {
             message.MessageType = MessageType.Event;
             _al.LogIncoming(message);
-            _buffer.Post(message);
+            Buffer.Post(message);
         }
 
         public bool IsScheduled()
@@ -123,7 +142,7 @@ namespace Rabbitual
         {
             var message = new Message { MessageType = MessageType.Check };
             _al.LogIncoming(message);
-            _buffer.Post(message);
+            Buffer.Post(message);
         }
 
         public bool IsConsumer()

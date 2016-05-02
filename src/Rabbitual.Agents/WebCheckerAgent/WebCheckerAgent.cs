@@ -10,9 +10,9 @@ namespace Rabbitual.Agents.WebCheckerAgent
         IEventPublisherAgent
     {
         private readonly ILogger _l;
-        private readonly IPublisher _p;
+        private readonly IMessagePublisher _p;
 
-        public WebCheckerAgent(ILogger l,WebCheckerOptions options, IPublisher p) : base(options)
+        public WebCheckerAgent(ILogger l,WebCheckerOptions options, IMessagePublisher p) : base(options)
         {
             _l = l;
             _p = p;

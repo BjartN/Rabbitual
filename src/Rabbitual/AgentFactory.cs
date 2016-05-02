@@ -36,7 +36,7 @@ namespace Rabbitual
         private readonly IObjectDb _db;
         private readonly IFactory _factory;
         private readonly IAgentConfiguration _cfg;
-        private readonly IPublisher _p;
+        private readonly IMessagePublisher _p;
         private readonly IAgentLogRepository _agentLog;
 
         public AgentFactory(
@@ -44,7 +44,7 @@ namespace Rabbitual
             IObjectDb db,
             IFactory factory,
             IAgentConfiguration cfg,
-            IPublisher p,
+            IMessagePublisher p,
             IAgentLogRepository agentLog)
         {
             _logger = logger;
@@ -82,7 +82,7 @@ namespace Rabbitual
 
             if (inculdePublisher)
             {
-                deps.Add(typeof(IPublisher), new PublisherProxy(_p, config.Id, _agentLog));
+                deps.Add(typeof(IMessagePublisher), new PublisherProxy(_p, config.Id, _agentLog));
             }
 
             if (includeState)
@@ -96,7 +96,7 @@ namespace Rabbitual
             var agent = (IAgent)_factory.GetInstance(agentType, deps);
             agent.Id = config.Id;
 
-            return new AgentWrapper(agent,al,_logger);
+            return new AgentWrapper(agent, config,al,_logger);
         }
     }
 }

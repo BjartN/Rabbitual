@@ -1,76 +1,42 @@
-using System;
-using System.Collections.Concurrent;
-using System.Threading.Tasks;
 using System.Threading.Tasks.Dataflow;
-using Rabbitual.Infrastructure;
 
 namespace Rabbitual.Fox
 {
 
     public class Hub
     {
-        private readonly ILogger _log;
-
         //producer consumer
         private readonly BufferBlock<Message> _workBlock;
-        private int _workCount;
-
+       
         //pub sub
         private readonly BroadcastBlock<Message> _broadcastBlock;
 
-        //single access per agent
-        private readonly ConcurrentDictionary<string,BufferBlock<Message>> _agentBuffers = new ConcurrentDictionary<string, BufferBlock<Message>>(); 
-
-
-        public Hub(ILogger log)
+        public Hub()
         {
-            _log = log;
-            _broadcastBlock = new BroadcastBlock<Message>(clone);
+            _broadcastBlock = new BroadcastBlock<Message>(x => x);
             _workBlock = new BufferBlock<Message>();
         }
 
         public void PublishEvent(Message message)
         {
+            message.MessageType = MessageType.Event;
             _broadcastBlock.Post(message);
         }
 
-        public void EnqueueTask(Message task)
+        public void EnqueueTask(Message message)
         {
-            _log.Debug("Adding work #" + (_workCount++));
-            _workBlock.Post(task);
+            message.MessageType = MessageType.Event;
+            _workBlock.Post(message);
         }
 
-        public void Subscribe(Action<Message> callback, string id)
+        public void Subscribe(IAgentWrapper w)
         {
-            var action = new ActionBlock<Message>(callback);
-            var agentBuffer = _agentBuffers.GetOrAdd(id, s => new BufferBlock<Message>());
-
-            agentBuffer.LinkTo(action);
-            _broadcastBlock.LinkTo(agentBuffer);
+            _broadcastBlock.LinkTo(w.Buffer,m=> w.CanConsume(m.SourceAgentId));
         }
 
         public void AddWorker(IAgentWrapper worker)
         {
-            var work = new ActionBlock<Message>(m =>
-            {
-                Task.Run(() =>
-                {
-                    worker.DoWork(m);
-                });
-            });
-            var agentBuffer = _agentBuffers.GetOrAdd(worker.Id, s => new BufferBlock<Message>());
-
-            agentBuffer.LinkTo(work);
-            _workBlock.LinkTo(agentBuffer, worker.CanDoWork);
-            _log.Debug("Adding worker agent #" + worker.Id);
+           _workBlock.LinkTo(worker.Buffer, worker.CanDoWork);
         }
-
-        private Message clone(Message x)
-        {
-            return x;
-        }
-
     }
-
-
 }

@@ -6,10 +6,10 @@ namespace Rabbitual.Agents.CsvAgent
     public class CsvAgent : ScheduledAgent<CsvOptions>, 
         IEventPublisherAgent
     {
-        private readonly IPublisher _publisher;
+        private readonly IMessagePublisher _publisher;
         private readonly ILogger _log;
 
-        public CsvAgent(CsvOptions options, IPublisher publisher, ILogger log) : base(options)
+        public CsvAgent(CsvOptions options, IMessagePublisher publisher, ILogger log) : base(options)
         {
             _publisher = publisher;
             _log = log;

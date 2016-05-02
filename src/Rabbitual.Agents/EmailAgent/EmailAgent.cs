@@ -28,9 +28,15 @@ namespace Rabbitual.Agents.EmailAgent
                 return;
             }
 
-            var message = new MailMessage(Options.ToEmail, Options.FromEmail);
+            var message = new MailMessage();
+            message.From = new MailAddress(Options.FromEmail);
             message.Subject = Options.SubjectTemplate.FromTemplate(evt.Data);
             message.Body = Options.BodyTemplate.FromTemplate(evt.Data);
+
+            foreach (var address in Options.ToEmail.Split(new[] { ";" }, StringSplitOptions.RemoveEmptyEntries))
+            {
+                message.To.Add(address);
+            }
 
             try
             {
@@ -73,6 +79,7 @@ namespace Rabbitual.Agents.EmailAgent
         [Description("Prevent hammering e-mail server")]
         public int? MaxEmailCountPerHour { get; set; }
         public string SubjectTemplate { get; set; }
+        [Description("Semi-colon separated list of addressess")]
         public string ToEmail { get; set; }
         public string FromEmail { get; set; }
         public string BodyTemplate { get; set; }

@@ -6,7 +6,7 @@ namespace Rabbitual.Rabbit
     /// <summary>
     ///  Publish / Enqueue messages to RabbitMq
     /// </summary>
-    public class RabbitMessagePublisher : IPublisher
+    public class RabbitMessagePublisher : IMessagePublisher
     {
         private readonly IBinarySerializer _s;
         private readonly IAppConfiguration _cfg;

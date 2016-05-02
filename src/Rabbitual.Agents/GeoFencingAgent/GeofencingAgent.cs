@@ -26,10 +26,10 @@ namespace Rabbitual.Agents.GeoFencingAgent
         , IEventPublisherAgent
         , IScheduledAgent
     {
-        public int DefaultScheduleMs => 1000;
-        private readonly IPublisher _p;
+        public int DefaultScheduleMs => 10000;
+        private readonly IMessagePublisher _p;
 
-        public GeofencingAgent(GeofencingOptions options, IAgentStateRepository asr, IPublisher p)
+        public GeofencingAgent(GeofencingOptions options, IAgentStateRepository asr, IMessagePublisher p)
             : base(options, asr)
         {
             _p = p;
@@ -58,7 +58,12 @@ namespace Rabbitual.Agents.GeoFencingAgent
                 list.Add(e.Item1.Id);
                 _p.PublishEvent(new Message
                 {
-                    Data = new Dictionary<string, string> { { "fence", e.Item1.Id }, { "description", e.Item1.Description } }
+                    Data = new Dictionary<string, string>
+                    {
+                        { "fence", e.Item1.Id },
+                        { "description",e.Item2.State==FenceStateId.In ?  e.Item1.EnteringDescription :  e.Item1.LeavingDescription },
+                        { "state", e.Item2.State.ToString() }
+                    }
                 });
             }
         }

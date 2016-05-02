@@ -6,7 +6,7 @@ namespace Rabbitual
     /// 
     ///     TODO: Impement the task part of the equation
     /// </summary>
-    public interface IPublisher
+    public interface IMessagePublisher
     {
         void EnqueueTask(Message task);
         void PublishEvent(Message e);

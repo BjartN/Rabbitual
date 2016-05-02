@@ -7,32 +7,16 @@ namespace Rabbitual.Fox
 {
     public class FoxEventConsumer : IEventConsumer
     {
-        private readonly Hub _m;
-        private readonly IAgentConfiguration _cfg;
-        private Dictionary<string, AgentConfig> _configs;
+        private readonly Hub _hub;
 
-        public FoxEventConsumer(Hub m, IAgentConfiguration cfg)
+        public FoxEventConsumer(Hub hub)
         {
-            _m = m;
-            _cfg = cfg;
+            _hub = hub;
         }
 
         public void Start(IAgentWrapper a)
         {
-            if (_configs == null)
-                _configs = _cfg.GetConfiguration().ToDictionary(x => x.Id, x => x);
-
-            var cfg = _configs[a.Id];
-
-            _m.Subscribe(message =>
-            {
-                //TODO: This is slow. 
-                var noSourceMatch = cfg.Sources.Any() && cfg.Sources.All(s => s.Id != message.SourceAgentId);
-                if (noSourceMatch)
-                    return;
-                a.Consume(message);
-            }, a.Id);
+            _hub.Subscribe(a);
         }
-
     }
 }

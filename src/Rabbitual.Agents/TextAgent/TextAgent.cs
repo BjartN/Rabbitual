@@ -7,9 +7,9 @@ namespace Rabbitual.Agents.TextAgent
         IEventConsumerAgent, 
         IEventPublisherAgent
     {
-        private readonly IPublisher _publisher;
+        private readonly IMessagePublisher _publisher;
 
-        public TextAgent(TextOptions options, IPublisher publisher) : base(options)
+        public TextAgent(TextOptions options, IMessagePublisher publisher) : base(options)
         {
             _publisher = publisher;
         }

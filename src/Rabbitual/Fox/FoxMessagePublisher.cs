@@ -2,7 +2,7 @@
 
 namespace Rabbitual.Fox
 {
-    public class FoxMessagePublisher: IPublisher
+    public class FoxMessagePublisher: IMessagePublisher
     {
         private readonly Hub _hub;
 

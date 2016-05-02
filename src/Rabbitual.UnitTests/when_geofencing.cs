@@ -40,8 +40,10 @@ namespace Rabbitual.UnitTests
 
             var service = new GeoFencingService(_opt,state,()=> now);
 
-            //move inside and check
+            //move inside 
             service.MoveTo(0.000001,0.000001);
+
+            //and check that we are arriving
             Assert.AreEqual(FenceStateId.Arriving,state.State["1"].State);
 
             //let an hour go by
@@ -55,17 +57,21 @@ namespace Rabbitual.UnitTests
             now = new DateTime(2000, 1, 1, 14, 0, 0);
             events = service.TransitionBasedOnTime();
 
-            //..and check that we're in
+            //..and check that we're still in
             Assert.AreEqual(0, events.Count);
 
-            //move outside and let an hour go by
+            //move outside 
             service.MoveTo(0.1, 0.1);
+            
+            //and check that we are leaving
+            Assert.AreEqual(FenceStateId.Leaving, state.State["1"].State);
+
+            //let an hour go by
             now = new DateTime(2000, 1, 1, 15, 0, 0);
             events = service.TransitionBasedOnTime();
 
             //..and check that we're outside
             Assert.AreEqual(FenceStateId.Out, events.Single().Item2.State);
-
 
         }
     }

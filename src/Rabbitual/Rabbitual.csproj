@@ -88,7 +88,7 @@
     <Compile Include="PublisherProxy.cs" />
     <Compile Include="Rabbit\ExchangeDefinitions.cs" />
     <Compile Include="IAppConfiguration.cs" />
-    <Compile Include="IPublisher.cs" />
+    <Compile Include="IMessagePublisher.cs" />
     <Compile Include="Infrastructure\ILogger.cs" />
     <Compile Include="Infrastructure\IBinarySerializer.cs" />
     <Compile Include="Infrastructure\JsonBinarySerializer.cs" />

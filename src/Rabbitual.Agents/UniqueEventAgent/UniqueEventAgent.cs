@@ -8,13 +8,13 @@ namespace Rabbitual.Agents.UniqueEventAgent
         , IEventConsumerAgent
         , IEventPublisherAgent
     {
-        private readonly IPublisher _publisher;
+        private readonly IMessagePublisher _publisher;
         private readonly object _locker = new object();
 
         public UniqueEventAgent(
             UniqueOptions options, 
             IAgentStateRepository stateRepository, 
-            IPublisher publisher) : base(options, stateRepository)
+            IMessagePublisher publisher) : base(options, stateRepository)
         {
             _publisher = publisher;
             DefaultScheduleMs = 1000*60*60*1; //one hour

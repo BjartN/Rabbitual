@@ -13,14 +13,14 @@ namespace Rabbitual.Agents.WeatherAgent
     {
         private readonly GribSources _d;
         private readonly ILogger _logger;
-        private readonly IPublisher _p;
+        private readonly IMessagePublisher _p;
 
         public GribFinderAgent(
             GribSources d, 
             ILogger logger, 
             WeatherOptions options,
             IAgentStateRepository stateRepository,
-            IPublisher p) : base(options,stateRepository)
+            IMessagePublisher p) : base(options,stateRepository)
         {
             _d = d;
             _logger = logger;

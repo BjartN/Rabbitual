@@ -14,7 +14,7 @@ namespace Rabbitual.Agents
             ILogger log, 
             ScheduledPublisherOptions options,
             IAgentStateRepository stateRepository,
-            IPublisher publisher) : base(options,stateRepository)
+            IMessagePublisher publisher) : base(options,stateRepository)
         {
             Publisher = publisher;
             _log = log;
@@ -28,7 +28,7 @@ namespace Rabbitual.Agents
 
         public new int DefaultSchedule => 500;
 
-        public IPublisher Publisher { get; set; }
+        public IMessagePublisher Publisher { get; set; }
     }
 
     public class SweetState

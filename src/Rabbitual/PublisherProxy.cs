@@ -1,13 +1,13 @@
 
 namespace Rabbitual
 {
-    public class PublisherProxy : IPublisher
+    public class PublisherProxy : IMessagePublisher
     {
-        private readonly IPublisher _inner;
+        private readonly IMessagePublisher _inner;
         private readonly string _agentId;
         private readonly IAgentMessageLog _messageLog;
 
-        public PublisherProxy(IPublisher inner, string agentId, IAgentLogRepository log)
+        public PublisherProxy(IMessagePublisher inner, string agentId, IAgentLogRepository log)
         {
             _inner = inner;
             _agentId = agentId;

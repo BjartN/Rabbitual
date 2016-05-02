@@ -1,7 +1,11 @@
+using System.Threading.Tasks.Dataflow;
+
 namespace Rabbitual
 {
     public interface IAgentWrapper
     {
+        BufferBlock<Message> Buffer { get; }
+
         string Id { get; set; }
 
         //Statefullness
@@ -20,6 +24,7 @@ namespace Rabbitual
         bool IsPublisher();
         bool IsConsumer();
         void Consume(Message message);
+        bool CanConsume(string fromAgentId);
 
 
         //Producer consumer
