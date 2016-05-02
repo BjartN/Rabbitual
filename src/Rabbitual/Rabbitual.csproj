@@ -82,6 +82,7 @@
     <Compile Include="Infrastructure\IObjectDb.cs" />
     <Compile Include="Infrastructure\ObjectExtentions.cs" />
     <Compile Include="Infrastructure\StringExtentions.cs" />
+    <Compile Include="ITaskConsumer.cs" />
     <Compile Include="Message.cs" />
     <Compile Include="Constants.cs" />
     <Compile Include="Fox\EventHub.cs" />

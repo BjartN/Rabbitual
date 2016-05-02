@@ -93,7 +93,7 @@ namespace Rabbitual.Agents.WebServerAgent.Controllers
         public HttpResponseMessage Get(string id)
         {
             var agent = _ar.GetAgent(id);
-            var state = _s.GetState(agent.Agent);
+            var state = _s.GetState(agent);
 
             return this.SweetJson(state);
         }

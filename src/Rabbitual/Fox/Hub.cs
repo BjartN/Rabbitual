@@ -31,12 +31,14 @@ namespace Rabbitual.Fox
 
         public void Subscribe(IAgentWrapper w)
         {
-            _broadcastBlock.LinkTo(w.Buffer,m=> w.CanConsume(m.SourceAgentId));
+            var ab = new ActionBlock<Message>(m=>w.Consume(m));
+            _broadcastBlock.LinkTo(ab, m=> w.CanConsume(m.SourceAgentId));
         }
 
-        public void AddWorker(IAgentWrapper worker)
+        public void AddWorker(IAgentWrapper w)
         {
-           _workBlock.LinkTo(worker.Buffer, worker.CanDoWork);
+            var ab = new ActionBlock<Message>(m => w.DoWork(m));
+            _workBlock.LinkTo(ab,w.CanDoWork);
         }
     }
 }

@@ -1,10 +1,8 @@
-﻿using System.Configuration;
-
-namespace Rabbitual.Demo
+﻿namespace Rabbitual.Demo
 {
     class Program
     {
-        static void Main(string[] args)
+        static void Main()
         {
             ConsoleHost.Host.Run(true);
         }

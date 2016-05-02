@@ -1,30 +1,29 @@
 using System.Threading.Tasks.Dataflow;
+using Rabbitual.Configuration;
 
 namespace Rabbitual
 {
     public interface IAgentWrapper
     {
-        BufferBlock<Message> Buffer { get; }
-
+        AgentConfig Config { get; set; }
         string Id { get; set; }
+        void Start();
+        void Stop();
 
         //Statefullness
         bool HasState();
         object GetState();
 
-        void Start();
-        void Stop();
-        void Check();
-
         //Scheduling
+        void Check();
         bool IsScheduled();
         int GetSchedule();
 
         //Pub Sub
         bool IsPublisher();
         bool IsConsumer();
-        void Consume(Message message);
         bool CanConsume(string fromAgentId);
+        void Consume(Message message);
 
 
         //Producer consumer

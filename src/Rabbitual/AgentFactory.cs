@@ -1,30 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Security.AccessControl;
 using Rabbitual.Configuration;
 using Rabbitual.Infrastructure;
 
 namespace Rabbitual
 {
-    public class Ac //in lack of a better name
-    {
-        public Ac(IAgentWrapper agent, AgentConfig config)
-        {
-            Agent = agent;
-            Config = config;
-        }
-
-        public AgentConfig Config { get; private set; }
-        public IAgentWrapper Agent { get; private set; }
-
-    }
-
+   
     public interface IAgentFactory
     {
-        Ac[] GetAgents();
+        IAgentWrapper[] GetAgents();
     }
 
+    /// <summary>
+    /// Used for creating objects dynamically after the application has started.
+    /// </summary>
     public interface IFactory
     {
         object GetInstance(Type t, IDictionary<Type, object> deps = null);
@@ -55,20 +45,19 @@ namespace Rabbitual
             _agentLog = agentLog;
         }
 
-        public Ac[] GetAgents()
+        public IAgentWrapper[] GetAgents()
         {
             var cfg = _cfg.GetConfiguration();
 
-            return cfg.Select(x => new Ac(createAgent(x), x))
-                .ToArray();
+            return cfg.Select(createAgent).ToArray();
         }
 
+        /// <summary>
+        /// Determine agent dependencies, create then and then create agent.
+        /// </summary>
         private IAgentWrapper createAgent(AgentConfig config)
         {
-            //TODO: Inject agent specific logger
-
             var agentType = config.ClrType;
-
             var includeOptions = agentType.IsOfType(typeof(IHaveOptions<>));
             var includeState = agentType.IsOfType(typeof(IStatefulAgent<>));
             var inculdePublisher = agentType.IsOfType(typeof(IEventPublisherAgent));
@@ -91,12 +80,11 @@ namespace Rabbitual
                 deps.Add(typeof(IAgentStateRepository), agentState);
             }
 
-            var al = _agentLog.GetLog(config.Id);
-
+            var agentLog = _agentLog.GetLog(config.Id);
             var agent = (IAgent)_factory.GetInstance(agentType, deps);
             agent.Id = config.Id;
 
-            return new AgentWrapper(agent, config,al,_logger);
+            return new AgentWrapper(agent, config,agentLog,_logger);
         }
     }
 }

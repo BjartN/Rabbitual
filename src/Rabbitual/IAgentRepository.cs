@@ -2,6 +2,6 @@
 {
     public interface IAgentRepository
     {
-        Ac GetAgent(string agentId);
+        IAgentWrapper GetAgent(string agentId);
     }
 }

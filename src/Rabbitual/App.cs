@@ -15,7 +15,7 @@ namespace Rabbitual
         private readonly IAgentFactory _f;
         private readonly ILogger _logger;
         private readonly List<Timer> _timers;
-        private Ac[] _agents = new Ac[0];
+        private IAgentWrapper[] _agents = new IAgentWrapper[0];
 
         public App(
             IEventConsumer eventConsumer,
@@ -30,33 +30,28 @@ namespace Rabbitual
             _timers = new List<Timer>();
         }
 
-        public Ac GetAgent(string id)
+        public IAgentWrapper GetAgent(string id)
         {
-            return _agents.FirstOrDefault(x => x.Agent.Id == id);
+            return _agents.FirstOrDefault(x => x.Id == id);
         }
 
         public void Start()
         {
             _agents = _f.GetAgents();
 
-            //Note that an agent both on timer and waiting for events might get accessed concurrently
             foreach (var ac in _agents)
             {
                 RunAgent(ac);
             }
         }
 
-        public void RunAgent(Ac ac)
+        public void RunAgent(IAgentWrapper agent)
         {
-            var agent = ac.Agent;
-
-            agent.Id = ac.Config.Id;
-
             if (agent.IsScheduled())
             {
                 var schedule = agent.GetSchedule();
                 schedule = schedule <= 0 ? 5000 : schedule;
-                _timers.Push(new Timer(_logger)).Start(schedule, () => agent.Check());
+                _timers.Push(new Timer(_logger)).Start(schedule, agent.Check);
             }
             if (agent.IsConsumer())
             {
@@ -79,7 +74,7 @@ namespace Rabbitual
                 t.Stop();
             }
 
-            foreach (var a in _agents.Select(x => x.Agent))
+            foreach (var a in _agents.Select(x => x))
             {
                 a.Stop();
             }

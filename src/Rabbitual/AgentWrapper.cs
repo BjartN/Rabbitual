@@ -17,6 +17,7 @@ namespace Rabbitual
         private readonly IAgentMessageLog _al;
         private readonly ILogger _logger;
         private readonly Dictionary<string, bool> _sourceIdx;
+        private readonly BufferBlock<Message> _buffer;
 
         public AgentWrapper(IAgent agent, AgentConfig config, IAgentMessageLog al, ILogger logger)
         {
@@ -26,10 +27,11 @@ namespace Rabbitual
             _logger = logger;
             Id = _agent.Id;
 
-            Buffer = setUpBuffer(_agent);
+            Config = config;
+            _buffer = setUpBuffer(_agent);
         }
 
-        public BufferBlock<Message> Buffer { get; }
+        public AgentConfig Config { get; set; }
 
         /// <summary>
         /// Ensure that only one thread is accessing the agent at a time
@@ -108,14 +110,14 @@ namespace Rabbitual
         {
             message.MessageType = MessageType.Task;
             _al.LogIncoming(message);
-            Buffer.Post(message);
+            _buffer.Post(message);
         }
 
         public void Consume(Message message)
         {
             message.MessageType = MessageType.Event;
             _al.LogIncoming(message);
-            Buffer.Post(message);
+            _buffer.Post(message);
         }
 
         public bool IsScheduled()
@@ -142,7 +144,7 @@ namespace Rabbitual
         {
             var message = new Message { MessageType = MessageType.Check };
             _al.LogIncoming(message);
-            Buffer.Post(message);
+            _buffer.Post(message);
         }
 
         public bool IsConsumer()

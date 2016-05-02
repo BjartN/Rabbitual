@@ -60,11 +60,11 @@ namespace Rabbitual.Rabbit
             _channel.BasicQos(prefetchSize: 0, prefetchCount: 1, global: false);
 
             //recieve tasks and send to all that can process it
-            StartRecieve<Message>(t =>
-            {
-                foreach (var taskProcessor in agents)
-                    taskProcessor.Consume(t);
-            });
+            //StartRecieve<Message>(t =>
+            //{
+            //    foreach (var taskProcessor in agents)
+            //        taskProcessor.Consume(t);
+            //});
         }
 
         public void Stop()

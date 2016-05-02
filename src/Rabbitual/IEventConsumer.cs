@@ -4,10 +4,4 @@ namespace Rabbitual
     {
         void Start(IAgentWrapper agent);
     }
-
-    public interface ITaskConsumer
-    {
-        void Start(IAgentWrapper worker);
-    }
-
 }

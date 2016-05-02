@@ -42,7 +42,6 @@ namespace Rabbitual.ConsoleHost
 
                 init.For<IObjectDb>().Use<FileObjectDb>();
                 init.For<IBinarySerializer>().Use<JsonBinarySerializer>();
-                //init.For<IAgentConfiguration>().Use(  new AgentConfiguration(ConfigurationManager.AppSettings["config-file"]));
                 init.For<IAgentLogRepository>().Use<AgentLogRepository>().Singleton();
                 init.For<IFactory>().Use<Factory>();
                 init.For<App>().Use<App>().Singleton();
