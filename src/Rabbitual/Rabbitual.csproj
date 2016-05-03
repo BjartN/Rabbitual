@@ -65,18 +65,19 @@
     <Compile Include="Configuration\IAgentConfiguration.cs" />
     <Compile Include="Configuration\AgentConfiguration.cs" />
     <Compile Include="Configuration\Scenario.cs" />
-    <Compile Include="FileObjectDb.cs" />
+    <Compile Include="Infrastructure\FileObjectDb.cs" />
     <Compile Include="Fox\FoxEventConsumer.cs" />
     <Compile Include="Fox\FoxMessagePublisher.cs" />
     <Compile Include="Fox\FoxTaskConsumer.cs" />
     <Compile Include="Fox\Hub.cs" />
     <Compile Include="IAgent.cs" />
     <Compile Include="App.cs" />
-    <Compile Include="IAgentLogRepository.cs" />
+    <Compile Include="Logging\AgentLogRepository.cs" />
+    <Compile Include="Logging\IAgentLogRepository.cs" />
     <Compile Include="IAgentRepository.cs" />
     <Compile Include="IAgentWrapper.cs" />
     <Compile Include="IFactory.cs" />
-    <Compile Include="IMessageLog.cs" />
+    <Compile Include="Logging\IMessageLog.cs" />
     <Compile Include="Infrastructure\DictonaryExtentions.cs" />
     <Compile Include="Infrastructure\EnumerableExtentions.cs" />
     <Compile Include="Infrastructure\IJsonSerializer.cs" />
@@ -87,13 +88,13 @@
     <Compile Include="Infrastructure\StringExtentions.cs" />
     <Compile Include="ITaskConsumer.cs" />
     <Compile Include="Message.cs" />
-    <Compile Include="Constants.cs" />
+    <Compile Include="Rabbit\Constants.cs" />
     <Compile Include="Fox\EventHub.cs" />
-    <Compile Include="PublisherProxy.cs" />
+    <Compile Include="AgentPublisher.cs" />
     <Compile Include="Rabbit\ExchangeDefinitions.cs" />
-    <Compile Include="IAppConfiguration.cs" />
+    <Compile Include="Configuration\IAppConfiguration.cs" />
     <Compile Include="IMessagePublisher.cs" />
-    <Compile Include="Infrastructure\ILogger.cs" />
+    <Compile Include="Logging\ILogger.cs" />
     <Compile Include="Infrastructure\IBinarySerializer.cs" />
     <Compile Include="Infrastructure\JsonBinarySerializer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -104,7 +105,7 @@
     <Compile Include="Rabbit\RabbitMessagePublisher.cs" />
     <Compile Include="Infrastructure\Timer.cs" />
     <Compile Include="ReflectionHelper.cs" />
-    <Compile Include="LogSummary.cs" />
+    <Compile Include="Logging\LogSummary.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Fox\README.md" />

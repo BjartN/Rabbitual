@@ -49,7 +49,7 @@ namespace Rabbitual.Agents.EmailAgent
                     Credentials = new NetworkCredential(Options.UserName,Options.Password)
                 };
 
-                client.Send(message);
+             client.Send(message);
                 State.EmailCount[now] = State.EmailCount[now] + 1;
             }
             catch(Exception ex)

@@ -7,7 +7,7 @@ namespace Rabbitual.Agents.GeoFencingAgent
     {
         public GeofencingOptions()
         {
-            CircleFences = new Fence[0];
+            CircleFence = new Fence();
             LeavingGrazeTime = TimeSpan.FromMinutes(1);
             ArrivingGrazeTime = TimeSpan.FromMinutes(1);
         }
@@ -16,7 +16,7 @@ namespace Rabbitual.Agents.GeoFencingAgent
 
         public TimeSpan LeavingGrazeTime { get; set; }
 
-        [Description("List of lists of [lat,lon,radiusMeter] to describe the circular fence")]
-        public Fence[] CircleFences { get; set; }
+        [Description("State with a radius in meters and a lat/lon center")]
+        public Fence CircleFence { get; set; }
     }
 }

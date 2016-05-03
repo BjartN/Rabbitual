@@ -16,56 +16,28 @@ namespace Rabbitual.Agents.GeoFencingAgent
             _now = now;
         }
 
-        public void MoveTo(double lat, double lon)
+        public FenceState MoveTo(double lat, double lon)
         {
-            foreach (var fence in _o.CircleFences)
-            {
-                FenceState fenceState;
-                _s.State.TryGetValue(fence.Id, out fenceState);
-                _s.State[fence.Id] = moveTo(lat, lon, fence, fenceState);
-            }
+            return moveTo(lat, lon, _o.CircleFence, _s.FenceState);
         }
 
-        public List<Tuple<Fence, FenceState>> TransitionBasedOnTime()
-        {
-            var l = new List<Tuple<Fence, FenceState>>();
-            foreach (var fence in _o.CircleFences)
-            {
-                FenceState fenceState;
-                _s.State.TryGetValue(fence.Id, out fenceState);
-                if (fenceState == null)
-                    continue;
-
-                var newState = TransitionBasedOnTime(fenceState);
-                if (newState == null)
-                    continue;
-
-                _s.State[fence.Id] = newState;
-                l.Add(new Tuple<Fence, FenceState>(fence, newState));
-            }
-            return l;
-        }
-
-
-        /// <summary>
-        ///     If have been in arriving or leaving state in the configured amount of time, issue change
-        /// </summary>
-        public FenceState TransitionBasedOnTime(FenceState currentState)
+        public FenceState TransitionBasedOnTime()
         {
             var now = _now();
 
-            if (currentState.State == FenceStateId.Arriving && (now - currentState.When) > _o.ArrivingGrazeTime)
+            if (_s.FenceState.Mode == FenceStateId.Arriving && (now - _s.FenceState.When) > _o.ArrivingGrazeTime)
             {
                 //you have now arrived
                 return new FenceState(FenceStateId.In, now);
             }
 
-            if (currentState.State == FenceStateId.Leaving && (now - currentState.When) > _o.LeavingGrazeTime)
+            if (_s.FenceState.Mode == FenceStateId.Leaving && (now - _s.FenceState.When) > _o.LeavingGrazeTime)
             {
                 return new FenceState(FenceStateId.Out, now);
             }
 
-            return null;
+            //same as before
+            return new FenceState(_s.FenceState.Mode, _s.FenceState.When);
         }
 
         private FenceState moveTo(double lat, double lon, Fence fence, FenceState fenceState)
@@ -83,7 +55,7 @@ namespace Rabbitual.Agents.GeoFencingAgent
 
             if (isMatch)
             {
-                switch (fenceState.State)
+                switch (fenceState.Mode)
                 {
                     case FenceStateId.Out:      //out -> in : arriving
                         return new FenceState(FenceStateId.Arriving, now);
@@ -100,7 +72,7 @@ namespace Rabbitual.Agents.GeoFencingAgent
             else //outside fence
             {
 
-                switch (fenceState.State)
+                switch (fenceState.Mode)
                 {
                     case FenceStateId.Out:      //out -> out : out
                         return new FenceState(FenceStateId.Out, now);

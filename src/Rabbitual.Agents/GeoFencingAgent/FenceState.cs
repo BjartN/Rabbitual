@@ -4,13 +4,13 @@ namespace Rabbitual.Agents.GeoFencingAgent
 {
     public class FenceState
     {
-        public FenceState(FenceStateId state, DateTime @when)
+        public FenceState(FenceStateId mode, DateTime @when)
         {
-            State = state;
+            Mode = mode;
             When = when;
         }
 
-        public FenceStateId State { get; set; }
+        public FenceStateId Mode { get; set; }
         public DateTime When { get; set; }
     }
 }

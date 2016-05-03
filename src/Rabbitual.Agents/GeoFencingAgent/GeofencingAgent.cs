@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Runtime.InteropServices;
 using Rabbitual.Infrastructure;
 
 namespace Rabbitual.Agents.GeoFencingAgent
@@ -43,29 +44,32 @@ namespace Rabbitual.Agents.GeoFencingAgent
             if (lat == null || lon == null)
                 return;
 
-            var service = new GeoFencingService(Options, State,()=> DateTime.UtcNow);
-            service.MoveTo(lat.Value, lon.Value);
+            var service = new GeoFencingService(Options, State, () => DateTime.UtcNow);
+            State.FenceState = service.MoveTo(lat.Value, lon.Value);
         }
 
         public void Check()
         {
             var service = new GeoFencingService(Options, State, () => DateTime.UtcNow);
-            var events = service.TransitionBasedOnTime();
-            var list = new ListManager<string>(State.IssuedFences, limit: 100);
+            var newState = service.TransitionBasedOnTime();
+            var change = State.FenceState.Mode != newState.Mode;
+            State.FenceState = newState;
 
-            foreach (var e in events)
+            if (!change)
+                return;
+
+            var list = new ListManager<string>(State.IssuedFences, limit: 100);
+            list.Add(Options.CircleFence.Id);
+
+            _p.PublishEvent(new Message
             {
-                list.Add(e.Item1.Id);
-                _p.PublishEvent(new Message
-                {
-                    Data = new Dictionary<string, string>
+                Data = new Dictionary<string, string>
                     {
-                        { "fence", e.Item1.Id },
-                        { "description",e.Item2.State==FenceStateId.In ?  e.Item1.EnteringDescription :  e.Item1.LeavingDescription },
-                        { "state", e.Item2.State.ToString() }
+                        { "fence", Options.CircleFence.Id },
+                        { "description",newState.Mode==FenceStateId.In ?  Options.CircleFence.EnteringDescription :  Options.CircleFence.LeavingDescription },
+                        { "state", newState.Mode.ToString() }
                     }
-                });
-            }
+            });
         }
     }
 }
