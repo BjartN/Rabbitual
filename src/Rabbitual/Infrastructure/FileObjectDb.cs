@@ -1,8 +1,8 @@
 ﻿using System;
 using System.IO;
-using Rabbitual.Infrastructure;
+using Rabbitual.Configuration;
 
-namespace Rabbitual
+namespace Rabbitual.Infrastructure
 {
     public class FileObjectDb : IObjectDb
     {

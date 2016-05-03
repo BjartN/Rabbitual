@@ -5,6 +5,7 @@ using System.Web.Http.Controllers;
 using System.Web.Http.Dispatcher;
 using Microsoft.Owin.Hosting;
 using Rabbitual.Infrastructure;
+using Rabbitual.Logging;
 
 namespace Rabbitual.Agents.WebServerAgent
 {

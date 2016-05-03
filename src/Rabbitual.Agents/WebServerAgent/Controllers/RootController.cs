@@ -7,6 +7,7 @@ using System.Web.Http;
 using NJsonSchema;
 using Rabbitual.Configuration;
 using Rabbitual.Infrastructure;
+using Rabbitual.Logging;
 
 namespace Rabbitual.Agents.WebServerAgent.Controllers
 {

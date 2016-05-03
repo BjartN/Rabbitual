@@ -4,6 +4,7 @@ using System.Configuration;
 using Rabbitual.Configuration;
 using Rabbitual.Fox;
 using Rabbitual.Infrastructure;
+using Rabbitual.Logging;
 using Rabbitual.Rabbit;
 using StructureMap;
 using StructureMap.Graph;

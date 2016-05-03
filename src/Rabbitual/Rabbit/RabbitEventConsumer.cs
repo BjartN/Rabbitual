@@ -3,7 +3,9 @@ using System.Linq;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
 using RabbitMQ.Client.Exceptions;
+using Rabbitual.Configuration;
 using Rabbitual.Infrastructure;
+using Rabbitual.Logging;
 
 namespace Rabbitual.Rabbit
 {

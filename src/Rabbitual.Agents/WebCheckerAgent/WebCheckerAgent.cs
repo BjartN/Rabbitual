@@ -3,6 +3,7 @@ using System.ComponentModel;
 using System.Text.RegularExpressions;
 using HtmlAgilityPack;
 using Rabbitual.Infrastructure;
+using Rabbitual.Logging;
 
 namespace Rabbitual.Agents.WebCheckerAgent
 {

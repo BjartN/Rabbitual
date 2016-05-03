@@ -1,4 +1,5 @@
 using RabbitMQ.Client;
+using Rabbitual.Configuration;
 using Rabbitual.Infrastructure;
 
 namespace Rabbitual.Rabbit

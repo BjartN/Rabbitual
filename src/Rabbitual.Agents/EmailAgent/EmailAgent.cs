@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Net;
 using System.Net.Mail;
 using Rabbitual.Infrastructure;
+using Rabbitual.Logging;
 
 namespace Rabbitual.Agents.EmailAgent
 {

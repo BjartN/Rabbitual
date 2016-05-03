@@ -54,6 +54,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AgentFactory.cs" />
+    <Compile Include="AgentMessageLog.cs" />
     <Compile Include="AgentService.cs" />
     <Compile Include="AgentStateRepository.cs" />
     <Compile Include="AgentWrapper.cs" />
@@ -71,8 +72,10 @@
     <Compile Include="Fox\Hub.cs" />
     <Compile Include="IAgent.cs" />
     <Compile Include="App.cs" />
+    <Compile Include="IAgentLogRepository.cs" />
     <Compile Include="IAgentRepository.cs" />
     <Compile Include="IAgentWrapper.cs" />
+    <Compile Include="IFactory.cs" />
     <Compile Include="IMessageLog.cs" />
     <Compile Include="Infrastructure\DictonaryExtentions.cs" />
     <Compile Include="Infrastructure\EnumerableExtentions.cs" />
@@ -101,6 +104,7 @@
     <Compile Include="Rabbit\RabbitMessagePublisher.cs" />
     <Compile Include="Infrastructure\Timer.cs" />
     <Compile Include="ReflectionHelper.cs" />
+    <Compile Include="LogSummary.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Fox\README.md" />

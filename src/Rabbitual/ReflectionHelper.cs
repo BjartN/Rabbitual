@@ -67,14 +67,6 @@ namespace Rabbitual
             var pi = agent.GetType().GetProperty("State");
             return pi.GetValue(agent, new object[0]);
         }
-
-
-        //public static void SetState(IStaItefulAgent agent, object result)
-        //{
-        //    var pi = agent.GetType().GetProperty("State");
-        //    pi.SetValue(agent, result);
-        //}
-
     }
 
     public class OptionsHelper
@@ -96,13 +88,6 @@ namespace Rabbitual
         {
             return ReflectionHelper.GetGenericArgument(agentType, typeof(IHaveOptions<>));
         }
-        //public static void SetOptionsUsingMagic(IHaveOptions optionsAgent, object options)
-        //{
-        //    //TODO: Cheating now, so make more robust
-        //    var pi = optionsAgent.GetType().GetProperties().FirstOrDefault(x => x.Name == "Options");
-        //    if (pi == null)
-        //        return;
-        //    pi.SetValue(optionsAgent, options, null);
-        //}
+        
     }
 }

@@ -3,6 +3,7 @@ using System.IO;
 using System.Net;
 using Rabbitual.Agents.WeatherAgent;
 using Rabbitual.Infrastructure;
+using Rabbitual.Logging;
 
 namespace Rabbitual.Agents.DownloaderAgent
 {

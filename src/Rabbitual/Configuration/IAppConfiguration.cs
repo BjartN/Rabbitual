@@ -1,6 +1,6 @@
 using System.Configuration;
 
-namespace Rabbitual
+namespace Rabbitual.Configuration
 {
     public interface IAppConfiguration
     {

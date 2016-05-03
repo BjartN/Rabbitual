@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Rabbitual.Configuration;
 using Rabbitual.Infrastructure;
+using Rabbitual.Logging;
 
 namespace Rabbitual
 {
@@ -10,14 +11,6 @@ namespace Rabbitual
     public interface IAgentFactory
     {
         IAgentWrapper[] GetAgents();
-    }
-
-    /// <summary>
-    /// Used for creating objects dynamically after the application has started.
-    /// </summary>
-    public interface IFactory
-    {
-        object GetInstance(Type t, IDictionary<Type, object> deps = null);
     }
 
     public class AgentFactory : IAgentFactory
@@ -71,7 +64,7 @@ namespace Rabbitual
 
             if (inculdePublisher)
             {
-                deps.Add(typeof(IMessagePublisher), new PublisherProxy(_p, config.Id, _agentLog));
+                deps.Add(typeof(IMessagePublisher), new AgentPublisher(_p, config.Id, _agentLog));
             }
 
             if (includeState)

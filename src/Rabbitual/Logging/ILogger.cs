@@ -1,6 +1,6 @@
 using System;
 
-namespace Rabbitual.Infrastructure
+namespace Rabbitual.Logging
 {
     public interface ILogger
     {

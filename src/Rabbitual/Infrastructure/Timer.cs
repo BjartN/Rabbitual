@@ -1,4 +1,5 @@
 using System;
+using Rabbitual.Logging;
 
 namespace Rabbitual.Infrastructure
 {

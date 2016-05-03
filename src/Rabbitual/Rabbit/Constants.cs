@@ -1,4 +1,4 @@
-﻿namespace Rabbitual
+﻿namespace Rabbitual.Rabbit
 {
     public class Constants
     {
