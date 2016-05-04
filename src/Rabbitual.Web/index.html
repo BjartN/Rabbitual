@@ -6,16 +6,20 @@
 
 		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.1.8/semantic.min.css" />
 		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.2/css/font-awesome.min.css">
-	    
-	    <style type="text/css">
-	    	body {
-	    	}
 
-    	    td {
-    	        text-transform: capitalize;
-    	    }
-    	</style>
-        <meta http-equiv="refresh" content="900">
+		<style type="text/css">
+			
+			td {
+				text-transform: capitalize;
+			}
+
+			.content .description {
+				overflow: hidden;
+				text-overflow: ellipsis;
+				text-transform: capitalize;
+			}
+		</style>
+		<meta http-equiv="refresh" content="900">
 	</head>
 	<body>
 		<div class="ui container">
@@ -40,44 +44,66 @@
 			</div>
 
 			<script id="table-template" type="text/x-handlebars-template">
-				<table class="ui very compact table">
-					<thead>
-						<tr>
-							<th></th>
-							<th class="one wide">Name</th>
-							<th class="two wide">Last Event In</th>
-							<th class="two wide">Last Event Out</th>
-							<th class="two wide">Last Task Out</th>
-							<th class="two wide">Last Task In</th>
-							<th class="two wide">Last Check</th>
-							<th class="one wide">Messages</th>
-							<th class="one wide">Schedule</th>
-							<th class="one wide">Sources</th>
-							<th class="two wide"></th>
-						</tr>
-					</thead>
-					<tbody>
-						{{#each this}}
-						<tr>
-							<td><i class="fa fa-{{icon}}"></i> </td>
-							<td>{{name}}</td>
-							<td>{{lastEventIn}}</td>
-							<td>{{lastEventOut}}</td>
-							<td>{{lastTaskOut}}</td>
-							<td>{{lastTaskIn}}</td>
-							<td>{{lastCheck}}</td>
-							<td>Out:{{outgoingCount}} / In:{{incomingCount}}</td>
-							<td>{{schedule}}</td>
-							<td>{{sources}}</td>
-							<td>
-								[<a href="editor.html?id={{id}}">Edit</a>]
-								[<a href="{{stateUrl}}">State</a>]
-								[<a href="{{messageLogUrl}}">Msg</a>]
-							</td>
-						</tr>
-						{{/each}}
-					</tbody>
-				</table>
+				
+				<div class="ui four cards">
+					{{#each this}}
+					<div class="card">
+						<div class="content">
+							<div class="ui small pink header"><i class="fa fa-{{icon}}"></i> {{name}}</div>
+							<div class="ui clearing divider"></div>
+							<div class="ui relaxed divided list">
+
+								{{#if lastEventIn}}
+								<a class="header">Event In:</a>
+								<div class="description">{{lastEventIn}}</div>
+								{{/if}}
+
+								{{#if lastEventOut}}
+								<a class="header">Event Out: </a>
+								<div class="description">{{lastEventOut}}</div>
+								{{/if}}
+
+								{{#if lastTaskIn}}
+								<a class="header">Task In:</a>
+								<div class="description">{{lastTaskIn}}</div>
+								{{/if}}
+
+								{{#if lastTaskOut}}
+								<a class="header">Task Out:</a>
+								<div class="description">{{lastTaskOut}}</div>
+								{{/if}}
+
+								{{#if lastCheck}}
+								<a class="header">Last Check:</a>
+								<div class="description">{{lastCheck}}</div>
+								{{/if}}
+
+								{{#if outgoingCount}}
+								<a class="header">Out/In</a>
+								<div class="description">{{outgoingCount}}/{{incomingCount}}</div>
+								{{/if}}
+
+								{{#if schedule}}
+								<a class="header">Schedule: </a>
+								<div class="description">{{schedule}}</div>
+								{{/if}}
+
+								{{#if sources}}
+								<a class="header">Source:</a>
+								<div class="description">{{sources}}</div>
+								{{/if}}
+
+							</div>
+						</div>
+						<div class="ui bottom attached button">
+							<a href="editor.html?id={{id}}">Edit</a>
+							- <a href="{{stateUrl}}">State</a>
+							- <a href="{{messageLogUrl}}">Msg</a>
+						</div>
+					</div>
+					{{/each}}
+				</div>
+
 			</script>
 
 
@@ -86,14 +112,14 @@
 					<div class="inline fields">
 						<div class="three wide field">
 							<select id="agent-type">
-								<option>Select Agent Type</option>
+								<option>Create Agent</option>
 								{{#each this}}
-									<option value="{{this}}">{{this}}</option>
+								<option value="{{this}}">{{this}}</option>
 								{{/each}}
 							</select>
 						</div>
 						<div class="three wide field">
-    						<input type="text" name="agent-name" id="agent-name" placeholder="Agent Name">
+							<input type="text" name="agent-name" id="agent-name" placeholder="Agent Name">
 						</div>
 						<div class="one wide field">
 							<button class="ui button" type="submit" id="create-agent" name="create-agent">Create</button>
