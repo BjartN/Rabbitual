@@ -6,38 +6,36 @@ namespace Rabbitual.Agents.GeoFencingAgent
     public class GeoFencingService
     {
         private readonly GeofencingOptions _o;
-        private readonly GeofencingState _s;
         private readonly Func<DateTime> _now;
 
-        public GeoFencingService(GeofencingOptions o, GeofencingState s, Func<DateTime> now)
+        public GeoFencingService(GeofencingOptions o, Func<DateTime> now)
         {
             _o = o;
-            _s = s;
             _now = now;
         }
 
-        public FenceState MoveTo(double lat, double lon)
+        public FenceState MoveTo(double lat, double lon, FenceState current)
         {
-            return moveTo(lat, lon, _o.CircleFence, _s.FenceState);
+            return moveTo(lat, lon, _o.CircleFence, current);
         }
 
-        public FenceState TransitionBasedOnTime()
+        public FenceState TransitionBasedOnTime(FenceState current)
         {
             var now = _now();
 
-            if (_s.FenceState.Mode == FenceStateId.Arriving && (now - _s.FenceState.When) > _o.ArrivingGrazeTime)
+            if (current.Mode == FenceStateId.Arriving && (now - current.When) > _o.ArrivingGrazeTime)
             {
                 //you have now arrived
                 return new FenceState(FenceStateId.In, now);
             }
 
-            if (_s.FenceState.Mode == FenceStateId.Leaving && (now - _s.FenceState.When) > _o.LeavingGrazeTime)
+            if (current.Mode == FenceStateId.Leaving && (now - current.When) > _o.LeavingGrazeTime)
             {
                 return new FenceState(FenceStateId.Out, now);
             }
 
             //same as before
-            return new FenceState(_s.FenceState.Mode, _s.FenceState.When);
+            return new FenceState(current.Mode, current.When);
         }
 
         private FenceState moveTo(double lat, double lon, Fence fence, FenceState fenceState)

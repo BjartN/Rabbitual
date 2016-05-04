@@ -1,5 +1,6 @@
 ﻿namespace Rabbitual.Agents.WebServerAgent
 {
+    [Icon("server")]
     public class WebServerAgent:IAgent
     {
         private readonly WebServer _s;

@@ -73,6 +73,8 @@ namespace Rabbitual.Agents.WebServerAgent.Controllers
         [Route("agent/options/{id}")]
         public HttpResponseMessage Options(string id)
         {
+            //TODO: When loading options for a newly created agent, the agent will not be in the inmemory repo
+
             var agent = _ar.GetAgent(id);
             return this.SweetJson(agent.Config.Options, bigAssPropertyNames: true);
         }
@@ -111,9 +113,11 @@ namespace Rabbitual.Agents.WebServerAgent.Controllers
                 .Select(x =>
                 {
                     var al = _l.GetLog(x.Id).GetSummary();
+                    var attr = x.ClrType.GetCustomAttributes(typeof(IconAttribute), true).FirstOrDefault() as IconAttribute;
 
                     return new
                     {
+                        Icon = attr==null ?  "hashtag": attr.FontAwesome,
                         OutgoingCount = al.OutgoingCount,
                         IncomingCount = al.IncomingCount,
                         LastCheck = al.LastCheck == null ? null : new DateTime?(al.LastCheck.Occured),

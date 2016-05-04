@@ -8,6 +8,7 @@ using Rabbitual.Logging;
 
 namespace Rabbitual.Agents.EmailAgent
 {
+    [Icon("send")]
     public class EmailAgent : StatefulAgent<EmailOptions,EmailState>, IEventConsumerAgent
     {
         private readonly ILogger _logger;

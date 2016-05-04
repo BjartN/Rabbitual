@@ -7,11 +7,11 @@ namespace Rabbitual.Agents.GeoFencingAgent
     {
         public GeofencingState()
         {
-            IssuedFences= new List<string>();
+            IssuedFences = new List<FenceState>();
         }
 
         public FenceState FenceState { get; set; }
 
-        public List<string> IssuedFences { get; set; }
+        public List<FenceState> IssuedFences { get; set; }
     }
 }

@@ -4,6 +4,7 @@ using System.Linq;
 
 namespace Rabbitual.Agents.UniqueEventAgent
 {
+    [Icon("hand-pointer-o")]
     public class UniqueEventAgent: ScheduledStatefulAgent<UniqueOptions,UniqueState>
         , IEventConsumerAgent
         , IEventPublisherAgent

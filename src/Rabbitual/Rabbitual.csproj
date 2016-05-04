@@ -65,6 +65,7 @@
     <Compile Include="Configuration\IAgentConfiguration.cs" />
     <Compile Include="Configuration\AgentConfiguration.cs" />
     <Compile Include="Configuration\Scenario.cs" />
+    <Compile Include="IconAttribute.cs" />
     <Compile Include="Infrastructure\FileObjectDb.cs" />
     <Compile Include="Fox\FoxEventConsumer.cs" />
     <Compile Include="Fox\FoxMessagePublisher.cs" />

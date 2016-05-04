@@ -4,6 +4,7 @@ using Rabbitual.Logging;
 
 namespace Rabbitual.Agents.CsvAgent
 {
+    [Icon("file-text")]
     public class CsvAgent : ScheduledAgent<CsvOptions>, 
         IEventPublisherAgent
     {

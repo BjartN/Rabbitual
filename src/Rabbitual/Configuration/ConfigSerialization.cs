@@ -61,7 +61,7 @@ namespace Rabbitual.Configuration
             foreach (var c in dtos)
             {
                 var config = d[c.Id];
-                config.Sources = c.SourceIds.Select(x => d[x]).ToArray();
+                config.Sources = c.SourceIds.Where(x=>d.ContainsKey(x)).Select(x => d[x]).ToArray();
             }
 
             foreach (var c in dtos)
@@ -75,8 +75,6 @@ namespace Rabbitual.Configuration
                     var o = _s.Deserialize(((JObject)c.Options).ToString(), t);
                     config.Options = o;
                 }
-
-                config.Sources = c.SourceIds.Select(x => d[x]).ToArray();
             }
 
             return d.Select(x => x.Value).ToArray();

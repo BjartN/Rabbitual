@@ -3,6 +3,7 @@ using Rabbitual.Infrastructure;
 
 namespace Rabbitual.Agents.TextAgent
 {
+    [Icon("comment")]
     public class TextAgent: Agent<TextOptions>, 
         IEventConsumerAgent, 
         IEventPublisherAgent

@@ -1,16 +1,21 @@
-	<!DOCTYPE html>
+﻿	<!DOCTYPE html>
 	<html lang="en">
 	<head>
 		<meta charset="utf-8">
 		<title>Rabbitual</title>
 
 		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.1.8/semantic.min.css" />
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.2/css/font-awesome.min.css">
+	    
+	    <style type="text/css">
+	    	body {
+	    	}
 
-		<style type="text/css">
-			td {
-				text-transform: capitalize;
-			}
-		</style>
+    	    td {
+    	        text-transform: capitalize;
+    	    }
+    	</style>
+        <meta http-equiv="refresh" content="900">
 	</head>
 	<body>
 		<div class="ui container">
@@ -18,9 +23,7 @@
 				<a class="active item">
 					Agents
 				</a>
-				<a class="item">
-					Flow
-				</a>
+				
 				<div class="right menu">
 					<div class="item">
 						Rabbitual
@@ -40,6 +43,7 @@
 				<table class="ui very compact table">
 					<thead>
 						<tr>
+							<th></th>
 							<th class="one wide">Name</th>
 							<th class="two wide">Last Event In</th>
 							<th class="two wide">Last Event Out</th>
@@ -55,6 +59,7 @@
 					<tbody>
 						{{#each this}}
 						<tr>
+							<td><i class="fa fa-{{icon}}"></i> </td>
 							<td>{{name}}</td>
 							<td>{{lastEventIn}}</td>
 							<td>{{lastEventOut}}</td>

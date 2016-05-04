@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Runtime.InteropServices;
 using Rabbitual.Infrastructure;
 
 namespace Rabbitual.Agents.GeoFencingAgent
@@ -22,6 +21,7 @@ namespace Rabbitual.Agents.GeoFencingAgent
         out -> arriving -> in
         out -> arriving -> out
     ")]
+    [Icon("map-marker")]
     public class GeofencingAgent : StatefulAgent<GeofencingOptions, GeofencingState>
         , IEventConsumerAgent
         , IEventPublisherAgent
@@ -44,22 +44,25 @@ namespace Rabbitual.Agents.GeoFencingAgent
             if (lat == null || lon == null)
                 return;
 
-            var service = new GeoFencingService(Options, State, () => DateTime.UtcNow);
-            State.FenceState = service.MoveTo(lat.Value, lon.Value);
+            var service = new GeoFencingService(Options, () => DateTime.UtcNow);
+            State.FenceState = service.MoveTo(lat.Value, lon.Value,State.FenceState);
         }
 
         public void Check()
         {
-            var service = new GeoFencingService(Options, State, () => DateTime.UtcNow);
-            var newState = service.TransitionBasedOnTime();
+            if (State.FenceState == null)
+                return;
+
+            var service = new GeoFencingService(Options, () => DateTime.UtcNow);
+            var newState = service.TransitionBasedOnTime(State.FenceState);
             var change = State.FenceState.Mode != newState.Mode;
             State.FenceState = newState;
 
             if (!change)
                 return;
 
-            var list = new ListManager<string>(State.IssuedFences, limit: 100);
-            list.Add(Options.CircleFence.Id);
+            var list = new ListManager<FenceState>(State.IssuedFences, limit: 100);
+            list.Add(State.FenceState);
 
             _p.PublishEvent(new Message
             {

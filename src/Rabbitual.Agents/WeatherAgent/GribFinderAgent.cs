@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using Rabbitual.Infrastructure;
 using Rabbitual.Logging;
 
 namespace Rabbitual.Agents.WeatherAgent

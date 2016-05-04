@@ -33,17 +33,17 @@ namespace Rabbitual.UnitTests
                 FenceState  =  new FenceState(FenceStateId.Out, now.AddMinutes(-5))
             };
 
-            var service = new GeoFencingService(_opt,state,()=> now);
+            var service = new GeoFencingService(_opt,()=> now);
 
             //move inside 
-            state.FenceState= service.MoveTo(0.000001,0.000001);
+            state.FenceState= service.MoveTo(0.000001,0.000001,state.FenceState);
 
             //and check that we are arriving
             Assert.AreEqual(FenceStateId.Arriving,state.FenceState.Mode);
 
             //let an hour go by
             now = new DateTime(2000, 1, 1, 13, 0, 0);
-            state.FenceState = service.TransitionBasedOnTime();
+            state.FenceState = service.TransitionBasedOnTime(state.FenceState);
 
             //..and check that we're in
             Assert.AreEqual(FenceStateId.In, state.FenceState.Mode);
@@ -51,20 +51,20 @@ namespace Rabbitual.UnitTests
             //let an hour go by
             now = new DateTime(2000, 1, 1, 14, 0, 0);
             var oldState = state.FenceState.Mode;
-            state.FenceState = service.TransitionBasedOnTime();
+            state.FenceState = service.TransitionBasedOnTime(state.FenceState);
 
             //..and check that we're still in
             Assert.AreEqual(oldState,state.FenceState.Mode);
 
             //move outside 
-            state.FenceState=service.MoveTo(0.1, 0.1);
+            state.FenceState=service.MoveTo(0.1, 0.1,state.FenceState);
             
             //and check that we are leaving
             Assert.AreEqual(FenceStateId.Leaving, state.FenceState.Mode);
 
             //let an hour go by
             now = new DateTime(2000, 1, 1, 15, 0, 0);
-            state.FenceState  = service.TransitionBasedOnTime();
+            state.FenceState  = service.TransitionBasedOnTime(state.FenceState);
 
             //..and check that we're outside
             Assert.AreEqual(FenceStateId.Out, state.FenceState.Mode);
