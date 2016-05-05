@@ -14,7 +14,7 @@ namespace Rabbitual.Agents.WebServerAgent.Controllers
     public class RootController : ApiController
     {
         private readonly IAgentConfiguration _cfg;
-        private readonly IAgentRepository _ar;
+        private readonly IAgentPool _ar;
         private readonly IAgentService _s;
         private readonly IAgentLogRepository _l;
         private readonly IAgentConfiguration _configRepository;
@@ -22,7 +22,7 @@ namespace Rabbitual.Agents.WebServerAgent.Controllers
 
         public RootController(
             IAgentConfiguration cfg,
-            IAgentRepository ar,
+            IAgentPool ar,
             IAgentService s,
             IAgentLogRepository l,
             IAgentConfiguration configRepository,
@@ -40,32 +40,29 @@ namespace Rabbitual.Agents.WebServerAgent.Controllers
         [Route("agent/options/schema/{id}")]
         public HttpResponseMessage Schema(string id)
         {
-            var agent = _ar.GetAgent(id);
-            var schema = JsonSchema4.FromType(agent.Config.Options.GetType());
+            var cfg = _cfg.GetConfiguration().FirstOrDefault(x => x.Id == id);
+            if (cfg == null)
+                return new HttpResponseMessage(HttpStatusCode.NotFound);
 
-            var response = Request.CreateResponse(HttpStatusCode.OK);
-            response.Content = new StringContent(schema.ToJson(), Encoding.UTF8, "application/schema+json");
-            return response;
+            var schema = JsonSchema4.FromType(cfg.Options.GetType());
+
+            return this.FromRawJson(schema.ToJson(), "application/schema+json");
         }
 
 
         [Route("agent/options/update/{id}")]
-        public IHttpActionResult Update(string id)
+        public HttpResponseMessage Update(string id)
         {
             var json = Request.Content.ReadAsStringAsync().Result;
-            var agent = _ar.GetAgent(id);
-            if (agent == null)
-                return NotFound();
+            var cfg = _cfg.GetConfiguration().FirstOrDefault(x => x.Id == id);
+            if (cfg == null)
+                return new HttpResponseMessage(HttpStatusCode.NotFound);
 
-            var newOptions = _serializer.Deserialize(json, agent.Config.Options.GetType());
-            //Note: This will replace the options object, so the agent(s) will still keep a refrence to the old one.
-            //Could be solved my replacing just copying the properties one by one.
-            agent.Config.Options = newOptions;
+            var newOptions = _serializer.Deserialize(json, cfg.Options.GetType());
+            cfg.Options = newOptions;
+            _configRepository.PersistConfig(cfg.ToDto());
 
-            _configRepository.PersistConfig(agent.Config.ToDto());
-
-
-            return Ok();
+            return new HttpResponseMessage(HttpStatusCode.OK);
         }
 
 
@@ -73,10 +70,11 @@ namespace Rabbitual.Agents.WebServerAgent.Controllers
         [Route("agent/options/{id}")]
         public HttpResponseMessage Options(string id)
         {
-            //TODO: When loading options for a newly created agent, the agent will not be in the inmemory repo
+            var cfg = _cfg.GetConfiguration().FirstOrDefault(x => x.Id==id);
+            if (cfg == null)
+                return new HttpResponseMessage(HttpStatusCode.NotFound);
 
-            var agent = _ar.GetAgent(id);
-            return this.SweetJson(agent.Config.Options, bigAssPropertyNames: true);
+            return this.SweetJson(cfg.Options, bigAssPropertyNames: true, keepNulls:true);
         }
 
         [HttpGet]
@@ -130,7 +128,7 @@ namespace Rabbitual.Agents.WebServerAgent.Controllers
                         OptionsSchemaUrl = $"{root}/agent/options/schema?id={x.Id}",
                         x.Id,
                         x.Name,
-                        Sources = x.Sources.Select(s => s.Id),
+                        Sources = x.SourceIds,
                         Options = x.Options
                     };
                 });

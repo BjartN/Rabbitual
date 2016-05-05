@@ -1,6 +1,6 @@
 ﻿namespace Rabbitual
 {
-    public interface IAgentRepository
+    public interface IAgentPool
     {
         IAgentWrapper GetAgent(string agentId);
     }

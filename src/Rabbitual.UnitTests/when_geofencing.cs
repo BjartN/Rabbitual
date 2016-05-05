@@ -17,7 +17,6 @@ namespace Rabbitual.UnitTests
             CircleFence =
                     new Fence
                     {
-                        Id = "1",
                         Lat = 0,
                         Lon = 0,
                         RadiusMeters = 1000

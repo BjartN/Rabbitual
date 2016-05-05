@@ -9,7 +9,7 @@ namespace Rabbitual
     /// <summary>
     /// Starting point for everything. 
     /// </summary>
-    public class App : IAgentRepository
+    public class App : IAgentPool
     {
         private readonly IEventConsumer _eventConsumer;
         private readonly ITaskConsumer _taskConsumer;

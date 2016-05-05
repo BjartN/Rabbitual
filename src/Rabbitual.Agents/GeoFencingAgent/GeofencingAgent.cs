@@ -68,7 +68,7 @@ namespace Rabbitual.Agents.GeoFencingAgent
             {
                 Data = new Dictionary<string, string>
                     {
-                        { "fence", Options.CircleFence.Id },
+                        { "agentId", Id},
                         { "description",newState.Mode==FenceStateId.In ?  Options.CircleFence.EnteringDescription :  Options.CircleFence.LeavingDescription },
                         { "state", newState.Mode.ToString() }
                     }

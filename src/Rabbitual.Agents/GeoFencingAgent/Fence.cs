@@ -6,8 +6,7 @@ namespace Rabbitual.Agents.GeoFencingAgent
         public double Lon { get; set; }
 
         public int RadiusMeters { get; set; }
-        public string  Id { get; set; }
-
+        
         public string LeavingDescription { get; set; }
 
         public string EnteringDescription { get; set; }

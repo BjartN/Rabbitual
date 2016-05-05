@@ -1,5 +1,6 @@
 ﻿using System.Net.Http;
 using System.Net.Http.Headers;
+using System.Text;
 using System.Web.Http;
 using Rabbitual.Infrastructure;
 
@@ -7,11 +8,17 @@ namespace Rabbitual.Agents.WebServerAgent
 {
     public static class WebApiExtentions
     {
-        public static HttpResponseMessage SweetJson(this ApiController c, object o, bool bigAssPropertyNames=false)
+        public static HttpResponseMessage SweetJson(this ApiController c, object o, bool bigAssPropertyNames=false, bool keepNulls=false)
         {
-            var response = new HttpResponseMessage();
-            response.Content = new StringContent(o.ToJson(bigAssPropertyNames));
-            response.Content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+            return c.FromRawJson(o.ToJson(bigAssPropertyNames, keepNulls));
+        }
+
+        public static HttpResponseMessage FromRawJson(this ApiController c,string rawJson, string contentType= "application/json")
+        {
+            var response = new HttpResponseMessage
+            {
+                Content = new StringContent(rawJson, Encoding.UTF8, contentType)
+            };
             return response;
         }
     }

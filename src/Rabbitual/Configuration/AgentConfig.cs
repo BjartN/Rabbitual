@@ -7,20 +7,20 @@ namespace Rabbitual.Configuration
     {
         public AgentConfig()
         {
-            Sources = new AgentConfig[0];
+            SourceIds = new string[0];
         }
         public string Id { get; set; }
         public string Name { get; set; }
         public int? Schedule { get; set; }
         public Type ClrType { get; set; }
-        public AgentConfig[] Sources { get; set; }
+        public string[] SourceIds { get; set; }
         public object Options { get; set; }
         public AgentConfigDto ToDto()
         {
             return new AgentConfigDto
             {
                 Id = Id,
-                SourceIds = Sources.Select(x=>x.Id).ToArray(),
+                SourceIds = SourceIds,
                 Schedule = Schedule,
                 Options = Options,
                 Name = Name,

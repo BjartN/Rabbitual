@@ -61,7 +61,6 @@
     <Compile Include="Configuration\AgentConfig.cs" />
     <Compile Include="Configuration\AgentConfigDto.cs" />
     <Compile Include="Configuration\ConfigReflection.cs" />
-    <Compile Include="Configuration\ConfigSerialization.cs" />
     <Compile Include="Configuration\IAgentConfiguration.cs" />
     <Compile Include="Configuration\AgentConfiguration.cs" />
     <Compile Include="Configuration\Scenario.cs" />
@@ -75,7 +74,7 @@
     <Compile Include="App.cs" />
     <Compile Include="Logging\AgentLogRepository.cs" />
     <Compile Include="Logging\IAgentLogRepository.cs" />
-    <Compile Include="IAgentRepository.cs" />
+    <Compile Include="IAgentPool.cs" />
     <Compile Include="IAgentWrapper.cs" />
     <Compile Include="IFactory.cs" />
     <Compile Include="Logging\IMessageLog.cs" />

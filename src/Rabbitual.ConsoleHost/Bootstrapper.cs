@@ -46,7 +46,7 @@ namespace Rabbitual.ConsoleHost
                 init.For<IAgentLogRepository>().Use<AgentLogRepository>().Singleton();
                 init.For<IFactory>().Use<Factory>();
                 init.For<App>().Use<App>().Singleton();
-                init.For<IAgentRepository>().Use(ctx => ctx.GetInstance<App>());
+                init.For<IAgentPool>().Use(ctx => ctx.GetInstance<App>());
             });
 
             return c;

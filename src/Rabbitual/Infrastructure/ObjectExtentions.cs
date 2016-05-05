@@ -6,14 +6,14 @@ namespace Rabbitual.Infrastructure
 {
     public static class ObjectExtentions
     {
-        public static string ToJson(this object o, bool bigAssPropertyNames=false)
+        public static string ToJson(this object o, bool bigAssPropertyNames = false, bool keepNulls = false)
         {
             var s = new JsonSerializerSettings()
             {
                 DateFormatHandling = DateFormatHandling.IsoDateFormat,
-                NullValueHandling = NullValueHandling.Ignore,
+                NullValueHandling = keepNulls ? NullValueHandling.Include : NullValueHandling.Ignore,
                 Formatting = Formatting.Indented,
-                ContractResolver = bigAssPropertyNames ? new DefaultContractResolver() : new CamelCasePropertyNamesContractResolver() 
+                ContractResolver = bigAssPropertyNames ? new DefaultContractResolver() : new CamelCasePropertyNamesContractResolver()
             };
 
             s.Converters.Add(new IsoDateTimeConverter()

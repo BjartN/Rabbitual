@@ -22,7 +22,7 @@ namespace Rabbitual
         public AgentWrapper(IAgent agent, AgentConfig config, IAgentMessageLog al, ILogger logger)
         {
             _agent = agent;
-            _sourceIdx = config.Sources.ToDictionary(x => x.Id, x => true);
+            _sourceIdx = config.SourceIds.ToDictionary(x => x, x => true);
             _al = al;
             _logger = logger;
             Id = _agent.Id;
