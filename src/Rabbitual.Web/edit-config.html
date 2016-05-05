@@ -29,16 +29,22 @@
 		</div>
 
 
+
 		<script id="form-template" type="text/x-handlebars-template">
 			<form class="ui form">
+				<div class="disabled field">
 					<label>Id</label>
+					<input id="id" type="text" value="{{id}}" name="id" placeholder="Id">
 				</div>
 				<div class="field">
 					<label>Name</label>
+					<input id="name" type="text" value="{{name}}" name="name" placeholder="Name">
 				</div>
 				<div class="field">
 					<label>Sources</label>
+					<input id="sources" type="text" value="{{sources}}" name="sources" placeholder="Sources">
 				</div>
+				<button id="submit" class="ui button" type="button">Submit</button>
 			</form>
 		</script>
 		

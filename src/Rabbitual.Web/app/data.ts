@@ -7,7 +7,7 @@
 		  this.root = 'http://localhost:9000'
  	}
 
- 	getAgentConfig(agentId,callback){
+ 	getAgentOptions(agentId,callback){
 		  this.get(`${this.root}/agent/options/${agentId}`, callback);
  	}
 
@@ -48,6 +48,10 @@
 
 	postOptions(agentId,value,callback){
 		this.post(`${this.root}/agent/options/update/` + agentId, JSON.stringify(value), callback);
+	}
+
+	postConfig(agentId, value, callback) {
+		this.post(`${this.root}/agent/config/update/` + agentId, JSON.stringify(value), callback);
 	}
 
 	postAgent(name, type, callback) {

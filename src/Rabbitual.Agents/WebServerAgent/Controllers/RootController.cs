@@ -1,12 +1,9 @@
 using System;
 using System.Linq;
-using System.Net;
 using System.Net.Http;
 using System.Text;
 using System.Web.Http;
-using NJsonSchema;
 using Rabbitual.Configuration;
-using Rabbitual.Infrastructure;
 using Rabbitual.Logging;
 
 namespace Rabbitual.Agents.WebServerAgent.Controllers
@@ -14,67 +11,14 @@ namespace Rabbitual.Agents.WebServerAgent.Controllers
     public class RootController : ApiController
     {
         private readonly IAgentConfiguration _cfg;
-        private readonly IAgentPool _ar;
-        private readonly IAgentService _s;
         private readonly IAgentLogRepository _l;
-        private readonly IAgentConfiguration _configRepository;
-        private readonly IJsonSerializer _serializer;
 
         public RootController(
             IAgentConfiguration cfg,
-            IAgentPool ar,
-            IAgentService s,
-            IAgentLogRepository l,
-            IAgentConfiguration configRepository,
-            IJsonSerializer serializer)
+            IAgentLogRepository l)
         {
             _cfg = cfg;
-            _ar = ar;
-            _s = s;
             _l = l;
-            _configRepository = configRepository;
-            _serializer = serializer;
-        }
-
-        [HttpGet]
-        [Route("agent/options/schema/{id}")]
-        public HttpResponseMessage Schema(string id)
-        {
-            var cfg = _cfg.GetConfiguration().FirstOrDefault(x => x.Id == id);
-            if (cfg == null)
-                return new HttpResponseMessage(HttpStatusCode.NotFound);
-
-            var schema = JsonSchema4.FromType(cfg.Options.GetType());
-
-            return this.FromRawJson(schema.ToJson(), "application/schema+json");
-        }
-
-
-        [Route("agent/options/update/{id}")]
-        public HttpResponseMessage Update(string id)
-        {
-            var json = Request.Content.ReadAsStringAsync().Result;
-            var cfg = _cfg.GetConfiguration().FirstOrDefault(x => x.Id == id);
-            if (cfg == null)
-                return new HttpResponseMessage(HttpStatusCode.NotFound);
-
-            var newOptions = _serializer.Deserialize(json, cfg.Options.GetType());
-            cfg.Options = newOptions;
-            _configRepository.PersistConfig(cfg.ToDto());
-
-            return new HttpResponseMessage(HttpStatusCode.OK);
-        }
-
-
-        [HttpGet]
-        [Route("agent/options/{id}")]
-        public HttpResponseMessage Options(string id)
-        {
-            var cfg = _cfg.GetConfiguration().FirstOrDefault(x => x.Id==id);
-            if (cfg == null)
-                return new HttpResponseMessage(HttpStatusCode.NotFound);
-
-            return this.SweetJson(cfg.Options, bigAssPropertyNames: true, keepNulls:true);
         }
 
         [HttpGet]
@@ -90,15 +34,6 @@ namespace Rabbitual.Agents.WebServerAgent.Controllers
             });
         }
 
-        [Route("agent/state/{id}")]
-        public HttpResponseMessage Get(string id)
-        {
-            var agent = _ar.GetAgent(id);
-            var state = _s.GetState(agent);
-
-            return this.SweetJson(state);
-        }
-
         [Route("config")]
         public HttpResponseMessage Get()
         {
@@ -112,10 +47,13 @@ namespace Rabbitual.Agents.WebServerAgent.Controllers
                 {
                     var al = _l.GetLog(x.Id).GetSummary();
                     var attr = x.ClrType.GetCustomAttributes(typeof(IconAttribute), true).FirstOrDefault() as IconAttribute;
+                    var adminUrl = x.ClrType.GetCustomAttributes(typeof(AdminUrlAttribute), true).FirstOrDefault() as AdminUrlAttribute;
 
                     return new
                     {
+                        AgentType= x.ClrType.Name,
                         Icon = attr==null ?  "hashtag": attr.FontAwesome,
+                        AdminUrl = adminUrl?.Url,
                         OutgoingCount = al.OutgoingCount,
                         IncomingCount = al.IncomingCount,
                         LastCheck = al.LastCheck == null ? null : new DateTime?(al.LastCheck.Occured),

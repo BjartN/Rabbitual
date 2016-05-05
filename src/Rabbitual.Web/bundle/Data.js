@@ -3,7 +3,7 @@ var DataService = (function () {
     function DataService() {
         this.root = 'http://localhost:9000';
     }
-    DataService.prototype.getAgentConfig = function (agentId, callback) {
+    DataService.prototype.getAgentOptions = function (agentId, callback) {
         this.get(this.root + "/agent/options/" + agentId, callback);
     };
     DataService.prototype.getConfig = function (callback) {
@@ -38,6 +38,9 @@ var DataService = (function () {
     };
     DataService.prototype.postOptions = function (agentId, value, callback) {
         this.post((this.root + "/agent/options/update/") + agentId, JSON.stringify(value), callback);
+    };
+    DataService.prototype.postConfig = function (agentId, value, callback) {
+        this.post((this.root + "/agent/config/update/") + agentId, JSON.stringify(value), callback);
     };
     DataService.prototype.postAgent = function (name, type, callback) {
         this.post(this.root + "/agent-create", { name: name, type: type }, callback);
