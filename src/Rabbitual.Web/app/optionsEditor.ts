@@ -27,7 +27,7 @@ class Editor {
 
 		editor.on('ready', function() {
 			editor.validate();
-			document.getElementById('submit').addEventListener('click', function() {
+			$('#submit').on('click', function() {
 				that.data.postOptions(that.agentId, editor.getValue(),function(){
 					window.location.href = 'index.html'
 				})

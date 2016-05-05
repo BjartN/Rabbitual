@@ -1,4 +1,6 @@
-﻿namespace Rabbitual.Configuration
+﻿using Newtonsoft.Json;
+
+namespace Rabbitual.Configuration
 {
     public class AgentConfigDto
     {

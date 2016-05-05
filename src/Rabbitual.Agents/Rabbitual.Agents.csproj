@@ -109,6 +109,7 @@
     <Compile Include="WeatherAgent\WeatherOptions.cs" />
     <Compile Include="WebCheckerAgent\WebCheckerAgent.cs" />
     <Compile Include="WebServerAgent\Controllers\AgentController.cs" />
+    <Compile Include="WebServerAgent\Controllers\OptionsController.cs" />
     <Compile Include="WebServerAgent\CustomHeaderHandler.cs" />
     <Compile Include="WebServerAgent\Controllers\RootController.cs" />
     <Compile Include="WebServerAgent\Startup.cs" />

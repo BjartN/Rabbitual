@@ -3,7 +3,8 @@
     "outDir" : "bundle"
   },
   "files": [
-  	"app/editor.ts",
+  	"app/optionsEditor.ts",
+  	"app/configEditor.ts",
   	"app/geofencingAgent.ts",
     "app/app.ts",
     "typings/tsd.d.ts"

@@ -8,6 +8,11 @@ namespace Rabbitual.Infrastructure
     {
         private static Random rng = new Random();
 
+        public static string[] Clean(this string[] a)
+        {
+            return a.Where(x => !string.IsNullOrEmpty(x)).Select(x => x.Trim()).ToArray();
+        }
+
         public static IEnumerable<T> TakeLast<T>(this IEnumerable<T> source, int N)
         {
             return source.Skip(Math.Max(0, source.Count() - N));
