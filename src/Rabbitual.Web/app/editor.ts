@@ -38,7 +38,7 @@ class Editor {
 
 	run(){
 		var that = this;
-		this.data.getOptions(that.agentId, opt => {
+		this.data.getFatOptions(that.agentId, opt => {
 			that.data.getSchema(that.agentId, optSchema => {
 				that.createEditor(opt, optSchema);
 			})

@@ -4,6 +4,7 @@
   },
   "files": [
   	"app/editor.ts",
+  	"app/geofencingAgent.ts",
     "app/app.ts",
     "typings/tsd.d.ts"
   ]

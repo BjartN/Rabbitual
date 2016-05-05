@@ -1,10 +1,10 @@
 /// <reference path="../typings/tsd.d.ts"/>
+/// <reference path="data.ts"/>
 
 class App {
 	tableTemplate: any;
 	createTemplate: any;
 	data: DataService;
-
 
 	constructor(){
 		this.data = new DataService()
@@ -19,7 +19,7 @@ class App {
 		let source = document.getElementById('table-template');
 		this.tableTemplate = Handlebars.compile(source.innerHTML);
 
-		this.data.get(data=>{
+		this.data.getConfig(data=>{
 			var html = that.tableTemplate(data);
 			document.getElementById('app').innerHTML = html;
 		})
@@ -34,8 +34,6 @@ class App {
 				});
 			});
 		});
-
-		
 	}
 }
 

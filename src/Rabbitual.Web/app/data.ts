@@ -7,10 +7,13 @@
 		  this.root = 'http://localhost:9000'
  	}
 
-	get(callback) {
+ 	getAgentConfig(agentId,callback){
+		  this.get(`${this.root}/agent/options/${agentId}`, callback);
+ 	}
+
+	getConfig(callback) {
 		let that = this;
-		fetch(`${this.root}/config`).then(r => {
-			r.json().then(data=>{
+		this.get(`${this.root}/config`,data => {
 				let props = ['lastCheck', 'lastEventOut', 'lastEventIn', 'lastTaskIn', 'lastTaskOut'];
 				_.each(data, x => {
 					_.each(props, p => {
@@ -19,57 +22,53 @@
 						}
 					});
 				});
-				
 				callback(data);				
-			});
 		});
 	}
 
 	getSchema(agentId,callback) {
-		fetch(`${this.root}/agent/options/schema/` + agentId).then(r => {
-			r.json().then(data => {
-				callback(data);
-			});
-		});
+		this.get(`${this.root}/agent/options/schema/` + agentId,callback);
+	}
+
+	getFatOptions(agentId, callback) {
+		this.get(`${this.root}/agent/fat-options/` + agentId,callback);
 	}
 
 	getOptions(agentId, callback) {
-		fetch(`${this.root}/agent/options/` + agentId).then(r => {
-			r.json().then(data => {
-				callback(data);
-			});
-		});
-	}
-
-	postAgent(name, type, callback) {
-
-		$.ajax({
-			type: 'POST',
-			data: {name:name,type:type},
-			url: `${this.root}/agent-create`,
-			success: callback
-		});
+		this.get(`${this.root}/agent/options/` + agentId, callback);
 	}
 
 	getAgentTypes(callback) {
-
 		$.ajax({
 			type: 'GET',
 			url: `${this.root}/agent/types`,
 			success: callback
 		});
-
 	}
 
 	postOptions(agentId,value,callback){
+		this.post(`${this.root}/agent/options/update/` + agentId, JSON.stringify(value), callback);
+	}
 
-		var bodz = JSON.stringify(value);
+	postAgent(name, type, callback) {
+		this.post(`${this.root}/agent-create`, { name: name, type: type }, callback);
+	}
 
+	post(url, data, callback) {
 		$.ajax({
 			type: 'POST',
-			url: `${this.root}/agent/options/update/` + agentId,
-			data: bodz,
+			data: data,
+			url: url,
 			success: callback
 		});
 	}
+
+	get(url, callback) {
+		$.ajax({
+			type: 'GET',
+			url: url,
+			success: callback
+		});
+	}
+
 }

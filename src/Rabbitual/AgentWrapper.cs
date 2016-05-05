@@ -166,7 +166,5 @@ namespace Rabbitual
         {
             _agent.Stop();
         }
-
     }
-
 }

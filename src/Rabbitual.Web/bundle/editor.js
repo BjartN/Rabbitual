@@ -28,7 +28,7 @@ var Editor = (function () {
     };
     Editor.prototype.run = function () {
         var that = this;
-        this.data.getOptions(that.agentId, function (opt) {
+        this.data.getFatOptions(that.agentId, function (opt) {
             that.data.getSchema(that.agentId, function (optSchema) {
                 that.createEditor(opt, optSchema);
             });

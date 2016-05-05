@@ -1,4 +1,5 @@
 /// <reference path="../typings/tsd.d.ts"/>
+/// <reference path="data.ts"/>
 var App = (function () {
     function App() {
         this.data = new DataService();
@@ -9,7 +10,7 @@ var App = (function () {
         this.createTemplate = Handlebars.compile(createSource.innerHTML);
         var source = document.getElementById('table-template');
         this.tableTemplate = Handlebars.compile(source.innerHTML);
-        this.data.get(function (data) {
+        this.data.getConfig(function (data) {
             var html = that.tableTemplate(data);
             document.getElementById('app').innerHTML = html;
         });

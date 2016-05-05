@@ -9,11 +9,11 @@ using Rabbitual.Logging;
 namespace Rabbitual.Agents.EmailAgent
 {
     [Icon("send")]
-    public class EmailAgent : StatefulAgent<EmailOptions,EmailState>, IEventConsumerAgent
+    public class EmailAgent : StatefulAgent<EmailOptions, EmailState>, IEventConsumerAgent
     {
         private readonly ILogger _logger;
 
-        public EmailAgent(EmailOptions options, ILogger logger, IAgentStateRepository asr) : base(options,asr)
+        public EmailAgent(EmailOptions options, ILogger logger, IAgentStateRepository asr) : base(options, asr)
         {
             _logger = logger;
         }
@@ -24,7 +24,7 @@ namespace Rabbitual.Agents.EmailAgent
             if (!State.EmailCount.ContainsKey(now))
                 State.EmailCount[now] = 0;
 
-            if (Options.MaxEmailCountPerHour.HasValue &&  State.EmailCount[now] > Options.MaxEmailCountPerHour.Value)
+            if (Options.MaxEmailCountPerHour.HasValue && State.EmailCount[now] > Options.MaxEmailCountPerHour.Value)
             {
                 _logger.Warn("Email not sent due to limit on MaxEmailCountPerHour");
                 return;
@@ -47,13 +47,13 @@ namespace Rabbitual.Agents.EmailAgent
                     Host = Options.Host,
                     Port = Options.Port,
                     EnableSsl = Options.EnableSsl,
-                    Credentials = new NetworkCredential(Options.UserName,Options.Password)
+                    Credentials = new NetworkCredential(Options.UserName, Options.Password)
                 };
 
-             client.Send(message);
+                client.Send(message);
                 State.EmailCount[now] = State.EmailCount[now] + 1;
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 _logger.Warn("Could not send email");
                 _logger.Warn(ex.Message);
@@ -65,7 +65,7 @@ namespace Rabbitual.Agents.EmailAgent
     {
         public EmailState()
         {
-            EmailCount = new Dictionary<string,int>();
+            EmailCount = new Dictionary<string, int>();
         }
 
         public IDictionary<string, int> EmailCount { get; set; }
