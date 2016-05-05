@@ -22,6 +22,7 @@ namespace Rabbitual.Agents.GeoFencingAgent
         out -> arriving -> out
     ")]
     [Icon("map-marker")]
+    [AdminUrl("agents/geofencing-agent")]
     public class GeofencingAgent : StatefulAgent<GeofencingOptions, GeofencingState>
         , IEventConsumerAgent
         , IEventPublisherAgent
