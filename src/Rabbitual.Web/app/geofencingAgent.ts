@@ -4,7 +4,7 @@
 class GeofencingAgent {
 
 	private data: DataService;
-	private agentId: string;
+	private agentId: number;
 
 	constructor(){
 		this.data = new DataService();

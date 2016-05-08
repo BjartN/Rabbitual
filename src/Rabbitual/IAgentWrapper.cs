@@ -6,7 +6,7 @@ namespace Rabbitual
     public interface IAgentWrapper
     {
         AgentConfig Config { get; set; }
-        string Id { get; set; }
+        int Id { get; set; }
         void Start();
         void Stop();
 
@@ -22,7 +22,7 @@ namespace Rabbitual
         //Pub Sub
         bool IsPublisher();
         bool IsConsumer();
-        bool CanConsume(string fromAgentId);
+        bool CanConsume(int fromAgentId);
         void Consume(Message message);
 
 

@@ -36,7 +36,7 @@ namespace Rabbitual.Agents.WebServerAgent.Controllers
         }
 
         [Route("agent/config/update/{id}")]
-        public HttpResponseMessage Update(string id)
+        public HttpResponseMessage Update(int id)
         {
             var json = Request.Content.ReadAsStringAsync().Result;
             var cfg = _cfg.GetConfiguration().FirstOrDefault(x => x.Id == id);
@@ -45,8 +45,8 @@ namespace Rabbitual.Agents.WebServerAgent.Controllers
 
             var newOptions = _serializer.Deserialize<AgentConfigDto>(json);
             cfg.Name = newOptions.Name;
-            cfg.SourceIds = newOptions.SourceIds.Clean();
-            _cfg.PersistConfig(cfg.ToDto());
+            cfg.SourceIds = newOptions.SourceIds;
+            _cfg.UpdateAgent(cfg.ToDto());
 
             return new HttpResponseMessage(HttpStatusCode.OK);
         }
@@ -54,24 +54,18 @@ namespace Rabbitual.Agents.WebServerAgent.Controllers
         [Route("agent-create")]
         public IHttpActionResult Create([FromBody]CreateCommand body)
         {
-            var type = _configReflection.GetTypeMap()[body.Type];
-
-            var agentConfig = new AgentConfigDto
+            _cfg.InsertAgent(new AgentConfigDto
             {
-                Id = body.Type + "." + Guid.NewGuid(),
                 Name = body.Name,
                 Type = body.Type,
-                Options = OptionsHelper.CreateDefaultOptionsUsingMagic(type)
-            };
-
-            _cfg.PersistConfig(agentConfig);
+            });
 
             return Ok();
         }
 
 
         [Route("agent/state/{id}")]
-        public HttpResponseMessage Get(string id)
+        public HttpResponseMessage Get(int id)
         {
             var agent = _ar.GetAgent(id);
             var state = _s.GetState(agent);

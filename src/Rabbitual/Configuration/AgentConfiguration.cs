@@ -1,6 +1,5 @@
-using System.IO;
+using System;
 using System.Linq;
-using Newtonsoft.Json.Linq;
 using Rabbitual.Infrastructure;
 using Rabbitual.Logging;
 
@@ -8,63 +7,60 @@ namespace Rabbitual.Configuration
 {
     public class AgentConfiguration : IAgentConfiguration
     {
-        private readonly IObjectDb _db;
+        private readonly IAgentDb _agentDb;
         private readonly IJsonSerializer _s;
         private readonly ILogger _log;
         private readonly IConfigReflection _reflection;
-        private readonly string _folder;
 
         public AgentConfiguration(
-            IAppConfiguration cfg, 
-            IObjectDb db, 
+            IAgentDb agentDb,
             IJsonSerializer s,
             ILogger log,
             IConfigReflection reflection)
         {
-            _db = db;
+            _agentDb = agentDb;
             _s = s;
             _log = log;
             _reflection = reflection;
-            _folder = cfg.Get("rabbitual.filedb.folder");
         }
 
         public AgentConfig[] GetConfiguration()
         {
-            var result = Directory
-                .GetFiles(_folder, "*.json")
-                .Where(x => new FileInfo(x).Name.StartsWith("agent."))
+            return _agentDb
+                .GetAgents()
+                .Select(toConfig)
                 .ToArray();
-
-            return result.Select(toConfig).ToArray();
         }
 
-        public void PersistConfig(AgentConfigDto c)
+        public void UpdateAgent(AgentConfigDto c)
         {
             _log.Info($"Persisting agent {c.Id}");
-            _db.Save(c, "agent." + c.Id);
+            _agentDb.UpdateAgent(c);
         }
 
-        private AgentConfig toConfig(string path)
+        public void InsertAgent(AgentConfigDto c)
         {
-            var c = _s.Deserialize<AgentConfigDto>(File.ReadAllText(path));
+            _log.Info($"Persisting agent {c.Id}");
+            _agentDb.InsertAgent(c);
+        }
 
+        private AgentConfig toConfig(AgentConfigDto c)
+        {
             var map = _reflection.GetTypeMap();
             var d = new AgentConfig
             {
                 Id = c.Id,
                 ClrType = map[c.Type],
                 Name = c.Name,
-                Options = c.Options,
                 Schedule = c.Schedule,
                 SourceIds = c.SourceIds
             };
 
-            var t = OptionsHelper.GetOptionType(d.ClrType);
-            if (c.Options != null)
+            var optionsType = OptionsHelper.GetOptionType(d.ClrType);
+            if (optionsType != null)
             {
-                //TODO: Making some internals assumptions here.
-                var o = _s.Deserialize(((JObject)c.Options).ToString(), t);
-                d.Options = o;
+                var options = _agentDb.GetOptions(c.Id, optionsType);
+                d.Options = options ?? Activator.CreateInstance(optionsType);
             }
 
             return d;

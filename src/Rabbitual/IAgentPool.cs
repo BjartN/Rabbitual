@@ -2,6 +2,6 @@
 {
     public interface IAgentPool
     {
-        IAgentWrapper GetAgent(string agentId);
+        IAgentWrapper GetAgent(int agentId);
     }
 }

@@ -3,12 +3,12 @@
 class Editor {
 	data: DataService;
 	e: any;
-	agentId: string;
+	agentId: number;
 
 	constructor(e) {
 		this.e = e;
 		this.data = new DataService();
-		this.agentId = $.urlParam('id');
+		this.agentId = parseInt($.urlParam('id'));
 	}
 
 	createEditor(opt, optSchema) {

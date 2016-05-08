@@ -7,7 +7,7 @@
             Options = options;
         }
 
-        public string Id { get; set; }
+        public int Id { get; set; }
         public virtual void Start() { }
         public virtual void Stop() { }
 

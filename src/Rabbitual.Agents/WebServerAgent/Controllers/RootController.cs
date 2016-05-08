@@ -23,7 +23,7 @@ namespace Rabbitual.Agents.WebServerAgent.Controllers
 
         [HttpGet]
         [Route("agent/message-log/{id}")]
-        public HttpResponseMessage MessageLog(string id)
+        public HttpResponseMessage MessageLog(int id)
         {
             var al = _l.GetLog(id);
 

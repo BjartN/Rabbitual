@@ -5,9 +5,9 @@ namespace Rabbitual.Logging
 {
     public class AgentLogRepository : IAgentLogRepository
     {
-        readonly IDictionary<string, AgentMessageLog> _logs = new ConcurrentDictionary<string, AgentMessageLog>();
+        readonly IDictionary<int, AgentMessageLog> _logs = new ConcurrentDictionary<int, AgentMessageLog>();
 
-        public IAgentMessageLog GetLog(string agentId)
+        public IAgentMessageLog GetLog(int agentId)
         {
             if (!_logs.ContainsKey(agentId))
                 _logs[agentId] = new AgentMessageLog();

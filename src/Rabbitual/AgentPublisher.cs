@@ -6,10 +6,10 @@ namespace Rabbitual
     public class AgentPublisher : IMessagePublisher
     {
         private readonly IMessagePublisher _inner;
-        private readonly string _agentId;
+        private readonly int _agentId;
         private readonly IAgentMessageLog _messageLog;
 
-        public AgentPublisher(IMessagePublisher inner, string agentId, IAgentLogRepository log)
+        public AgentPublisher(IMessagePublisher inner, int agentId, IAgentLogRepository log)
         {
             _inner = inner;
             _agentId = agentId;

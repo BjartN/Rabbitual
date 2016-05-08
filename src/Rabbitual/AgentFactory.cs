@@ -15,23 +15,23 @@ namespace Rabbitual
 
     public class AgentFactory : IAgentFactory
     {
+        private readonly IAgentDb _db;
         private readonly ILogger _logger;
-        private readonly IObjectDb _db;
         private readonly IFactory _factory;
         private readonly IAgentConfiguration _cfg;
         private readonly IMessagePublisher _p;
         private readonly IAgentLogRepository _agentLog;
 
         public AgentFactory(
+            IAgentDb db,
             ILogger logger,
-            IObjectDb db,
             IFactory factory,
             IAgentConfiguration cfg,
             IMessagePublisher p,
             IAgentLogRepository agentLog)
         {
-            _logger = logger;
             _db = db;
+            _logger = logger;
             _factory = factory;
             _cfg = cfg;
             _p = p;
@@ -59,7 +59,8 @@ namespace Rabbitual
             if (includeOptions)
             {
                 var optionType = OptionsHelper.GetOptionType(agentType);
-                deps.Add(optionType, config.Options ?? Activator.CreateInstance(optionType));
+                var options = _db.GetOptions(config.Id, optionType);
+                deps.Add(optionType, options ?? Activator.CreateInstance(optionType));
             }
 
             if (inculdePublisher)

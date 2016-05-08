@@ -7,13 +7,13 @@ namespace Rabbitual.Configuration
     {
         public AgentConfig()
         {
-            SourceIds = new string[0];
+            SourceIds = new int[0];
         }
-        public string Id { get; set; }
+        public int Id { get; set; }
         public string Name { get; set; }
         public int? Schedule { get; set; }
         public Type ClrType { get; set; }
-        public string[] SourceIds { get; set; }
+        public int[] SourceIds { get; set; }
         public object Options { get; set; }
         public AgentConfigDto ToDto()
         {
@@ -22,7 +22,6 @@ namespace Rabbitual.Configuration
                 Id = Id,
                 SourceIds = SourceIds,
                 Schedule = Schedule,
-                Options = Options,
                 Name = Name,
                 Type = ClrType.Name
             };

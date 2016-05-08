@@ -5,7 +5,7 @@
     /// </summary>
     public interface IAgent
     {
-        string Id { get; set; }
+        int Id { get; set; }
 
         void Start();
 
@@ -57,14 +57,7 @@
 
     public interface IAgentStateRepository
     {
-        /// <summary>
-        /// As long as the serializers can serialize, you can have state
-        /// </summary>
         T GetState<T>();
-
-        /// <summary>
-        /// Agent is responsible for persisting it's own state when required
-        /// </summary>
         void PersistState(object state);
     }
 }

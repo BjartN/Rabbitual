@@ -1,4 +1,4 @@
-	<!DOCTYPE html>
+<!DOCTYPE html>
 	<html lang="en">
 	<head>
 		<meta charset="utf-8">
@@ -34,15 +34,19 @@
 			<form class="ui form">
 				<div class="disabled field">
 					<label>Id</label>
-					<input id="id" type="text" value="{{id}}" name="id" placeholder="Id">
+					<input id="id" type="text" value="{{cfg.id}}" name="id" placeholder="Id">
 				</div>
 				<div class="field">
 					<label>Name</label>
-					<input id="name" type="text" value="{{name}}" name="name" placeholder="Name">
+					<input id="name" type="text" value="{{cfg.name}}" name="name" placeholder="Name">
 				</div>
 				<div class="field">
 					<label>Sources</label>
-					<input id="sources" type="text" value="{{sources}}" name="sources" placeholder="Sources">
+					<select name="msources" multiple="" class="ui fluid dropdown msources">
+					{{#each all}}
+						<option value="{{this.id}}">{{this.name}}</option>
+					{{/each}}
+					</select>
 				</div>
 				<button id="submit" class="ui button" type="button">Submit</button>
 			</form>

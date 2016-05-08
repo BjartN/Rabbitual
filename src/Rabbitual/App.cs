@@ -31,7 +31,7 @@ namespace Rabbitual
             _timers = new List<Timer>();
         }
 
-        public IAgentWrapper GetAgent(string id)
+        public IAgentWrapper GetAgent(int id)
         {
             return _agents.FirstOrDefault(x => x.Id == id);
         }

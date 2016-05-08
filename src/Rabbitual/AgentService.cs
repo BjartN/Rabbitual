@@ -7,24 +7,24 @@ namespace Rabbitual
     public interface IAgentService
     {
         object GetState(IAgentWrapper a);
-        object GetPersistedState(Type agent, string id);
+        object GetPersistedState(Type agent, int id);
     }
 
 
     public class AgentService : IAgentService
     {
-        private readonly IObjectDb _db;
+        private readonly IAgentDb _db;
         private readonly ILogger _logger;
 
         public AgentService(
-            IObjectDb db,
+            IAgentDb db,
             ILogger logger)
         {
             _db = db;
             _logger = logger;
         }
 
-        public object GetPersistedState(Type agent, string id)
+        public object GetPersistedState(Type agent, int id)
         {
             if (!agent.IsOfType(typeof(IStatefulAgent<>)))
                 return null;

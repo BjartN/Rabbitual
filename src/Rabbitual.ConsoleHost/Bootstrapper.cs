@@ -1,7 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Configuration;
-using Rabbitual.Configuration;
+using System.Data;
+using System.Data.SQLite;
 using Rabbitual.Fox;
 using Rabbitual.Infrastructure;
 using Rabbitual.Logging;
@@ -41,7 +42,7 @@ namespace Rabbitual.ConsoleHost
                     init.For<ITaskConsumer>().Use<FoxTaskConsumer>();
                 }
 
-                init.For<IObjectDb>().Use<FileObjectDb>();
+                init.For<IAgentDb>().Use(ctx=>new AgentDb(ConnectionFactory.Create(),ctx.GetInstance<IJsonSerializer>()));
                 init.For<IBinarySerializer>().Use<JsonBinarySerializer>();
                 init.For<IAgentLogRepository>().Use<AgentLogRepository>().Singleton();
                 init.For<IFactory>().Use<Factory>();
@@ -50,6 +51,23 @@ namespace Rabbitual.ConsoleHost
             });
 
             return c;
+        }
+
+        public class ConnectionFactory //...Factory
+        {
+            public static Func<IDbConnection> Create()
+            {
+                var f = ConfigurationManager.AppSettings["rabbitual.db"];
+
+                Func<IDbConnection> factory = () =>
+                {
+                    var sqliteConn = new SQLiteConnection($"Data Source={f};Version=3;");
+                    sqliteConn.Open();
+                    return sqliteConn;
+                };
+
+                return factory;
+            }
         }
 
         public class Factory : IFactory

@@ -2,6 +2,6 @@
 {
     public interface IAgentLogRepository
     {
-        IAgentMessageLog GetLog(string agentId);
+        IAgentMessageLog GetLog(int agentId);
     }
 }

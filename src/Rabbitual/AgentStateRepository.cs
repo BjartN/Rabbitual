@@ -5,11 +5,11 @@ namespace Rabbitual
 {
     public class AgentStateRepository : IAgentStateRepository
     {
-        private readonly string _agentId;
-        private readonly IObjectDb _db;
+        private readonly int _agentId;
+        private readonly IAgentDb _db;
         private readonly ILogger _log;
 
-        public AgentStateRepository(string agentId, IObjectDb db, ILogger log)
+        public AgentStateRepository(int agentId, IAgentDb db, ILogger log)
         {
             _agentId = agentId;
             _db = db;
@@ -18,13 +18,13 @@ namespace Rabbitual
 
         public T GetState<T>()
         {
-            return _db.Get<T>("state." + _agentId);
+            return _db.GetState<T>(_agentId);
         }
 
         public void PersistState(object state)
         {
             _log.Info("Persisting state for {0}", _log);
-            _db.Save(state,"state." + _agentId);
+            _db.InsertOrReplaceState(_agentId,state);
         }
     }
 }

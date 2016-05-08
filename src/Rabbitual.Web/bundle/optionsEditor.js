@@ -3,7 +3,7 @@ var Editor = (function () {
     function Editor(e) {
         this.e = e;
         this.data = new DataService();
-        this.agentId = $.urlParam('id');
+        this.agentId = parseInt($.urlParam('id'));
     }
     Editor.prototype.createEditor = function (opt, optSchema) {
         var that = this;

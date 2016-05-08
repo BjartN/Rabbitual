@@ -3,6 +3,7 @@
     public interface IAgentConfiguration
     {
         AgentConfig[] GetConfiguration();
-        void PersistConfig(AgentConfigDto c);
+        void UpdateAgent(AgentConfigDto c);
+        void InsertAgent(AgentConfigDto c);
     }
 }

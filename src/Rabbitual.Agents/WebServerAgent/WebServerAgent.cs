@@ -10,7 +10,7 @@
             _s = s;
         }
 
-        public string Id { get; set; }
+        public int Id { get; set; }
         public void Start()
         {
             _s.Start();

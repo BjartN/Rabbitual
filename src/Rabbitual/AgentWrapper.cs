@@ -16,7 +16,7 @@ namespace Rabbitual
         private readonly IAgent _agent;
         private readonly IAgentMessageLog _al;
         private readonly ILogger _logger;
-        private readonly Dictionary<string, bool> _sourceIdx;
+        private readonly Dictionary<int, bool> _sourceIdx;
         private readonly BufferBlock<Message> _buffer;
 
         public AgentWrapper(IAgent agent, AgentConfig config, IAgentMessageLog al, ILogger logger)
@@ -89,9 +89,9 @@ namespace Rabbitual
             return b;
         }
 
-        public string Id { get; set; }
+        public int Id { get; set; }
 
-        public bool CanConsume(string fromAgentId)
+        public bool CanConsume(int fromAgentId)
         {
             return _sourceIdx.Count == 0 || _sourceIdx.ContainsKey(fromAgentId);
         }

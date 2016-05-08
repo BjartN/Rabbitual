@@ -12,7 +12,7 @@ namespace Rabbitual
         }
 
         public IDictionary<string, string> Data { get; set; }
-        public string SourceAgentId { get; set; }
+        public int SourceAgentId { get; set; }
         public MessageType MessageType { get; set; }
         public DateTime Occured { get; set; }
     }
