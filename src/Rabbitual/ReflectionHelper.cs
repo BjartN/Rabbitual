@@ -17,20 +17,6 @@ namespace Rabbitual
             return target.IsAssignableFrom(o);
         }
 
-        public static Type[] GetArgumentsOfOpenGenericInterfaceType(Type openGenericType, Assembly[] assemblies)
-        {
-            return GetArgumentsOfOpenGenericInterfaceType(openGenericType,
-                assemblies.SelectMany(a => a.GetTypes()).ToArray());
-        }
-
-        public static Type[] GetArgumentsOfOpenGenericInterfaceType(Type openGenericType, Type[] types)
-        {
-            return types
-                .Select(t=> GetGenericArgument(t, openGenericType))
-                .Where(t=>t!=null)
-                .ToArray();
-        }
-
         public static Type GetGenericArgument(Type type, Type interfaceType)
         {
             if (type.IsInterface || type.IsAbstract)
@@ -49,19 +35,6 @@ namespace Rabbitual
 
     public class StateHelper
     {
-        public static Type GetStateType(Type agent)
-        {
-            return ReflectionHelper.GetGenericArgument(agent, typeof(IStatefulAgent<>));
-        }
-
-        public static object GetPersistedStateUsingMagic(IAgentStateRepository service, Type agent)
-        {
-            var stateType = GetStateType(agent);
-            var method = typeof(AgentStateRepository).GetMethod("GetState");
-            var genericMethod = method.MakeGenericMethod(stateType);
-            return genericMethod.Invoke(service, null);
-        }
-
         public static object GetStateUsingMagic(IAgent  agent)
         {
             var pi = agent.GetType().GetProperty("State");
@@ -71,19 +44,6 @@ namespace Rabbitual
 
     public class OptionsHelper
     {
-
-        public static object[] GetDefaultOptions(Assembly[] assemblies)
-        {
-            var optionTypes = ReflectionHelper.GetArgumentsOfOpenGenericInterfaceType(typeof(IHaveOptions<>), assemblies);
-            return optionTypes.Select(Activator.CreateInstance).ToArray();
-        }
-
-        public static object CreateDefaultOptionsUsingMagic(Type agentType)
-        {
-            var optionType = GetOptionType(agentType);
-            return Activator.CreateInstance(optionType);
-        }
-
         public static Type GetOptionType(Type agentType)
         {
             return ReflectionHelper.GetGenericArgument(agentType, typeof(IHaveOptions<>));

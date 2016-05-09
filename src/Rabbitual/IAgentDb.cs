@@ -207,7 +207,7 @@ namespace Rabbitual
                 c.Execute(qState);
                 c.Execute(qIndex);
 
-                var agentId= c.Query<int>(qWebServer);
+                c.Query<int>(qWebServer);
             }
         }
 

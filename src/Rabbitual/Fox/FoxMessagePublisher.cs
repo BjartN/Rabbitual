@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Rabbitual.Fox
+﻿namespace Rabbitual.Fox
 {
     public class FoxMessagePublisher: IMessagePublisher
     {

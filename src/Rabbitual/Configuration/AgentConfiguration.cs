@@ -8,18 +8,15 @@ namespace Rabbitual.Configuration
     public class AgentConfiguration : IAgentConfiguration
     {
         private readonly IAgentDb _agentDb;
-        private readonly IJsonSerializer _s;
         private readonly ILogger _log;
         private readonly IConfigReflection _reflection;
 
         public AgentConfiguration(
             IAgentDb agentDb,
-            IJsonSerializer s,
             ILogger log,
             IConfigReflection reflection)
         {
             _agentDb = agentDb;
-            _s = s;
             _log = log;
             _reflection = reflection;
         }
@@ -34,13 +31,13 @@ namespace Rabbitual.Configuration
 
         public void UpdateAgent(AgentConfigDto c)
         {
-            _log.Info($"Persisting agent {c.Id}");
+            _log.Info($"Updating agent {c.Id}");
             _agentDb.UpdateAgent(c);
         }
 
         public void InsertAgent(AgentConfigDto c)
         {
-            _log.Info($"Persisting agent {c.Id}");
+            _log.Info($"Inserting agent {c.Id}");
             _agentDb.InsertAgent(c);
         }
 

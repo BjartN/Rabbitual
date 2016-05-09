@@ -14,17 +14,17 @@ namespace Rabbitual.Agents.WebServerAgent.Controllers
         private readonly IConfigReflection _configReflection;
         private readonly IAgentConfiguration _cfg;
         private readonly IAgentPool _ar;
-        private readonly IAgentService _s;
 
-        public AgentCreateController(IJsonSerializer serializer, IConfigReflection configReflection, IAgentConfiguration cfg,
-             IAgentPool ar,
-            IAgentService s)
+        public AgentCreateController(
+            IJsonSerializer serializer,
+            IConfigReflection configReflection,
+            IAgentConfiguration cfg,
+             IAgentPool ar)
         {
             _serializer = serializer;
             _configReflection = configReflection;
             _cfg = cfg;
             _ar = ar;
-            _s = s;
         }
 
         [HttpGet]
@@ -68,7 +68,7 @@ namespace Rabbitual.Agents.WebServerAgent.Controllers
         public HttpResponseMessage Get(int id)
         {
             var agent = _ar.GetAgent(id);
-            var state = _s.GetState(agent);
+            var state = agent.HasState() ? agent.GetState() : null;
 
             return this.SweetJson(state);
         }

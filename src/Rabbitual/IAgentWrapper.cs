@@ -1,4 +1,3 @@
-using System.Threading.Tasks.Dataflow;
 using Rabbitual.Configuration;
 
 namespace Rabbitual
