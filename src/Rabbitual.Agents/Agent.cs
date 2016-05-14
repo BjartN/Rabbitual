@@ -1,4 +1,6 @@
-﻿namespace Rabbitual.Agents
+﻿using Rabbitual.Core;
+
+namespace Rabbitual.Agents
 {
     public abstract class Agent<TOptions> : IHaveOptions<TOptions> where TOptions : class
     {

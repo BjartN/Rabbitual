@@ -3,6 +3,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Threading.Tasks.Dataflow;
 using Rabbitual.Configuration;
+using Rabbitual.Core;
+using Rabbitual.Core.Logging;
 using Rabbitual.Logging;
 
 namespace Rabbitual

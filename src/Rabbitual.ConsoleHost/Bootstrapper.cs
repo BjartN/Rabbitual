@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
 using System.Data.SQLite;
+using Rabbitual.Core;
 using Rabbitual.Fox;
 using Rabbitual.Infrastructure;
 using Rabbitual.Logging;

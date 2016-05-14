@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Text.RegularExpressions;
 
-namespace Rabbitual.Infrastructure
+namespace Rabbitual.Core.Infrastructure
 {
     public static class StringExtentions
     {

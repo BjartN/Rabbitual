@@ -1,4 +1,6 @@
-﻿namespace Rabbitual.Fox
+﻿using Rabbitual.Core;
+
+namespace Rabbitual.Fox
 {
     public class FoxMessagePublisher: IMessagePublisher
     {

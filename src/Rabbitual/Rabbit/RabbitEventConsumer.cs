@@ -4,6 +4,7 @@ using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
 using RabbitMQ.Client.Exceptions;
 using Rabbitual.Configuration;
+using Rabbitual.Core.Logging;
 using Rabbitual.Infrastructure;
 using Rabbitual.Logging;
 

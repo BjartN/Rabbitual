@@ -2,10 +2,14 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Rabbitual.Infrastructure
+namespace Rabbitual.Core.Infrastructure
 {
     public static class EnumerableExtentions
     {
+        public static bool ContainsKeys<T>(this IDictionary<string,T> d, params string[] keys)
+        {
+            return keys.All(d.ContainsKey);
+        }
 
         public static IEnumerable<T> TakeLast<T>(this IEnumerable<T> source, int N)
         {

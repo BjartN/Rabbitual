@@ -1,4 +1,5 @@
 using Rabbitual.Configuration;
+using Rabbitual.Core;
 
 namespace Rabbitual
 {

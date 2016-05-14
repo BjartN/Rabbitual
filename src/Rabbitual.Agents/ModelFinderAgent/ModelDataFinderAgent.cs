@@ -1,28 +1,27 @@
 ﻿using System;
 using System.Collections.Generic;
-using Rabbitual.Logging;
+using Rabbitual.Agents.WeatherAgent;
+using Rabbitual.Core;
+using Rabbitual.Core.Logging;
 
-namespace Rabbitual.Agents.WeatherAgent
+namespace Rabbitual.Agents.ModelFinderAgent
 {
     /// <summary>
     /// Search the W3 for gribs to download
     /// </summary>
-    public class GribFinderAgent :
-        ScheduledStatefulAgent<WeatherOptions, GribFinderState>, 
+    public class ModelDataFinderAgent :
+        ScheduledStatefulAgent<ModelDataFinderOptions, ModelDataFinderState>,
         IEventPublisherAgent
     {
-        private readonly GribSources _d;
         private readonly ILogger _logger;
         private readonly IMessagePublisher _p;
 
-        public GribFinderAgent(
-            GribSources d, 
-            ILogger logger, 
-            WeatherOptions options,
+        public ModelDataFinderAgent(
+            ILogger logger,
+            ModelDataFinderOptions options,
             IAgentStateRepository stateRepository,
-            IMessagePublisher p) : base(options,stateRepository)
+            IMessagePublisher p) : base(options, stateRepository)
         {
-            _d = d;
             _logger = logger;
             _p = p;
             DefaultScheduleMs = 3000;
@@ -31,24 +30,37 @@ namespace Rabbitual.Agents.WeatherAgent
         public override void Check()
         {
             var anaTime = getAnaTime();
-            var stuffToDownload = Options.Source == "ww3" ? _d.GetWaveWatch3(anaTime) : _d.GetGfs(anaTime);
+            string[] urls;
+            if (string.IsNullOrWhiteSpace(Options.Source))
+                return;
 
-            foreach (var item in stuffToDownload)
+            switch (Options.Source.ToLower())
+            {
+                case "ww3":
+                    urls = ModelDataUrlBuilder.GetUrls(ModelDataUrlBuilder.WW3, anaTime);
+                    break;
+                case "gfs":
+                    urls = ModelDataUrlBuilder.GetUrls(ModelDataUrlBuilder.GFS, anaTime, Options.FcHours);
+                    break;
+                default:
+                    urls = ModelDataUrlBuilder.GetUrls(Options.Source, anaTime, Options.FcHours);
+                    break;
+            }
+
+            foreach (var item in urls)
             {
                 //don't issue previously issued work
-                if (State.Index.ContainsKey(item.Url))
+                if (State.Index.ContainsKey(item))
                 {
                     continue;
                 }
-                    
-                State.Index[item.Url] = true;
+
+                State.Index[item] = true;
                 _p.EnqueueTask(new Message
                 {
                     Data = new Dictionary<string, string>
                     {
-                        {"Url", item.Url },
-                        {"File",item.File },
-                        {"Folder",Options.Source + "\\" + anaTime.ToString("yyyy-MM-dd-HH-mm") }
+                        {"Url", item},
                     }
                 });
             }
@@ -65,14 +77,14 @@ namespace Rabbitual.Agents.WeatherAgent
                 : yesterday;
             return anaTime;
         }
-        
+
     }
 
-    public class GribFinderState
+    public class ModelDataFinderState
     {
         public IDictionary<string, bool> Index { get; set; }
 
-        public GribFinderState()
+        public ModelDataFinderState()
         {
             Index = new Dictionary<string, bool>();
         }

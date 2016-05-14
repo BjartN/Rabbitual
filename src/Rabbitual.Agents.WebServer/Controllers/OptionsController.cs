@@ -6,24 +6,21 @@ using NJsonSchema;
 using Rabbitual.Configuration;
 using Rabbitual.Infrastructure;
 
-namespace Rabbitual.Agents.WebServerAgent.Controllers
+namespace Rabbitual.Agents.WebServer.Controllers
 {
     public class OptionsController:ApiController
     {
         private readonly IAgentDb _db;
         private readonly IAgentConfiguration _cfg;
-        private readonly IAgentConfiguration _configRepository;
         private readonly IJsonSerializer _serializer;
 
         public OptionsController(
             IAgentDb db,
             IAgentConfiguration cfg,
-            IAgentConfiguration configRepository,
             IJsonSerializer serializer)
         {
             _db = db;
             _cfg = cfg;
-            _configRepository = configRepository;
             _serializer = serializer;
         }
 

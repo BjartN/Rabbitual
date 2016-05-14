@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
-VisualStudioVersion = 14.0.23107.0
+VisualStudioVersion = 14.0.25123.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rabbitual", "Rabbitual\Rabbitual.csproj", "{993AFF94-2199-4009-A2AC-661D9E061933}"
 EndProject
@@ -14,6 +14,10 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rabbitual.UnitTests", "Rabbitual.UnitTests\Rabbitual.UnitTests.csproj", "{2B82A6B4-AC72-4D96-8A92-808141FDD66E}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rabbitual.IntegrationTests", "Rabbitual.IntegrationTests\Rabbitual.IntegrationTests.csproj", "{B0BAD012-B2EA-4E88-9C99-4F52FCD6208E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rabbitual.Core", "Rabbitual.Core\Rabbitual.Core.csproj", "{49007F5E-AD58-461F-A005-9A9F6C0F3207}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rabbitual.Agents.WebServer", "Rabbitual.Agents.WebServer\Rabbitual.Agents.WebServer.csproj", "{5CC5DE2A-1416-40C3-9789-92CD7BB2A2BD}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -45,6 +49,14 @@ Global
 		{B0BAD012-B2EA-4E88-9C99-4F52FCD6208E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B0BAD012-B2EA-4E88-9C99-4F52FCD6208E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B0BAD012-B2EA-4E88-9C99-4F52FCD6208E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{49007F5E-AD58-461F-A005-9A9F6C0F3207}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{49007F5E-AD58-461F-A005-9A9F6C0F3207}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{49007F5E-AD58-461F-A005-9A9F6C0F3207}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{49007F5E-AD58-461F-A005-9A9F6C0F3207}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5CC5DE2A-1416-40C3-9789-92CD7BB2A2BD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5CC5DE2A-1416-40C3-9789-92CD7BB2A2BD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5CC5DE2A-1416-40C3-9789-92CD7BB2A2BD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5CC5DE2A-1416-40C3-9789-92CD7BB2A2BD}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

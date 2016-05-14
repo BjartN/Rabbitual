@@ -1,6 +1,6 @@
 ﻿using System.Net;
-using Rabbitual.Infrastructure;
-using Rabbitual.Logging;
+using Rabbitual.Core;
+using Rabbitual.Core.Logging;
 
 namespace Rabbitual.Agents.CsvAgent
 {

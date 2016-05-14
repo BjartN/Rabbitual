@@ -1,3 +1,5 @@
+using Rabbitual.Core;
+
 namespace Rabbitual.Agents
 {
     public abstract class ScheduledStatefulAgent<TOptions, TState> :StatefulAgent<TOptions,TState>, IScheduledAgent

@@ -1,8 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Globalization;
 
-namespace Rabbitual.Infrastructure
+namespace Rabbitual.Core.Infrastructure
 {
     public static class DictonaryExtentions
     {

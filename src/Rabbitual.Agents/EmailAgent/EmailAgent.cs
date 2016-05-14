@@ -3,8 +3,9 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Net;
 using System.Net.Mail;
-using Rabbitual.Infrastructure;
-using Rabbitual.Logging;
+using Rabbitual.Core;
+using Rabbitual.Core.Infrastructure;
+using Rabbitual.Core.Logging;
 
 namespace Rabbitual.Agents.EmailAgent
 {

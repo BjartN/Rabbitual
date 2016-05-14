@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using Rabbitual.Configuration;
+using Rabbitual.Core;
+using Rabbitual.Core.Logging;
 using Rabbitual.Infrastructure;
 using Rabbitual.Logging;
 

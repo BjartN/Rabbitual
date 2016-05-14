@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Rabbitual
+namespace Rabbitual.Core
 {
     public class Message
     {

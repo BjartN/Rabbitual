@@ -75,34 +75,25 @@
     <Compile Include="Configuration\AgentConfiguration.cs" />
     <Compile Include="Configuration\Scenario.cs" />
     <Compile Include="IAgentDb.cs" />
-    <Compile Include="IconAttribute.cs" />
     <Compile Include="Fox\FoxEventConsumer.cs" />
     <Compile Include="Fox\FoxMessagePublisher.cs" />
     <Compile Include="Fox\FoxTaskConsumer.cs" />
     <Compile Include="Fox\Hub.cs" />
-    <Compile Include="IAgent.cs" />
     <Compile Include="App.cs" />
     <Compile Include="Logging\AgentLogRepository.cs" />
-    <Compile Include="Logging\IAgentLogRepository.cs" />
     <Compile Include="IAgentPool.cs" />
     <Compile Include="IAgentWrapper.cs" />
     <Compile Include="IFactory.cs" />
-    <Compile Include="Logging\IMessageLog.cs" />
-    <Compile Include="Infrastructure\DictonaryExtentions.cs" />
-    <Compile Include="Infrastructure\EnumerableExtentions.cs" />
     <Compile Include="Infrastructure\IJsonSerializer.cs" />
     <Compile Include="Infrastructure\JsonSerializer.cs" />
-    <Compile Include="Infrastructure\ListManager.cs" />
     <Compile Include="Infrastructure\ObjectExtentions.cs" />
-    <Compile Include="Infrastructure\StringExtentions.cs" />
     <Compile Include="ITaskConsumer.cs" />
-    <Compile Include="Message.cs" />
+    <Compile Include="Logging\IAgentLogRepository.cs" />
+    <Compile Include="Logging\IMessageLog.cs" />
     <Compile Include="Rabbit\Constants.cs" />
     <Compile Include="AgentPublisher.cs" />
     <Compile Include="Rabbit\ExchangeDefinitions.cs" />
     <Compile Include="Configuration\IAppConfiguration.cs" />
-    <Compile Include="IMessagePublisher.cs" />
-    <Compile Include="Logging\ILogger.cs" />
     <Compile Include="Infrastructure\IBinarySerializer.cs" />
     <Compile Include="Infrastructure\JsonBinarySerializer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -120,7 +111,12 @@
     <None Include="Fox\README.md" />
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\Rabbitual.Core\Rabbitual.Core.csproj">
+      <Project>{49007f5e-ad58-461f-a005-9a9f6c0f3207}</Project>
+      <Name>Rabbitual.Core</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\System.Data.SQLite.Core.1.0.101.0\build\net451\System.Data.SQLite.Core.targets" Condition="Exists('..\packages\System.Data.SQLite.Core.1.0.101.0\build\net451\System.Data.SQLite.Core.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

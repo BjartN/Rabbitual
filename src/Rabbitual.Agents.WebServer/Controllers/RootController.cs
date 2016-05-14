@@ -1,12 +1,11 @@
 using System;
 using System.Linq;
 using System.Net.Http;
-using System.Text;
 using System.Web.Http;
 using Rabbitual.Configuration;
 using Rabbitual.Logging;
 
-namespace Rabbitual.Agents.WebServerAgent.Controllers
+namespace Rabbitual.Agents.WebServer.Controllers
 {
     public class RootController : ApiController
     {

@@ -1,7 +1,6 @@
 using System;
 using System.Linq;
-using Rabbitual.Infrastructure;
-using Rabbitual.Logging;
+using Rabbitual.Core.Logging;
 
 namespace Rabbitual.Configuration
 {

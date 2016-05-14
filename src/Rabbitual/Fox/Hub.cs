@@ -1,4 +1,5 @@
 using System.Threading.Tasks.Dataflow;
+using Rabbitual.Core;
 
 namespace Rabbitual.Fox
 {

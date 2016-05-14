@@ -2,8 +2,8 @@
 using System.ComponentModel;
 using System.Text.RegularExpressions;
 using HtmlAgilityPack;
-using Rabbitual.Infrastructure;
-using Rabbitual.Logging;
+using Rabbitual.Core;
+using Rabbitual.Core.Logging;
 
 namespace Rabbitual.Agents.WebCheckerAgent
 {

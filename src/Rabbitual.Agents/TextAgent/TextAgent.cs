@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
-using Rabbitual.Infrastructure;
+using Rabbitual.Core;
+using Rabbitual.Core.Infrastructure;
 
 namespace Rabbitual.Agents.TextAgent
 {

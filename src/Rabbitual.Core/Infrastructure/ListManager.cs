@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Rabbitual.Infrastructure
+namespace Rabbitual.Core.Infrastructure
 {
     public class ListManager<T>
     {

@@ -30,6 +30,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Moq, Version=4.2.1510.2205, Culture=neutral, PublicKeyToken=69f491c39445e920, processorArchitecture=MSIL">
+      <HintPath>..\packages\Moq.4.2.1510.2205\lib\net40\Moq.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="nunit.framework, Version=3.2.1.0, Culture=neutral, PublicKeyToken=2638cd05610744eb, processorArchitecture=MSIL">
       <HintPath>..\packages\NUnit.3.2.1\lib\net45\nunit.framework.dll</HintPath>
       <Private>True</Private>
@@ -44,9 +48,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Agents\DownloaderAgent\when_passing_message_to_download.cs" />
     <Compile Include="when_geofencing.cs" />
     <Compile Include="when_parsing_csv.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="when_parsing_model_url.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
@@ -56,6 +62,14 @@
     <ProjectReference Include="..\Rabbitual.Agents\Rabbitual.Agents.csproj">
       <Project>{e4329469-889d-43ce-87db-0fb058bec741}</Project>
       <Name>Rabbitual.Agents</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Rabbitual.Core\Rabbitual.Core.csproj">
+      <Project>{49007f5e-ad58-461f-a005-9a9f6c0f3207}</Project>
+      <Name>Rabbitual.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Rabbitual\Rabbitual.csproj">
+      <Project>{993aff94-2199-4009-a2ac-661d9e061933}</Project>
+      <Name>Rabbitual</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

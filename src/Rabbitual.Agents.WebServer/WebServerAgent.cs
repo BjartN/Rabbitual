@@ -1,4 +1,6 @@
-﻿namespace Rabbitual.Agents.WebServerAgent
+﻿using Rabbitual.Core;
+
+namespace Rabbitual.Agents.WebServer
 {
     [Icon("server")]
     public class WebServerAgent:IAgent

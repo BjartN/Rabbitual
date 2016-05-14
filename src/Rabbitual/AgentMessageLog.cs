@@ -1,4 +1,6 @@
 ﻿using System.Collections.Generic;
+using Rabbitual.Core;
+using Rabbitual.Core.Infrastructure;
 using Rabbitual.Infrastructure;
 using Rabbitual.Logging;
 

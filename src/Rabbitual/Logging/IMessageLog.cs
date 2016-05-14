@@ -1,4 +1,6 @@
-﻿namespace Rabbitual.Logging
+﻿using Rabbitual.Core;
+
+namespace Rabbitual.Logging
 {
     public interface IAgentMessageLog
     {

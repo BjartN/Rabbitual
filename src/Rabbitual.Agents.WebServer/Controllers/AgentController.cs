@@ -1,4 +1,3 @@
-using System;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -6,7 +5,7 @@ using System.Web.Http;
 using Rabbitual.Configuration;
 using Rabbitual.Infrastructure;
 
-namespace Rabbitual.Agents.WebServerAgent.Controllers
+namespace Rabbitual.Agents.WebServer.Controllers
 {
     public class AgentCreateController : ApiController
     {
@@ -19,7 +18,7 @@ namespace Rabbitual.Agents.WebServerAgent.Controllers
             IJsonSerializer serializer,
             IConfigReflection configReflection,
             IAgentConfiguration cfg,
-             IAgentPool ar)
+            IAgentPool ar)
         {
             _serializer = serializer;
             _configReflection = configReflection;

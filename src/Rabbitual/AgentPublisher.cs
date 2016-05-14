@@ -1,4 +1,5 @@
 
+using Rabbitual.Core;
 using Rabbitual.Logging;
 
 namespace Rabbitual

@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using Rabbitual.Infrastructure;
+using Rabbitual.Core;
+using Rabbitual.Core.Infrastructure;
 
 namespace Rabbitual.Agents.GeoFencingAgent
 {

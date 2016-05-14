@@ -2,7 +2,7 @@ using System.Web.Http;
 using System.Web.Http.Dispatcher;
 using Owin;
 
-namespace Rabbitual.Agents.WebServerAgent
+namespace Rabbitual.Agents.WebServer
 {
     public class Startup
     {

@@ -1,7 +1,7 @@
 using System.Net.Http;
 using System.Threading.Tasks;
 
-namespace Rabbitual.Agents.WebServerAgent
+namespace Rabbitual.Agents.WebServer
 {
     public class CustomHeaderHandler : DelegatingHandler
     {

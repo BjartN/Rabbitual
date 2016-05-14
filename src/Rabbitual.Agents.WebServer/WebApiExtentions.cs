@@ -1,10 +1,9 @@
 ﻿using System.Net.Http;
-using System.Net.Http.Headers;
 using System.Text;
 using System.Web.Http;
 using Rabbitual.Infrastructure;
 
-namespace Rabbitual.Agents.WebServerAgent
+namespace Rabbitual.Agents.WebServer
 {
     public static class WebApiExtentions
     {

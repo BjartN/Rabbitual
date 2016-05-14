@@ -1,8 +1,11 @@
-﻿using Rabbitual.Infrastructure;
-using Rabbitual.Logging;
+﻿using Rabbitual.Core;
+using Rabbitual.Core.Logging;
 
 namespace Rabbitual.Agents.StatsAgent
 {
+    /// <summary>
+    /// Count number of events
+    /// </summary>
     public class StatsAgent : StatefulAgent<StatsOptions, StatsState>, 
         IEventConsumerAgent, 
         IEventPublisherAgent
@@ -17,8 +20,7 @@ namespace Rabbitual.Agents.StatsAgent
         public void Consume(Message evt)
         {
             State.Count = State.Count+1;
-            _l.Debug($"Stats count is {State.Count}");
-
+            _l.Debug($"Event count count is {State.Count}");
         }
 
     }

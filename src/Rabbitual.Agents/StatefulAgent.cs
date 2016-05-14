@@ -1,3 +1,5 @@
+using Rabbitual.Core;
+
 namespace Rabbitual.Agents
 {
     public abstract class StatefulAgent<TOptions, TState>:Agent<TOptions>, IStatefulAgent<TState> 

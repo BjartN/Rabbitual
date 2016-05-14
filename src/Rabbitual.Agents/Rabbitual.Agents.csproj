@@ -34,45 +34,17 @@
       <HintPath>..\packages\HtmlAgilityPack.1.4.9\lib\Net45\HtmlAgilityPack.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Microsoft.Owin, Version=2.0.2.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.Owin.2.0.2\lib\net45\Microsoft.Owin.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Microsoft.Owin.Host.HttpListener, Version=3.0.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.Owin.Host.HttpListener.3.0.1\lib\net45\Microsoft.Owin.Host.HttpListener.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Microsoft.Owin.Hosting, Version=2.0.2.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.Owin.Hosting.2.0.2\lib\net45\Microsoft.Owin.Hosting.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="Newtonsoft.Json, Version=8.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.8.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="NJsonSchema, Version=2.11.5963.474, Culture=neutral, PublicKeyToken=c2f9c3bdfae56102, processorArchitecture=MSIL">
-      <HintPath>..\packages\NJsonSchema.2.11.5963.474\lib\portable-net45+win+wpa81+wp80+MonoAndroid10+xamarinios10+MonoTouch10\NJsonSchema.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Owin, Version=1.0.0.0, Culture=neutral, PublicKeyToken=f0ebd12fd5e55cc5, processorArchitecture=MSIL">
-      <HintPath>..\packages\Owin.1.0\lib\net40\Owin.dll</HintPath>
+    <Reference Include="NJsonSchema, Version=2.18.5976.28450, Culture=neutral, PublicKeyToken=c2f9c3bdfae56102, processorArchitecture=MSIL">
+      <HintPath>..\packages\NJsonSchema.2.18.5976.28450\lib\portable45-net45+win8+wp8+wpa81\NJsonSchema.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Activities" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Net.Http.Formatting, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.AspNet.WebApi.Client.5.2.3\lib\net45\System.Net.Http.Formatting.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="System.Web.Http, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.AspNet.WebApi.Core.5.2.3\lib\net45\System.Web.Http.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="System.Web.Http.Owin, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.AspNet.WebApi.Owin.5.2.3\lib\net45\System.Web.Http.Owin.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -93,6 +65,8 @@
     <Compile Include="GeoFencingAgent\GeofencingState.cs" />
     <Compile Include="GeoFencingAgent\GeometryFun.cs" />
     <Compile Include="GeoFencingAgent\GeofencingAgent.cs" />
+    <Compile Include="GribLoaderAgent\GribLoaderAgent.cs" />
+    <Compile Include="IconAttribute.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ScheduledStatefulAgent.cs" />
     <Compile Include="StatefulAgent.cs" />
@@ -101,31 +75,26 @@
     <Compile Include="DownloaderAgent\DownloaderOptions.cs" />
     <Compile Include="TextAgent\TextAgent.cs" />
     <Compile Include="UniqueEventAgent\UniqueEventAgent.cs" />
-    <Compile Include="WeatherAgent\GribSources.cs" />
+    <Compile Include="ModelFinderAgent\DiskSize.cs" />
     <Compile Include="ScheduledAgent.cs" />
-    <Compile Include="WeatherAgent\GribFinderAgent.cs" />
+    <Compile Include="ModelFinderAgent\ModelDataFinderAgent.cs" />
     <Compile Include="DownloaderAgent\DownloaderAgent.cs" />
-    <Compile Include="WeatherAgent\WeatherFolder.cs" />
-    <Compile Include="WeatherAgent\WeatherOptions.cs" />
+    <Compile Include="ModelFinderAgent\HttpContentExtensions.cs" />
+    <Compile Include="ModelFinderAgent\ModelDataUrlBuilder.cs" />
+    <Compile Include="ModelFinderAgent\Quarantine.cs" />
+    <Compile Include="ModelFinderAgent\WeatherFolder.cs" />
+    <Compile Include="ModelFinderAgent\ModelDataFinderOptions.cs" />
     <Compile Include="WebCheckerAgent\WebCheckerAgent.cs" />
-    <Compile Include="WebServerAgent\Controllers\AgentController.cs" />
-    <Compile Include="WebServerAgent\Controllers\OptionsController.cs" />
-    <Compile Include="WebServerAgent\CustomHeaderHandler.cs" />
-    <Compile Include="WebServerAgent\Controllers\RootController.cs" />
-    <Compile Include="WebServerAgent\Startup.cs" />
-    <Compile Include="WebServerAgent\WebApiExtentions.cs" />
-    <Compile Include="WebServerAgent\WebServer.cs" />
-    <Compile Include="WebServerAgent\WebServerAgent.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Rabbitual\Rabbitual.csproj">
-      <Project>{993aff94-2199-4009-a2ac-661d9e061933}</Project>
-      <Name>Rabbitual</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Rabbitual.Core\Rabbitual.Core.csproj">
+      <Project>{49007f5e-ad58-461f-a005-9a9f6c0f3207}</Project>
+      <Name>Rabbitual.Core</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

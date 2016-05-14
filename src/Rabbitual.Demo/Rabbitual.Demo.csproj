@@ -68,6 +68,10 @@
     <None Include="README.md" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Rabbitual.Agents.WebServer\Rabbitual.Agents.WebServer.csproj">
+      <Project>{5cc5de2a-1416-40c3-9789-92cd7bb2a2bd}</Project>
+      <Name>Rabbitual.Agents.WebServer</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Rabbitual.Agents\Rabbitual.Agents.csproj">
       <Project>{e4329469-889d-43ce-87db-0fb058bec741}</Project>
       <Name>Rabbitual.Agents</Name>

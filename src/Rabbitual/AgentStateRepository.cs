@@ -1,3 +1,5 @@
+using Rabbitual.Core;
+using Rabbitual.Core.Logging;
 using Rabbitual.Infrastructure;
 using Rabbitual.Logging;
 

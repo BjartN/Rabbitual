@@ -2,12 +2,23 @@ using System;
 using System.IO;
 using System.Net;
 using Rabbitual.Agents.WeatherAgent;
-using Rabbitual.Infrastructure;
-using Rabbitual.Logging;
+using Rabbitual.Core.Logging;
 
 namespace Rabbitual.Agents.DownloaderAgent
 {
-    public class Downloader
+    public class DownloadItem
+    {
+        public string File { get; set; }
+        public string Folder { get; set; }
+        public string Url { get; set; }
+    }
+
+    public interface IDownloader
+    {
+        void Download(DownloadItem file);
+    }
+
+    public class Downloader : IDownloader
     {
         private readonly ILogger _logger;
         public Downloader(ILogger l)
@@ -16,11 +27,11 @@ namespace Rabbitual.Agents.DownloaderAgent
         }
 
         private readonly Quarantine _q = new Quarantine();
-        public void Download(string rootFolder, DownloadItem file)
+        public void Download(DownloadItem file)
         {
 
-            var fullFile = Path.Combine(rootFolder, file.File) + ".tmp";
-            var fullFileFinal = Path.Combine(rootFolder, file.File);
+            var fullFile = Path.Combine(file.Folder, file.File) + ".tmp";
+            var fullFileFinal = Path.Combine(file.Folder, file.File);
 
             var f = Path.GetDirectoryName(fullFile);
             if (!Directory.Exists(f))
